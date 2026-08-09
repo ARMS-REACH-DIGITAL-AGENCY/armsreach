@@ -6,11 +6,11 @@
     },
     {
       "source": "/assets/favicon.jpg",
-      "destination": "https://raw.githubusercontent.com/ARMS-REACH-DIGITAL-AGENCY/armsreach/main/assets/favicon.jpg"
+      "destination": "https://raw.githubusercontent.com/ARMS-REACH-DIGITAL-AGENCY/armsreach/main/sites/complete/favicon.svg"
     },
     {
       "source": "/favicon.ico",
-      "destination": "https://raw.githubusercontent.com/ARMS-REACH-DIGITAL-AGENCY/armsreach/main/assets/favicon.jpg"
+      "destination": "https://raw.githubusercontent.com/ARMS-REACH-DIGITAL-AGENCY/armsreach/main/sites/complete/favicon.svg"
     }
   ]
 }
