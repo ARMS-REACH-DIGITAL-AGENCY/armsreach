@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/assets/arms-reach-logo.png",
+      "destination": "https://raw.githubusercontent.com/ARMS-REACH-DIGITAL-AGENCY/armsreach/main/assets/arms-reach-logo.png"
+    },
+    {
+      "source": "/assets/favicon.jpg",
+      "destination": "https://raw.githubusercontent.com/ARMS-REACH-DIGITAL-AGENCY/armsreach/main/assets/favicon.jpg"
+    },
+    {
+      "source": "/favicon.ico",
+      "destination": "https://raw.githubusercontent.com/ARMS-REACH-DIGITAL-AGENCY/armsreach/main/assets/favicon.jpg"
+    }
+  ]
+}
