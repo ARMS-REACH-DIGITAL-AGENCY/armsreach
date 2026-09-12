@@ -1,1 +1,378 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>YAT?STATS | Beyond the Scoreboard</title><meta name="description" content="YAT?STATS connects high-school baseball programs, players, alumni, fans, and local co-branding partners."><style>body{margin:0;font-family:Arial,sans-serif;background:#f5f1e8;color:#14233a}.hero{background:linear-gradient(135deg,#0d1d34,#17365c);color:#fff;padding:78px 24px}.wrap{max-width:1100px;margin:auto}.brand{font-size:1.2rem;font-weight:900;letter-spacing:.06em}.hero h1{font-size:clamp(3rem,8vw,6.3rem);line-height:.94;margin:24px 0}.hero h1 span{color:#f2b544}.hero p{max-width:780px;color:#d7e0eb;font-size:1.15rem;line-height:1.65}.cta{display:inline-block;background:#f2b544;color:#14233a;padding:15px 22px;border-radius:8px;text-decoration:none;font-weight:800;margin-top:18px}.section{padding:70px 24px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.card{background:#fff;border:1px solid #d6d2c8;border-radius:16px;padding:22px}.card h2{font-size:1.2rem}.model{background:#14233a;color:#fff;border-radius:20px;padding:34px;margin-top:42px}.model p{color:#ccd7e4;line-height:1.6}.number{font-size:clamp(2.4rem,6vw,5rem);font-weight:900;color:#f2b544;margin:0}.note{color:#6e7682;line-height:1.6}@media(max-width:850px){.grid{grid-template-columns:1fr 1fr}}@media(max-width:560px){.grid{grid-template-columns:1fr}}</style></head><body><section class="hero"><div class="wrap"><div class="brand">YAT?STATS</div><h1>Baseball communities built <span>beyond the scoreboard.</span></h1><p>YAT?STATS gives high-school baseball programs a hometown media and relationship platform that celebrates players, reconnects alumni, engages fans, strengthens fundraising, and creates a more valuable local sponsorship opportunity.</p><a class="cta" href="mailto:pete@yatstats.com?subject=Launch%20a%20YATSTATS%20Community">Launch a school community</a></div></section><section class="section"><div class="wrap"><h2>One ecosystem. Four connected audiences.</h2><div class="grid"><article class="card"><h2>Schools, coaches and boosters</h2><p>A Fan Advancement Solution for communication, fundraising, alumni engagement, and sponsor development.</p></article><article class="card"><h2>Players and active alumni</h2><p>Hometown visibility, personal-brand growth, NIL pathways, mentorship, and career storytelling.</p></article><article class="card"><h2>Fans, families and alumni</h2><p>Stats, stories, nostalgia, game updates, fundraising campaigns, and a lasting connection to the program.</p></article><article class="card"><h2>Local co-branding partners</h2><p>Hyperlocal exposure and goodwill by helping provide the community platform to the school.</p></article></div><div class="model"><p class="number">1,025 school hubs</p><h2>Each school becomes a local growth engine.</h2><p>YAT?STATS equips programs with ARMS—the Alumni Relationship Management Solution—to grow and nurture their communities. Schools can introduce local businesses to a stronger co-branding opportunity than a traditional booster donation. Those partners subsidize the platform, receive measurable hometown exposure, and may also become ARMS Complete clients for their own businesses.</p><p><strong>Illustrative revenue model:</strong> 1,025 hubs × $1,000 per month = $1,025,000 in potential monthly recurring revenue. This is a target model, not a claim that the programs or revenue are currently contracted.</p></div><p class="note">The existing network of school microsites, including subdomains such as hamilton.az.yatstats.com, remains separate from this corporate homepage and continues to be powered by its existing application repository.</p></div></section></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YAT?STATS | Follow High School Baseball Alumni Into College & Pro Baseball</title>
+<meta name="description" content="YAT?STATS follows high school baseball alumni into college and professional baseball, reconnecting players, coaches, families, fans, alumni and hometown communities around the programs that started their stories.">
+<meta name="theme-color" content="#08090a">
+<meta property="og:title" content="YAT?STATS | Their Journey Didn't End at Graduation">
+<meta property="og:description" content="Follow the hometown players you still care about. Preserve the stories. Reconnect the alumni. Strengthen the program.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yatstats.com/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08090a;
+  --bg2:#0b0d0f;
+  --panel:#111315;
+  --panel2:#151719;
+  --panel3:#1a1c1f;
+  --line:#24272b;
+  --line2:#2d3136;
+  --text:#f5f5f2;
+  --muted:#9b9ea3;
+  --muted2:#70747a;
+  --gold:#efb936;
+  --gold2:#ffd76a;
+  --gold3:#8d6b1f;
+  --maroon:#7a1f2b;
+  --green:#2f9d68;
+  --shadow:0 30px 80px rgba(0,0,0,.42);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:86px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;line-height:1.55;overflow-x:hidden}
+a{color:inherit}
+img{display:block;max-width:100%}
+button,input,select,textarea{font:inherit}
+.shell{width:min(1160px,calc(100% - 40px));margin:auto}
+.testbar{background:linear-gradient(90deg,#d29a18,#f2c453);color:#111;text-align:center;padding:8px 14px;font-size:.68rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+.header{position:sticky;top:0;z-index:60;background:rgba(8,9,10,.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
+.header-inner{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;text-decoration:none}
+.brand img{width:150px;height:auto}
+.nav{display:flex;align-items:center;gap:22px}
+.nav a{text-decoration:none;color:#d7d8d9;font-size:.8rem;font-weight:700}
+.nav a:hover{color:#fff}
+.menu{display:none;border:0;background:transparent;color:#fff;font-size:1.6rem}
+.button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:47px;padding:13px 20px;border:1px solid transparent;border-radius:8px;text-decoration:none;font-weight:800;font-size:.84rem;cursor:pointer;transition:.2s ease;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#111;box-shadow:0 12px 35px rgba(239,185,54,.15)}
+.button:hover{transform:translateY(-1px);box-shadow:0 16px 40px rgba(239,185,54,.22)}
+.button.secondary{background:#141618;border-color:#292d31;color:#fff;box-shadow:none}
+.button.secondary:hover{background:#1b1e21}
+.button.small{min-height:38px;padding:9px 14px;font-size:.75rem}
+.eyebrow{margin:0 0 12px;color:var(--gold);font-size:.69rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
+.section{padding:96px 0}
+.section.alt{background:#090a0b}
+.section-glow{position:relative;overflow:hidden}
+.section-glow:before{content:"";position:absolute;width:620px;height:420px;left:50%;top:-120px;transform:translateX(-50%);background:radial-gradient(circle,rgba(239,185,54,.08),transparent 67%);pointer-events:none}
+.section-head{position:relative;max-width:850px;margin:0 auto 46px;text-align:center}
+.section-head.left{margin-left:0;text-align:left}
+.section-head h2{font:800 clamp(2.2rem,5vw,4.6rem)/1.02 Manrope,Inter,sans-serif;letter-spacing:-.045em;margin:0 0 16px}
+.section-head h2 span{color:var(--gold)}
+.section-head p{color:var(--muted);font-size:1rem;margin:0}
+.hero{position:relative;overflow:hidden;padding:82px 0 92px;background:radial-gradient(circle at 72% 12%,rgba(239,185,54,.13),transparent 26%),radial-gradient(circle at 16% 70%,rgba(122,31,43,.16),transparent 32%),linear-gradient(145deg,#08090a,#0b0d0f 55%,#0d0c09)}
+.hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:54px 54px;mask-image:linear-gradient(to bottom,black,transparent 88%)}
+.hero-grid{position:relative;display:grid;grid-template-columns:1.02fr .98fr;gap:58px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid #2b2f33;background:#101214;border-radius:999px;color:#b6b9bd;font-size:.69rem;font-weight:700;margin-bottom:22px}
+.pill i{display:block;width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(239,185,54,.1)}
+.hero h1{font:800 clamp(3.3rem,6.8vw,6.55rem)/.98 Manrope,Inter,sans-serif;letter-spacing:-.055em;margin:0 0 22px;max-width:850px}
+.hero h1 span{background:linear-gradient(90deg,var(--gold),var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-lede{font-size:clamp(1.05rem,1.55vw,1.22rem);color:#c0c2c5;max-width:700px;margin:0 0 28px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.hero-proof{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;color:#a8abb0;font-size:.73rem;font-weight:700}
+.hero-proof span strong{color:#fff}
+.product-wrap{position:relative}
+.product-glow{position:absolute;inset:10% -8% -4% 12%;background:radial-gradient(circle,rgba(239,185,54,.16),transparent 63%);filter:blur(28px);pointer-events:none}
+.product-card{position:relative;background:linear-gradient(180deg,#151719,#0e1011);border:1px solid #30343a;border-radius:20px;padding:14px;box-shadow:0 38px 90px rgba(0,0,0,.55)}
+.product-top{display:flex;align-items:center;justify-content:space-between;padding:1px 3px 12px;color:#8b8f94;font-size:.62rem}
+.product-top .dots{display:flex;gap:5px}.product-top .dots b{display:block;width:6px;height:6px;border-radius:50%;background:#3a3e43}.product-top .dots b:nth-child(2){background:#70561b}.product-top .dots b:nth-child(3){background:#66212a}
+.product-image{position:relative;border-radius:13px;overflow:hidden;border:1px solid #2d3034;background:#050505}
+.product-image img{width:100%;aspect-ratio:1.02/1;object-fit:cover;object-position:top center}
+.product-image:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.82),transparent 45%)}
+.product-caption{position:absolute;z-index:2;left:18px;right:18px;bottom:16px;display:flex;align-items:flex-end;justify-content:space-between;gap:15px}
+.product-caption h3{margin:0;font:800 1.2rem/1.05 Manrope,sans-serif}.product-caption p{margin:5px 0 0;color:#c4c6ca;font-size:.65rem}.tag{white-space:nowrap;border:1px solid #3b3e42;background:rgba(9,10,11,.82);border-radius:999px;padding:6px 9px;font-size:.56rem;font-weight:900;color:var(--gold)}
+.product-link{display:flex;align-items:center;justify-content:space-between;padding:13px 5px 1px;text-decoration:none;font-size:.74rem;font-weight:800}.product-link span:last-child{color:var(--gold)}
+.hero-media{position:relative;margin-top:46px;border-radius:22px;overflow:hidden;border:1px solid #24282c;background:#0b0c0d;box-shadow:var(--shadow)}
+.hero-media img{width:100%;height:360px;object-fit:cover;opacity:.42;filter:saturate(.8)}
+.hero-media:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,9,10,.95),rgba(8,9,10,.28) 60%,rgba(8,9,10,.6))}
+.hero-media-copy{position:absolute;z-index:2;left:34px;right:34px;top:50%;transform:translateY(-50%);max-width:660px}
+.hero-media-copy p{margin:0 0 10px;color:var(--gold);font-size:.68rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase}.hero-media-copy h2{font:800 clamp(2.1rem,4.5vw,4rem)/1.04 Manrope,sans-serif;margin:0 0 13px;letter-spacing:-.04em}.hero-media-copy span{color:#c0c3c7;font-size:.9rem}
+.problem-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.problem-card{position:relative;min-height:230px;padding:26px;background:linear-gradient(180deg,#121416,#0f1113);border:1px solid #25292d;border-radius:15px;overflow:hidden}
+.problem-card:after{content:attr(data-n);position:absolute;right:18px;top:7px;font:800 4.9rem/1 Manrope,sans-serif;color:#171a1d}
+.icon-box{position:relative;z-index:2;width:36px;height:36px;border-radius:9px;border:1px solid #2d3237;background:#181b1e;display:grid;place-items:center;color:var(--gold);font-weight:900}
+.problem-card h3{position:relative;z-index:2;font-size:1rem;margin:25px 0 8px}.problem-card p{position:relative;z-index:2;color:#94989d;margin:0;font-size:.82rem;max-width:92%}
+.origin-panel{display:grid;grid-template-columns:.9fr 1.1fr;gap:16px;background:linear-gradient(145deg,#111315,#0d0f10);border:1px solid #25292d;border-radius:18px;padding:22px}
+.origin-visual{position:relative;min-height:420px;border-radius:13px;overflow:hidden;background:#080808}
+.origin-visual img{width:100%;height:100%;min-height:420px;object-fit:cover;opacity:.55}
+.origin-visual:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9),transparent 62%)}
+.origin-quote{position:absolute;left:22px;right:22px;bottom:20px;z-index:2}.origin-quote strong{display:block;font:800 clamp(1.85rem,4vw,3.2rem)/1.02 Manrope,sans-serif;letter-spacing:-.04em}.origin-quote span{display:block;color:#c6c8cb;font-size:.72rem;margin-top:9px}
+.origin-copy{padding:20px 18px 18px}
+.origin-copy h3{font:800 clamp(2rem,4vw,3.6rem)/1.05 Manrope,sans-serif;letter-spacing:-.04em;margin:0 0 16px}.origin-copy h3 span{color:var(--gold)}.origin-copy>p{color:#9fa2a6;margin-bottom:22px}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:10px}.check{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid #292d31;background:#131517;border-radius:9px;font-size:.76rem;color:#cfd1d3}.check b{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:rgba(239,185,54,.12);color:var(--gold);font-size:.68rem;flex:0 0 auto}
+.proof-card{position:relative;background:linear-gradient(145deg,#101315,#0c0e10);border:1px solid #272b2f;border-radius:20px;padding:18px;box-shadow:0 26px 70px rgba(0,0,0,.3)}
+.proof-shot{border-radius:14px;overflow:hidden;border:1px solid #292d31;background:#050505}.proof-shot img{width:100%;height:auto}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #24282d;margin-top:18px}.metric{padding:22px 18px;border-right:1px solid #24282d}.metric:last-child{border-right:0}.metric strong{display:block;font:800 clamp(1.8rem,3.8vw,3rem)/1 Manrope,sans-serif;color:#fff}.metric span{display:block;color:#8f9398;font-size:.68rem;margin-top:7px}.metric em{font-style:normal;color:var(--gold)}
+.audience-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.aud-tab{border:1px solid #272b2f;background:#121416;color:#fff;border-radius:13px;padding:20px;text-align:left;cursor:pointer;transition:.2s ease;min-height:128px}.aud-tab:hover{border-color:#4a4130}.aud-tab.active{border-color:#8f6f25;box-shadow:0 0 0 1px rgba(239,185,54,.12),0 0 40px rgba(239,185,54,.08);background:linear-gradient(145deg,#151617,#17140d)}.aud-tab .small-icon{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:#1b1e21;color:var(--gold);margin-bottom:18px}.aud-tab strong{display:block;font-size:.93rem}.aud-tab span{display:block;color:#85898f;font-size:.7rem;margin-top:5px}.aud-detail{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;background:#101214;border:1px solid #272b2f;border-radius:16px;padding:28px}.aud-detail-copy h3{font:800 clamp(1.9rem,4vw,3.5rem)/1.05 Manrope,sans-serif;letter-spacing:-.04em;margin:0 0 13px}.aud-detail-copy p{color:#9da0a5;margin:0 0 22px}.aud-points{display:grid;gap:9px}.aud-points div{display:flex;gap:9px;color:#d4d5d6;font-size:.78rem}.aud-points div:before{content:"✓";color:var(--gold);font-weight:900}.aud-cta{display:flex;align-items:center;justify-content:center;border:1px solid #2b2f34;border-radius:12px;background:radial-gradient(circle at 50% 20%,rgba(239,185,54,.1),transparent 60%),#0d0f10;padding:22px;text-align:center}.aud-cta strong{display:block;font:800 1.7rem/1.05 Manrope,sans-serif;margin-bottom:9px}.aud-cta p{color:#898d92;font-size:.75rem;margin:0 0 18px}
+.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.step-card{padding:24px;background:#111315;border:1px solid #262a2e;border-radius:14px;min-height:210px}.step-card .num{font:800 2.6rem/1 Manrope,sans-serif;color:var(--gold)}.step-card h3{font-size:.95rem;margin:25px 0 8px}.step-card p{color:#8f9398;font-size:.75rem;margin:0}.goldenline{margin-top:34px;display:grid;grid-template-columns:.95fr 1.05fr;gap:16px}.memory-card{border:1px solid #292d31;background:linear-gradient(145deg,#141618,#0e1011);border-radius:16px;padding:26px}.memory-card h3{font:800 clamp(1.9rem,3.5vw,3rem)/1.05 Manrope,sans-serif;letter-spacing:-.035em;margin:0 0 12px}.memory-card h3 span{color:var(--gold)}.memory-card p{color:#969a9f;font-size:.83rem}.memory-example{position:relative;border-radius:16px;overflow:hidden;min-height:290px;border:1px solid #292d31;background:#111}.memory-example img{width:100%;height:100%;min-height:290px;object-fit:cover;opacity:.44}.memory-example:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.93),rgba(0,0,0,.1))}.memory-quote{position:absolute;z-index:2;left:24px;right:24px;bottom:22px}.memory-quote span{font-size:.63rem;color:var(--gold);font-weight:900;letter-spacing:.12em;text-transform:uppercase}.memory-quote blockquote{margin:9px 0 7px;font:800 1.6rem/1.08 Manrope,sans-serif;letter-spacing:-.035em}.memory-quote small{color:#aaaeb2}
+.blog-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:14px}.blog-card{min-height:280px;padding:24px;border:1px solid #282c30;border-radius:15px;background:linear-gradient(145deg,#141618,#101214);display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden}.blog-card:before{content:"";position:absolute;width:240px;height:240px;right:-80px;top:-80px;background:radial-gradient(circle,rgba(239,185,54,.12),transparent 65%)}.blog-card>*{position:relative;z-index:2}.blog-card .label{color:var(--gold);font-size:.62rem;font-weight:900;letter-spacing:.11em;text-transform:uppercase}.blog-card h3{font:800 1.5rem/1.07 Manrope,sans-serif;letter-spacing:-.035em;margin:8px 0}.blog-card p{color:#8e9297;font-size:.75rem;margin:0}.blog-card.featured h3{font-size:2.35rem}.blog-card a{margin-top:15px;font-size:.72rem;font-weight:800;text-decoration:none}.blog-card a span{color:var(--gold)}
+.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.how-card{padding:24px;border:1px solid #282c30;background:#111315;border-radius:14px;min-height:210px}.how-card b{display:block;font:800 2.7rem/1 Manrope,sans-serif;color:var(--gold)}.how-card strong{display:block;margin:25px 0 8px;font-size:.9rem}.how-card p{margin:0;color:#8d9196;font-size:.74rem}
+.faq{max-width:880px;margin:auto}.faq details{border:1px solid #272b2f;background:#111315;border-radius:10px;margin:10px 0;padding:18px 20px}.faq summary{cursor:pointer;font-size:.83rem;font-weight:800}.faq p{color:#94989d;font-size:.79rem;margin-bottom:0}
+.cta-band{position:relative;overflow:hidden;border:1px solid #2b2f33;border-radius:20px;background:radial-gradient(circle at 50% 0%,rgba(239,185,54,.13),transparent 40%),linear-gradient(145deg,#121416,#0c0e0f);padding:48px;text-align:center}.cta-band h2{font:800 clamp(2.3rem,5vw,4.8rem)/1.02 Manrope,sans-serif;letter-spacing:-.045em;margin:0 auto 15px;max-width:900px}.cta-band h2 span{color:var(--gold)}.cta-band p{max-width:680px;margin:0 auto 24px;color:#999da2}.form-card{margin:36px auto 0;max-width:900px;border:1px solid #282c30;background:#101214;border-radius:16px;padding:26px;text-align:left}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-card label{display:block;color:#cfd1d3;font-size:.68rem;font-weight:800;margin-bottom:6px}.form-card input,.form-card select,.form-card textarea{width:100%;background:#0b0d0e;color:#fff;border:1px solid #292d31;border-radius:8px;padding:12px}.form-card textarea{min-height:110px;resize:vertical}.full{grid-column:1/-1}.form-note{min-height:20px;color:#d8b44f;font-size:.7rem;margin-top:10px}.footer{border-top:1px solid #202428;background:#070809;padding:34px 0;color:#83878c}.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:20px}.footer img{width:140px}.footer-links{display:flex;gap:16px;flex-wrap:wrap}.footer-links a{text-decoration:none;font-size:.72rem}
+@media(max-width:980px){
+  .nav{display:none;position:absolute;top:72px;left:0;right:0;padding:20px;background:#090a0b;border-bottom:1px solid #25292d;flex-direction:column;align-items:flex-start}.nav.open{display:flex}.menu{display:block}
+  .hero-grid,.origin-panel,.aud-detail,.goldenline{grid-template-columns:1fr}.product-wrap{max-width:720px}.metrics{grid-template-columns:1fr 1fr}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid #24282d}.audience-tabs{grid-template-columns:1fr 1fr}.timeline{grid-template-columns:repeat(3,1fr)}.blog-grid{grid-template-columns:1fr 1fr}.blog-card.featured{grid-column:1/-1}.how-grid{grid-template-columns:1fr 1fr}.origin-visual{min-height:360px}.origin-visual img{min-height:360px}
+}
+@media(max-width:680px){
+  .shell{width:min(100% - 26px,1160px)}.header-inner{min-height:66px}.brand img{width:132px}.nav{top:66px}.section{padding:72px 0}.hero{padding:58px 0 70px}.hero h1{font-size:3.45rem}.hero-actions .button{width:100%}.hero-media img{height:320px}.hero-media-copy{left:22px;right:22px}.hero-media-copy h2{font-size:2.35rem}.problem-grid{grid-template-columns:1fr}.checks{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.metric{padding:18px 13px}.audience-tabs{grid-template-columns:1fr 1fr}.aud-tab{padding:16px;min-height:116px}.aud-detail{padding:20px}.timeline{grid-template-columns:1fr}.step-card{min-height:0}.blog-grid,.how-grid{grid-template-columns:1fr}.blog-card.featured{grid-column:auto}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.cta-band{padding:30px 20px}.footer-inner{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="testbar">Test branch preview — not connected to the live YAT?STATS homepage</div>
+<header class="header">
+  <div class="shell header-inner">
+    <a class="brand" href="#top"><img src="https://yatstats.github.io/hamilton-mvp/assets/img/yatstats-logo.png" alt="YAT?STATS"></a>
+    <button class="menu" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <nav class="nav">
+      <a href="#problem">The Problem</a>
+      <a href="#proof">Proof</a>
+      <a href="#who">Who It's For</a>
+      <a href="#timeline">Golden Timeline</a>
+      <a href="#stories">Stories</a>
+      <a class="button small" href="#apply">Find Your Place</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="hero" id="top">
+  <div class="shell">
+    <div class="hero-grid">
+      <div>
+        <div class="pill"><i></i> Built for the baseball communities that never stopped caring</div>
+        <h1>Their baseball journey didn't end at graduation. <span>Neither should their story.</span></h1>
+        <p class="hero-lede">YAT?STATS follows high school baseball alumni into college and professional baseball — then brings their stats, milestones, memories and stories back home to the programs and people that helped get them there.</p>
+        <div class="hero-actions">
+          <a class="button" href="#apply">Find Your High School</a>
+          <a class="button secondary" href="https://hamilton.az.yatstats.com" target="_blank" rel="noopener">See Hamilton, AZ</a>
+        </div>
+        <div class="hero-proof"><span><strong>17,000+</strong> HS programs searchable</span><span><strong>College → Pro</strong> alumni tracking</span><span><strong>Past + Present</strong> in one hometown view</span></div>
+      </div>
+      <div class="product-wrap">
+        <div class="product-glow"></div>
+        <div class="product-card">
+          <div class="product-top"><div class="dots"><b></b><b></b><b></b></div><span>hamilton.az.yatstats.com</span><span>LIVE COMMUNITY</span></div>
+          <div class="product-image">
+            <img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https%3A//assets.cdn.filesafe.space/8eYj1Uj7Ugt0PDUGHblx/media/69d3e9436ea2b5d7c0c73155.jpg" alt="Hamilton YAT?STATS active alumni community">
+            <div class="product-caption"><div><h3>Follow the players who came from here.</h3><p>One school. Generations of players. One community that still cares.</p></div><div class="tag">HAMILTON · AZ</div></div>
+          </div>
+          <a class="product-link" href="https://hamilton.az.yatstats.com" target="_blank" rel="noopener"><span>Open the flagship community</span><span>Explore →</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-media">
+      <img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https%3A//assets.cdn.filesafe.space/8eYj1Uj7Ugt0PDUGHblx/media/69aa5fab618c8d2e6017c698.png" alt="Baseball fans cheering in a stadium">
+      <div class="hero-media-copy"><p>The hometown never stopped watching</p><h2>Stats tell you what happened. Community tells you why it mattered.</h2><span>YAT?STATS is designed to keep both alive — the next-level performance and the hometown connection behind it.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt section-glow" id="problem">
+  <div class="shell">
+    <div class="section-head left">
+      <p class="eyebrow">The problem</p>
+      <h2>Graduation breaks a connection that <span>never really went away.</span></h2>
+      <p>Players move on. The hometown keeps caring. But the trail gets scattered across box scores, social feeds, old photos, memories and word of mouth.</p>
+    </div>
+    <div class="problem-grid">
+      <article class="problem-card" data-n="01"><div class="icon-box">↗</div><h3>The trail goes cold</h3><p>A player leaves high school and suddenly fans, parents and former teammates have to hunt across dozens of places just to keep up.</p></article>
+      <article class="problem-card" data-n="02"><div class="icon-box">⌁</div><h3>Program history gets fragmented</h3><p>Photos, stories, championship memories and old teammate connections live everywhere except one place built for the program.</p></article>
+      <article class="problem-card" data-n="03"><div class="icon-box">◎</div><h3>Alumni scatter</h3><p>Former players lose an easy reason to stay connected to the coaches, teammates, families and school that helped shape their baseball life.</p></article>
+      <article class="problem-card" data-n="04"><div class="icon-box">◆</div><h3>Schools leave value behind</h3><p>Decades of alumni success, loyalty and local goodwill rarely become an active community asset that helps today's program grow.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="origin">
+  <div class="shell">
+    <div class="section-head">
+      <p class="eyebrow">Why YAT?STATS</p>
+      <h2>Built from a Hall of Fame coach's <span>real problem.</span></h2>
+      <p>Not a theoretical use case. The idea started with one of high school baseball's most accomplished programs asking a very simple question: where are our guys now?</p>
+    </div>
+    <div class="origin-panel">
+      <div class="origin-visual">
+        <img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https%3A//assets.cdn.filesafe.space/8eYj1Uj7Ugt0PDUGHblx/media/69aa5f8c7bdf3880b88d573f.png" alt="Baseballs held at a baseball field">
+        <div class="origin-quote"><strong>“No more huntin' & peckin' to track my alumni.”</strong><span>Coach Mike Woods · Hamilton High School · Chandler, Arizona</span></div>
+      </div>
+      <div class="origin-copy">
+        <h3>One elite program exposed a <span>national opportunity.</span></h3>
+        <p>Mike Woods spent decades building Hamilton into a nationally recognized baseball program. The players kept moving on. The relationships did not. YAT?STATS was created to make following those journeys — and preserving the program's living history — easier.</p>
+        <div class="checks">
+          <div class="check"><b>✓</b><span>10 Arizona state championships under Woods</span></div>
+          <div class="check"><b>✓</b><span>College and professional alumni worth following</span></div>
+          <div class="check"><b>✓</b><span>Families and former teammates who still care</span></div>
+          <div class="check"><b>✓</b><span>A program identity that extends beyond graduation</span></div>
+          <div class="check"><b>✓</b><span>A model that can repeat school by school</span></div>
+          <div class="check"><b>✓</b><span>A natural local sponsorship and fundraising layer</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="proof">
+  <div class="shell">
+    <div class="section-head left">
+      <p class="eyebrow">Proof of concept</p>
+      <h2>Hamilton isn't a mockup. <span>It's where the idea began.</span></h2>
+      <p>The flagship community already shows the direction: current alumni, school-branded player cards, next-level snapshots and a hometown lens around the players who came through the program.</p>
+    </div>
+    <div class="proof-card">
+      <div class="proof-shot"><img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https%3A//assets.cdn.filesafe.space/8eYj1Uj7Ugt0PDUGHblx/media/69d3e9436ea2b5d7c0c73155.jpg" alt="Hamilton YAT?STATS player card gallery"></div>
+      <div class="metrics">
+        <div class="metric"><strong>17K<em>+</em></strong><span>High school programs searchable</span></div>
+        <div class="metric"><strong>10</strong><span>Hamilton state titles under Mike Woods</span></div>
+        <div class="metric"><strong>HS→MLB</strong><span>One continuous hometown lens</span></div>
+        <div class="metric"><strong>Past + Present</strong><span>Active and inactive alumni belong</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-glow" id="who">
+  <div class="shell">
+    <div class="section-head">
+      <p class="eyebrow">Who we help</p>
+      <h2>How do you fit into the <span>baseball community?</span></h2>
+      <p>Choose your role. The value of YAT?STATS changes depending on where you sit in the clubhouse.</p>
+    </div>
+    <div class="audience-tabs" role="tablist">
+      <button class="aud-tab active" data-role="fan"><div class="small-icon">★</div><strong>Fan / Family</strong><span>Follow the hometown players you still care about</span></button>
+      <button class="aud-tab" data-role="coach"><div class="small-icon">H</div><strong>Coach / Booster</strong><span>Reconnect alumni and strengthen today's program</span></button>
+      <button class="aud-tab" data-role="player"><div class="small-icon">#</div><strong>Player / Alumni</strong><span>Keep your journey connected to home</span></button>
+      <button class="aud-tab" data-role="sponsor"><div class="small-icon">◆</div><strong>Local Partner</strong><span>Support the program and become part of its community</span></button>
+    </div>
+    <div class="aud-detail">
+      <div class="aud-detail-copy">
+        <h3 id="role-title">Follow the players who still feel like yours.</h3>
+        <p id="role-copy">Your favorite hometown player may be at a college 1,500 miles away or grinding through professional baseball. YAT?STATS organizes the journey back around the school and community where you first knew him.</p>
+        <div class="aud-points" id="role-points"><div>One hometown view instead of scattered searches</div><div>College and pro milestones organized by former school</div><div>Stories, memories and program history around the stats</div></div>
+      </div>
+      <div class="aud-cta"><div><strong id="role-cta-title">Start with your high school.</strong><p id="role-cta-copy">Find the program you played for, graduated from or still root for.</p><a id="role-cta" class="button" href="#apply">Find My School</a></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="timeline">
+  <div class="shell">
+    <div class="section-head left">
+      <p class="eyebrow">The Golden Timeline</p>
+      <h2>A baseball journey is bigger than the <span>last box score.</span></h2>
+      <p>YAT?STATS is built around continuity — from the first years of baseball through high school, the next level, professional baseball and life after the uniform.</p>
+    </div>
+    <div class="timeline">
+      <div class="step-card"><div class="num">01</div><h3>Youth Ball</h3><p>The first teams, first coaches, first photos and first stories.</p></div>
+      <div class="step-card"><div class="num">02</div><h3>High School</h3><p>The hometown program becomes the anchor for the entire journey.</p></div>
+      <div class="step-card"><div class="num">03</div><h3>College</h3><p>Stats, schedules, transfers, milestones and next-level visibility.</p></div>
+      <div class="step-card"><div class="num">04</div><h3>Pro Baseball</h3><p>Independent ball, minor leagues, MLB and every stop in between.</p></div>
+      <div class="step-card"><div class="num">05</div><h3>Alumni</h3><p>The playing days end. The relationship with home does not.</p></div>
+    </div>
+    <div class="goldenline">
+      <div class="memory-card">
+        <p class="eyebrow">The Golden Line</p>
+        <h3>Stats tell us what happened. <span>Memories tell us why it mattered.</span></h3>
+        <p>Photos, teammate stories, coach reflections, championship moments and family memories can become part of the same timeline as the measurable baseball journey.</p>
+        <a class="button" href="#apply">Contribute a Story</a>
+      </div>
+      <div class="memory-example">
+        <img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https%3A//assets.cdn.filesafe.space/8eYj1Uj7Ugt0PDUGHblx/media/69aa5fab618c8d2e6017c698.png" alt="Fans celebrating a baseball moment">
+        <div class="memory-quote"><span>Fan memory · attached to the player + season</span><blockquote>“I was there when he hit the walk-off that sent us to State.”</blockquote><small>The kind of story a box score can never preserve.</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="stories">
+  <div class="shell">
+    <div class="section-head left">
+      <p class="eyebrow">Stories from the clubhouse</p>
+      <h2>Give hometown heroes more than a <span>player page.</span></h2>
+      <p>The next version of YAT?STATS can pair the stat utility with an editorial layer — player journeys, alumni profiles, program history and community-submitted stories.</p>
+    </div>
+    <div class="blog-grid">
+      <article class="blog-card featured"><span class="label">Featured Journey</span><h3>From hometown diamond to the next level.</h3><p>Long-form player stories that connect today's accomplishments back to the place the journey began.</p><a href="#apply">Explore the story concept <span>→</span></a></article>
+      <article class="blog-card"><span class="label">Program History</span><h3>The teams people still talk about.</h3><p>Championship seasons, coaches, teammates and memories that deserve a permanent home.</p><a href="#apply">Preserve a memory <span>→</span></a></article>
+      <article class="blog-card"><span class="label">Where Are They Now?</span><h3>Baseball ends. Alumni doesn't.</h3><p>Reconnect former players to teammates, mentors, local businesses and the next generation.</p><a href="#apply">Reconnect <span>→</span></a></article>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="how">
+  <div class="shell">
+    <div class="section-head left"><p class="eyebrow">Process</p><h2>How it <span>works.</span></h2></div>
+    <div class="how-grid">
+      <div class="how-card"><b>01</b><strong>Find your program</strong><p>Start with the high school you played for, graduated from or still follow.</p></div>
+      <div class="how-card"><b>02</b><strong>Follow its alumni</strong><p>See the players continuing their baseball journey in college and the pros.</p></div>
+      <div class="how-card"><b>03</b><strong>Reconnect the story</strong><p>Add memories, history, alumni participation and community context around the stats.</p></div>
+      <div class="how-card"><b>04</b><strong>Strengthen the program</strong><p>Turn that attention into a more active alumni, fan, fundraising and local sponsorship ecosystem.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="shell">
+    <div class="section-head"><p class="eyebrow">FAQ</p><h2>Questions, <span>answered.</span></h2></div>
+    <div class="faq">
+      <details open><summary>Is YAT?STATS just another college baseball stats app?</summary><p>No. Stats are part of the utility, but the organizing principle is the hometown program. YAT?STATS brings college and professional alumni back into the context of the school, coaches, families, teammates and fans who already care about them.</p></details>
+      <details><summary>Who is YAT?STATS built for?</summary><p>Fans and families, coaches and booster leaders, current and former players, and local businesses that want to support a meaningful baseball community.</p></details>
+      <details><summary>What happens after a player stops playing?</summary><p>He still belongs to the program's history. The broader vision includes all-time alumni lists, memories, stories, interviews, mentorship, business connections and community participation after real-time tracking ends.</p></details>
+      <details><summary>Does every school already have a live community?</summary><p>No. The national database can identify programs while school communities are activated in stages. Hamilton, Arizona is the flagship proof-of-concept environment.</p></details>
+      <details><summary>Will YAT?STATS still connect to HighLevel / ARMS?</summary><p>Yes. The public site can live on a modern Vercel front end while HighLevel handles forms, CRM, attribution, email, SMS, pipelines and audience-specific nurture campaigns behind the scenes.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="apply">
+  <div class="shell">
+    <div class="cta-band">
+      <p class="eyebrow">Where do you fit?</p>
+      <h2>Every baseball community already exists. <span>YAT?STATS gives it a home.</span></h2>
+      <p>This test build is designed so the final calls-to-action can route fans, coaches, players and local partners into the right ARMS / HighLevel nurture path without forcing the whole public site to live inside the page builder.</p>
+      <div class="form-card">
+        <form id="interest-form">
+          <div class="form-grid">
+            <div><label for="name">Name</label><input id="name" name="name" placeholder="Your name"></div>
+            <div><label for="email">Email</label><input id="email" name="email" type="email" placeholder="you@email.com"></div>
+            <div><label for="school">High school / program</label><input id="school" name="school" placeholder="Hamilton High School"></div>
+            <div><label for="role">How do you fit in?</label><select id="role" name="role"><option>Fan / Family</option><option>Coach / Booster</option><option>Player / Alumni</option><option>Local Business / Sponsor</option></select></div>
+            <div class="full"><label for="message">What would you like to do?</label><textarea id="message" name="message" placeholder="Tell us what caught your attention..."></textarea></div>
+            <div class="full"><button class="button" type="submit" style="width:100%">Continue With YAT?STATS →</button><div class="form-note" id="form-note"></div></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="footer">
+  <div class="shell footer-inner">
+    <img src="https://yatstats.github.io/hamilton-mvp/assets/img/yatstats-logo.png" alt="YAT?STATS">
+    <div class="footer-links"><a href="#problem">Why YAT?</a><a href="#proof">Hamilton</a><a href="#timeline">Golden Timeline</a><a href="#stories">Stories</a><a href="#apply">Get Involved</a></div>
+    <span style="font-size:.7rem">© <span id="year"></span> YAT?STATS</span>
+  </div>
+</footer>
+<script>
+const menu=document.querySelector('.menu');
+const nav=document.querySelector('.nav');
+menu?.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));});
+nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+document.getElementById('year').textContent=new Date().getFullYear();
+
+const roleData={
+ fan:{title:'Follow the players who still feel like yours.',copy:'Your favorite hometown player may be at a college 1,500 miles away or grinding through professional baseball. YAT?STATS organizes the journey back around the school and community where you first knew him.',points:['One hometown view instead of scattered searches','College and pro milestones organized by former school','Stories, memories and program history around the stats'],ctaTitle:'Start with your high school.',ctaCopy:'Find the program you played for, graduated from or still root for.',cta:'Find My School'},
+ coach:{title:'Turn decades of alumni history into an active program asset.',copy:'Your former players are already a community. YAT?STATS gives the program a place to recognize them, follow the ones still playing and rebuild the relationships that usually fade after graduation.',points:['Active alumni tracking organized around your program','All-time alumni recognition and storytelling','New fundraising, mentorship and sponsor opportunities'],ctaTitle:'Build the alumni connection.',ctaCopy:'See how YAT?STATS can become the digital hometown for your program.',cta:'Bring YAT?STATS to My Program'},
+ player:{title:'Your story can stay connected to the place it started.',copy:'Current and former players should not disappear from the hometown story when the season ends. YAT?STATS is designed to keep the journey visible and the alumni relationship useful long after graduation.',points:['Share milestones with hometown fans and former teammates','Contribute stories and memories to your Golden Timeline','Reconnect with alumni, mentors and local opportunities'],ctaTitle:'Stay part of the story.',ctaCopy:'Tell us where you played and where your journey went next.',cta:'Connect My Player Story'},
+ sponsor:{title:'Support the community instead of buying another forgettable banner.',copy:'Local businesses can help make the platform available to a school while receiving meaningful hometown exposure around players, alumni, families and stories people already care about.',points:['Hyper-local program alignment','Community goodwill and measurable digital visibility','A stronger story than a traditional booster donation'],ctaTitle:'Put your brand behind the hometown.',ctaCopy:'Explore how a local partnership could support a school community.',cta:'Explore Local Sponsorship'}
+};
+const tabs=document.querySelectorAll('.aud-tab');
+const title=document.getElementById('role-title'),copy=document.getElementById('role-copy'),points=document.getElementById('role-points'),ctaTitle=document.getElementById('role-cta-title'),ctaCopy=document.getElementById('role-cta-copy'),cta=document.getElementById('role-cta'),roleSelect=document.getElementById('role');
+tabs.forEach(tab=>tab.addEventListener('click',()=>{tabs.forEach(t=>t.classList.remove('active'));tab.classList.add('active');const r=roleData[tab.dataset.role];title.textContent=r.title;copy.textContent=r.copy;points.innerHTML=r.points.map(p=>`<div>${p}</div>`).join('');ctaTitle.textContent=r.ctaTitle;ctaCopy.textContent=r.ctaCopy;cta.textContent=r.cta;if(roleSelect){const map={fan:0,coach:1,player:2,sponsor:3};roleSelect.selectedIndex=map[tab.dataset.role];}}));
+
+document.getElementById('interest-form')?.addEventListener('submit',e=>{e.preventDefault();document.getElementById('form-note').textContent='Test branch only — this form is intentionally not connected to HighLevel yet.';});
+</script>
+</body>
+</html>
