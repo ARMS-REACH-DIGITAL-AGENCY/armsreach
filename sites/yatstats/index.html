@@ -85,6 +85,30 @@ button,input,select,textarea{font:inherit}
 .product-caption{position:absolute;z-index:2;left:18px;right:18px;bottom:16px;display:flex;align-items:flex-end;justify-content:space-between;gap:15px}
 .product-caption h3{margin:0;font:800 1.2rem/1.05 Manrope,sans-serif}.product-caption p{margin:5px 0 0;color:#c4c6ca;font-size:.65rem}.tag{white-space:nowrap;border:1px solid #3b3e42;background:rgba(9,10,11,.82);border-radius:999px;padding:6px 9px;font-size:.56rem;font-weight:900;color:var(--gold)}
 .product-link{display:flex;align-items:center;justify-content:space-between;padding:13px 5px 1px;text-decoration:none;font-size:.74rem;font-weight:800}.product-link span:last-child{color:var(--gold)}
+
+/* Featured live global search — powered by the same school/player endpoints as the microsites */
+.network-search{position:relative;margin-top:44px;border:1px solid #34383d;border-radius:22px;background:radial-gradient(circle at 76% 0%,rgba(239,185,54,.12),transparent 30%),linear-gradient(145deg,#121416,#0c0e10);padding:28px;box-shadow:0 34px 90px rgba(0,0,0,.42)}
+.network-search:before{content:"";position:absolute;inset:-1px;border-radius:22px;padding:1px;background:linear-gradient(120deg,rgba(239,185,54,.32),transparent 28%,transparent 70%,rgba(239,185,54,.12));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.network-search-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:20px}
+.network-search-head h2{font:800 clamp(2rem,4vw,3.8rem)/1.02 Manrope,sans-serif;letter-spacing:-.045em;margin:0}.network-search-head h2 span{color:var(--gold)}
+.network-search-head p{max-width:420px;margin:0;color:#92969b;font-size:.82rem}
+.search-input-wrap{position:relative;display:flex;align-items:center;border:1px solid #353a40;background:#090b0c;border-radius:12px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.01)}
+.search-input-wrap:focus-within{border-color:#8d702c;box-shadow:0 0 0 3px rgba(239,185,54,.08)}
+.search-icon{width:52px;display:grid;place-items:center;color:var(--gold);font-size:1.1rem;flex:0 0 auto}
+#network-search-input{width:100%;border:0;outline:0;background:transparent;color:#fff;padding:17px 12px 17px 0;font-size:1rem}
+#network-search-input::placeholder{color:#62676d}
+.search-clear{display:none;border:0;background:transparent;color:#888;padding:12px 16px;cursor:pointer;font-size:1rem}.search-clear.show{display:block}.search-clear:hover{color:#fff}
+.search-hints{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;color:#72777d;font-size:.67rem}.search-hints button{border:1px solid #292e33;background:#111315;color:#aaaeb3;border-radius:999px;padding:6px 9px;cursor:pointer;font-size:.65rem}.search-hints button:hover{color:#fff;border-color:#5b4a24}.search-hints strong{color:#aeb1b5;font-weight:700}
+.search-results{margin-top:18px;display:none}.search-results.open{display:block}
+.search-state{padding:24px;border:1px dashed #2b3035;border-radius:12px;color:#777c82;text-align:center;font-size:.78rem}
+.result-group+.result-group{margin-top:18px}.result-group-title{display:flex;align-items:center;justify-content:space-between;color:#aeb2b7;font-size:.65rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin:0 2px 8px}.result-group-title span:last-child{color:#676c72;letter-spacing:0;text-transform:none;font-weight:600}
+.result-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.search-result{display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:12px;padding:12px;border:1px solid #292d31;border-radius:11px;background:#111315;text-decoration:none;min-width:0;transition:.18s ease}.search-result:hover{border-color:#5a4922;background:#151615;transform:translateY(-1px)}
+.result-avatar{width:46px;height:46px;border-radius:10px;object-fit:contain;background:#090a0b;border:1px solid #282c30;padding:4px}.result-avatar.player{border-radius:50%;object-fit:cover}
+.result-info{min-width:0}.result-name{font-size:.82rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.result-sub{color:#81868c;font-size:.67rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}.result-meta{display:flex;align-items:center;gap:7px;margin-top:5px;flex-wrap:wrap}.result-chip{border:1px solid #2e3237;border-radius:999px;padding:3px 6px;color:#969ba1;font-size:.56rem;font-weight:700}.result-chip.live{color:#67d397;border-color:rgba(78,181,123,.35);background:rgba(78,181,123,.06)}.result-chip.potential{color:#e6bd58;border-color:rgba(239,185,54,.35);background:rgba(239,185,54,.06)}
+.result-arrow{color:#6f747a;font-size:1rem;padding:0 4px}.search-result:hover .result-arrow{color:var(--gold)}
+.network-search-footer{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-top:16px;padding-top:15px;border-top:1px solid #25292d;color:#767b81;font-size:.65rem}.network-search-footer strong{color:#b8bbc0}
+
 .hero-media{position:relative;margin-top:46px;border-radius:22px;overflow:hidden;border:1px solid #24282c;background:#0b0c0d;box-shadow:var(--shadow)}
 .hero-media img{width:100%;height:360px;object-fit:cover;opacity:.42;filter:saturate(.8)}
 .hero-media:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,9,10,.95),rgba(8,9,10,.28) 60%,rgba(8,9,10,.6))}
@@ -114,10 +138,10 @@ button,input,select,textarea{font:inherit}
 .cta-band{position:relative;overflow:hidden;border:1px solid #2b2f33;border-radius:20px;background:radial-gradient(circle at 50% 0%,rgba(239,185,54,.13),transparent 40%),linear-gradient(145deg,#121416,#0c0e0f);padding:48px;text-align:center}.cta-band h2{font:800 clamp(2.3rem,5vw,4.8rem)/1.02 Manrope,sans-serif;letter-spacing:-.045em;margin:0 auto 15px;max-width:900px}.cta-band h2 span{color:var(--gold)}.cta-band p{max-width:680px;margin:0 auto 24px;color:#999da2}.form-card{margin:36px auto 0;max-width:900px;border:1px solid #282c30;background:#101214;border-radius:16px;padding:26px;text-align:left}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-card label{display:block;color:#cfd1d3;font-size:.68rem;font-weight:800;margin-bottom:6px}.form-card input,.form-card select,.form-card textarea{width:100%;background:#0b0d0e;color:#fff;border:1px solid #292d31;border-radius:8px;padding:12px}.form-card textarea{min-height:110px;resize:vertical}.full{grid-column:1/-1}.form-note{min-height:20px;color:#d8b44f;font-size:.7rem;margin-top:10px}.footer{border-top:1px solid #202428;background:#070809;padding:34px 0;color:#83878c}.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:20px}.footer img{width:140px}.footer-links{display:flex;gap:16px;flex-wrap:wrap}.footer-links a{text-decoration:none;font-size:.72rem}
 @media(max-width:980px){
   .nav{display:none;position:absolute;top:72px;left:0;right:0;padding:20px;background:#090a0b;border-bottom:1px solid #25292d;flex-direction:column;align-items:flex-start}.nav.open{display:flex}.menu{display:block}
-  .hero-grid,.origin-panel,.aud-detail,.goldenline{grid-template-columns:1fr}.product-wrap{max-width:720px}.metrics{grid-template-columns:1fr 1fr}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid #24282d}.audience-tabs{grid-template-columns:1fr 1fr}.timeline{grid-template-columns:repeat(3,1fr)}.blog-grid{grid-template-columns:1fr 1fr}.blog-card.featured{grid-column:1/-1}.how-grid{grid-template-columns:1fr 1fr}.origin-visual{min-height:360px}.origin-visual img{min-height:360px}
+  .hero-grid,.origin-panel,.aud-detail,.goldenline{grid-template-columns:1fr}.product-wrap{max-width:720px}.network-search-head{align-items:flex-start;flex-direction:column}.result-list{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid #24282d}.audience-tabs{grid-template-columns:1fr 1fr}.timeline{grid-template-columns:repeat(3,1fr)}.blog-grid{grid-template-columns:1fr 1fr}.blog-card.featured{grid-column:1/-1}.how-grid{grid-template-columns:1fr 1fr}.origin-visual{min-height:360px}.origin-visual img{min-height:360px}
 }
 @media(max-width:680px){
-  .shell{width:min(100% - 26px,1160px)}.header-inner{min-height:66px}.brand img{width:132px}.nav{top:66px}.section{padding:72px 0}.hero{padding:58px 0 70px}.hero h1{font-size:3.45rem}.hero-actions .button{width:100%}.hero-media img{height:320px}.hero-media-copy{left:22px;right:22px}.hero-media-copy h2{font-size:2.35rem}.problem-grid{grid-template-columns:1fr}.checks{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.metric{padding:18px 13px}.audience-tabs{grid-template-columns:1fr 1fr}.aud-tab{padding:16px;min-height:116px}.aud-detail{padding:20px}.timeline{grid-template-columns:1fr}.step-card{min-height:0}.blog-grid,.how-grid{grid-template-columns:1fr}.blog-card.featured{grid-column:auto}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.cta-band{padding:30px 20px}.footer-inner{flex-direction:column;align-items:flex-start}
+  .shell{width:min(100% - 26px,1160px)}.header-inner{min-height:66px}.brand img{width:132px}.nav{top:66px}.section{padding:72px 0}.hero{padding:58px 0 70px}.hero h1{font-size:3.45rem}.hero-actions .button{width:100%}.network-search{padding:20px;margin-top:34px}.network-search-head h2{font-size:2.2rem}.search-icon{width:44px}.network-search-footer{align-items:flex-start;flex-direction:column}.hero-media img{height:320px}.hero-media-copy{left:22px;right:22px}.hero-media-copy h2{font-size:2.35rem}.problem-grid{grid-template-columns:1fr}.checks{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.metric{padding:18px 13px}.audience-tabs{grid-template-columns:1fr 1fr}.aud-tab{padding:16px;min-height:116px}.aud-detail{padding:20px}.timeline{grid-template-columns:1fr}.step-card{min-height:0}.blog-grid,.how-grid{grid-template-columns:1fr}.blog-card.featured{grid-column:auto}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.cta-band{padding:30px 20px}.footer-inner{flex-direction:column;align-items:flex-start}
 }
 </style>
 </head>
@@ -128,6 +152,7 @@ button,input,select,textarea{font:inherit}
     <a class="brand" href="#top"><img src="https://yatstats.github.io/hamilton-mvp/assets/img/yatstats-logo.png" alt="YAT?STATS"></a>
     <button class="menu" aria-label="Open navigation" aria-expanded="false">☰</button>
     <nav class="nav">
+      <a href="#global-search">Search</a>
       <a href="#problem">The Problem</a>
       <a href="#proof">Proof</a>
       <a href="#who">Who It's For</a>
@@ -146,7 +171,7 @@ button,input,select,textarea{font:inherit}
         <h1>Their baseball journey didn't end at graduation. <span>Neither should their story.</span></h1>
         <p class="hero-lede">YAT?STATS follows high school baseball alumni into college and professional baseball — then brings their stats, milestones, memories and stories back home to the programs and people that helped get them there.</p>
         <div class="hero-actions">
-          <a class="button" href="#apply">Find Your High School</a>
+          <a class="button" href="#global-search">Search the YAT?STATS Network</a>
           <a class="button secondary" href="https://hamilton.az.yatstats.com" target="_blank" rel="noopener">See Hamilton, AZ</a>
         </div>
         <div class="hero-proof"><span><strong>17,000+</strong> HS programs searchable</span><span><strong>College → Pro</strong> alumni tracking</span><span><strong>Past + Present</strong> in one hometown view</span></div>
@@ -163,6 +188,25 @@ button,input,select,textarea{font:inherit}
         </div>
       </div>
     </div>
+
+    <section class="network-search" id="global-search" aria-labelledby="network-search-title">
+      <div class="network-search-head">
+        <div>
+          <p class="eyebrow">Enter the actual platform</p>
+          <h2 id="network-search-title">Find a school or <span>player.</span></h2>
+        </div>
+        <p>This is the same global search used inside the YAT?STATS school communities. Search the national network, then jump directly into the relevant school microsite or player profile.</p>
+      </div>
+      <div class="search-input-wrap">
+        <div class="search-icon" aria-hidden="true">⌕</div>
+        <input id="network-search-input" type="search" autocomplete="off" placeholder="Search by high school or player name…" aria-label="Search YAT?STATS schools and players" aria-controls="network-search-results">
+        <button class="search-clear" id="network-search-clear" aria-label="Clear search">✕</button>
+      </div>
+      <div class="search-hints"><strong>Try:</strong><button type="button" data-search-example="Hamilton">Hamilton</button><button type="button" data-search-example="Bellinger">Bellinger</button><button type="button" data-search-example="Kucherak">Kucherak</button></div>
+      <div class="search-results" id="network-search-results" aria-live="polite"></div>
+      <div class="network-search-footer"><span><strong>Live data:</strong> schools + players across the YAT?STATS database</span><span>Results open the actual YAT?STATS platform ↗</span></div>
+    </section>
+
     <div class="hero-media">
       <img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https%3A//assets.cdn.filesafe.space/8eYj1Uj7Ugt0PDUGHblx/media/69aa5fab618c8d2e6017c698.png" alt="Baseball fans cheering in a stadium">
       <div class="hero-media-copy"><p>The hometown never stopped watching</p><h2>Stats tell you what happened. Community tells you why it mattered.</h2><span>YAT?STATS is designed to keep both alive — the next-level performance and the hometown connection behind it.</span></div>
@@ -252,7 +296,7 @@ button,input,select,textarea{font:inherit}
         <p id="role-copy">Your favorite hometown player may be at a college 1,500 miles away or grinding through professional baseball. YAT?STATS organizes the journey back around the school and community where you first knew him.</p>
         <div class="aud-points" id="role-points"><div>One hometown view instead of scattered searches</div><div>College and pro milestones organized by former school</div><div>Stories, memories and program history around the stats</div></div>
       </div>
-      <div class="aud-cta"><div><strong id="role-cta-title">Start with your high school.</strong><p id="role-cta-copy">Find the program you played for, graduated from or still root for.</p><a id="role-cta" class="button" href="#apply">Find My School</a></div></div>
+      <div class="aud-cta"><div><strong id="role-cta-title">Start with your high school.</strong><p id="role-cta-copy">Find the program you played for, graduated from or still root for.</p><a id="role-cta" class="button" href="#global-search">Find My School</a></div></div>
     </div>
   </div>
 </section>
@@ -351,7 +395,7 @@ button,input,select,textarea{font:inherit}
 <footer class="footer">
   <div class="shell footer-inner">
     <img src="https://yatstats.github.io/hamilton-mvp/assets/img/yatstats-logo.png" alt="YAT?STATS">
-    <div class="footer-links"><a href="#problem">Why YAT?</a><a href="#proof">Hamilton</a><a href="#timeline">Golden Timeline</a><a href="#stories">Stories</a><a href="#apply">Get Involved</a></div>
+    <div class="footer-links"><a href="#global-search">Search</a><a href="#problem">Why YAT?</a><a href="#proof">Hamilton</a><a href="#timeline">Golden Timeline</a><a href="#stories">Stories</a><a href="#apply">Get Involved</a></div>
     <span style="font-size:.7rem">© <span id="year"></span> YAT?STATS</span>
   </div>
 </footer>
@@ -362,15 +406,106 @@ menu?.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu
 nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
 document.getElementById('year').textContent=new Date().getFullYear();
 
+/*
+  Homepage global search.
+  Uses the same national school/player API endpoints and result-linking logic
+  as GlobalSearchModal / YatInteractivity in mike_crozite_template.
+  The Hamilton microsite is used as the cross-origin API bridge in this static preview;
+  those API routes explicitly return CORS headers for external origins.
+*/
+const YAT_SEARCH_API='https://hamilton.az.yatstats.com';
+const YAT_ASSETS='https://yatstats-assets.s3.us-west-2.amazonaws.com';
+const YAT_SEARCH_LIMIT=10;
+const YAT_SEARCH_DEBOUNCE=250;
+const searchInput=document.getElementById('network-search-input');
+const searchResults=document.getElementById('network-search-results');
+const searchClear=document.getElementById('network-search-clear');
+let searchTimer=null;
+let searchToken=0;
+
+function esc(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function schoolStatus(p){if(p?.microsite_url)return 'live';if(Number(p?.current_aa||0)>0)return 'potential';return 'inactive';}
+function schoolDestination(p){
+  const status=schoolStatus(p);
+  if(status==='live'&&p.microsite_url)return p.microsite_url;
+  if(p?.hsid)return `${YAT_SEARCH_API}/${encodeURIComponent(String(p.hsid))}?schoolState=${encodeURIComponent(status)}`;
+  const loc=String(p?.hslocation||'').split(',');
+  const params=new URLSearchParams();
+  if(p?.hsname)params.set('school',p.hsname);
+  if(loc[0])params.set('city',loc[0].trim());
+  if(loc[1])params.set('state',loc.slice(1).join(',').trim());
+  params.set('reason',status);
+  return `https://yatstats.com/school-not-live?${params}`;
+}
+function playerDestination(p){
+  const playerId=p?.playerId||'';
+  if(!playerId)return '#';
+  const slug=p?.slug||'player';
+  if(p?.micrositeUrl)return `${String(p.micrositeUrl).replace(/\/$/,'')}/player/${encodeURIComponent(playerId)}/${encodeURIComponent(slug)}`;
+  if(p?.schoolId)return `${YAT_SEARCH_API}/${encodeURIComponent(p.schoolId)}/player/${encodeURIComponent(playerId)}/${encodeURIComponent(slug)}`;
+  return '#';
+}
+function crestUrl(hsid){return hsid?`${YAT_ASSETS}/schools/${encodeURIComponent(hsid)}.png`:`${YAT_ASSETS}/yatstats-crest.png`;}
+function avatarFallback(img){img.onerror=null;img.src='https://yatstats.github.io/hamilton-mvp/assets/img/yatstats-logo.png';}
+function renderSchool(p){
+  const status=schoolStatus(p);
+  const statusLabel=status==='live'?'Live community':status==='potential'?'Alumni found':'In network';
+  const location=esc(p?.hslocation||p?.regionid||'');
+  const ranking=p?.yatstats_national_rank?`National rank #${esc(p.yatstats_national_rank)}`:'';
+  return `<a class="search-result" href="${esc(schoolDestination(p))}" target="_blank" rel="noopener"><img class="result-avatar" src="${esc(crestUrl(p?.hsid))}" alt="" onerror="avatarFallback(this)"><div class="result-info"><div class="result-name">${esc(p?.hsname||'Unknown school')}</div><div class="result-sub">${location||'High school baseball program'}</div><div class="result-meta"><span class="result-chip ${status==='live'?'live':status==='potential'?'potential':''}">${statusLabel}</span>${ranking?`<span class="result-chip">${ranking}</span>`:''}</div></div><div class="result-arrow">→</div></a>`;
+}
+function renderPlayer(p){
+  const name=esc(p?.displayName||`${p?.firstName||''} ${p?.lastName||''}`.trim()||'Unknown player');
+  const loc=[p?.city,p?.state].filter(Boolean).join(', ');
+  const avatar=p?.headshotUrl||p?.crestUrl||crestUrl(p?.schoolId);
+  const destination=playerDestination(p);
+  return `<a class="search-result" href="${esc(destination)}" target="_blank" rel="noopener"><img class="result-avatar player" src="${esc(avatar)}" alt="" onerror="avatarFallback(this)"><div class="result-info"><div class="result-name">${name}</div><div class="result-sub">${esc(p?.schoolName||'YAT?STATS player')}${loc?` · ${esc(loc)}`:''}</div><div class="result-meta"><span class="result-chip potential">Player profile</span></div></div><div class="result-arrow">→</div></a>`;
+}
+function setSearchState(html){searchResults.classList.add('open');searchResults.innerHTML=html;}
+function renderCombined(players,schools,q){
+  const hasPlayers=Array.isArray(players)&&players.length;
+  const hasSchools=Array.isArray(schools)&&schools.length;
+  if(!hasPlayers&&!hasSchools){setSearchState(`<div class="search-state">No school or player matches for “${esc(q)}”. Try a last name, school name, or a broader spelling.</div>`);return;}
+  let html='';
+  if(hasSchools)html+=`<div class="result-group"><div class="result-group-title"><span>Schools</span><span>${schools.length} result${schools.length===1?'':'s'}</span></div><div class="result-list">${schools.map(renderSchool).join('')}</div></div>`;
+  if(hasPlayers)html+=`<div class="result-group"><div class="result-group-title"><span>Players</span><span>${players.length} result${players.length===1?'':'s'}</span></div><div class="result-list">${players.map(renderPlayer).join('')}</div></div>`;
+  searchResults.classList.add('open');searchResults.innerHTML=html;
+}
+async function runNetworkSearch(raw){
+  const q=String(raw||'').trim();
+  searchClear?.classList.toggle('show',q.length>0);
+  if(q.length<2){searchResults.classList.remove('open');searchResults.innerHTML='';return;}
+  const token=++searchToken;
+  setSearchState('<div class="search-state">Searching schools and players across YAT?STATS…</div>');
+  try{
+    const [schoolsResponse,playersResponse]=await Promise.all([
+      fetch(`${YAT_SEARCH_API}/api/schools/search?q=${encodeURIComponent(q)}&limit=${YAT_SEARCH_LIMIT}`),
+      fetch(`${YAT_SEARCH_API}/api/players/search?q=${encodeURIComponent(q)}&limit=${YAT_SEARCH_LIMIT}`)
+    ]);
+    if(!schoolsResponse.ok||!playersResponse.ok)throw new Error('Search service response error');
+    const [schoolsData,playersData]=await Promise.all([schoolsResponse.json(),playersResponse.json()]);
+    if(token!==searchToken)return;
+    renderCombined(playersData?.players||[],schoolsData?.programs||[],q);
+  }catch(error){
+    if(token!==searchToken)return;
+    console.warn('YAT?STATS global search failed',error);
+    setSearchState('<div class="search-state">The live YAT?STATS search service could not be reached from this preview. The homepage search is wired to the same APIs used by the microsites and will retry when you type again.</div>');
+  }
+}
+searchInput?.addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>runNetworkSearch(searchInput.value),YAT_SEARCH_DEBOUNCE);});
+searchInput?.addEventListener('keydown',event=>{if(event.key==='Escape'){searchInput.value='';searchResults.classList.remove('open');searchResults.innerHTML='';searchClear?.classList.remove('show');}});
+searchClear?.addEventListener('click',()=>{searchInput.value='';searchResults.classList.remove('open');searchResults.innerHTML='';searchClear.classList.remove('show');searchInput.focus();});
+document.querySelectorAll('[data-search-example]').forEach(button=>button.addEventListener('click',()=>{searchInput.value=button.dataset.searchExample||'';runNetworkSearch(searchInput.value);searchInput.focus();}));
+
 const roleData={
- fan:{title:'Follow the players who still feel like yours.',copy:'Your favorite hometown player may be at a college 1,500 miles away or grinding through professional baseball. YAT?STATS organizes the journey back around the school and community where you first knew him.',points:['One hometown view instead of scattered searches','College and pro milestones organized by former school','Stories, memories and program history around the stats'],ctaTitle:'Start with your high school.',ctaCopy:'Find the program you played for, graduated from or still root for.',cta:'Find My School'},
- coach:{title:'Turn decades of alumni history into an active program asset.',copy:'Your former players are already a community. YAT?STATS gives the program a place to recognize them, follow the ones still playing and rebuild the relationships that usually fade after graduation.',points:['Active alumni tracking organized around your program','All-time alumni recognition and storytelling','New fundraising, mentorship and sponsor opportunities'],ctaTitle:'Build the alumni connection.',ctaCopy:'See how YAT?STATS can become the digital hometown for your program.',cta:'Bring YAT?STATS to My Program'},
- player:{title:'Your story can stay connected to the place it started.',copy:'Current and former players should not disappear from the hometown story when the season ends. YAT?STATS is designed to keep the journey visible and the alumni relationship useful long after graduation.',points:['Share milestones with hometown fans and former teammates','Contribute stories and memories to your Golden Timeline','Reconnect with alumni, mentors and local opportunities'],ctaTitle:'Stay part of the story.',ctaCopy:'Tell us where you played and where your journey went next.',cta:'Connect My Player Story'},
- sponsor:{title:'Support the community instead of buying another forgettable banner.',copy:'Local businesses can help make the platform available to a school while receiving meaningful hometown exposure around players, alumni, families and stories people already care about.',points:['Hyper-local program alignment','Community goodwill and measurable digital visibility','A stronger story than a traditional booster donation'],ctaTitle:'Put your brand behind the hometown.',ctaCopy:'Explore how a local partnership could support a school community.',cta:'Explore Local Sponsorship'}
+ fan:{title:'Follow the players who still feel like yours.',copy:'Your favorite hometown player may be at a college 1,500 miles away or grinding through professional baseball. YAT?STATS organizes the journey back around the school and community where you first knew him.',points:['One hometown view instead of scattered searches','College and pro milestones organized by former school','Stories, memories and program history around the stats'],ctaTitle:'Start with your high school.',ctaCopy:'Find the program you played for, graduated from or still root for.',cta:'Find My School',href:'#global-search'},
+ coach:{title:'Turn decades of alumni history into an active program asset.',copy:'Your former players are already a community. YAT?STATS gives the program a place to recognize them, follow the ones still playing and rebuild the relationships that usually fade after graduation.',points:['Active alumni tracking organized around your program','All-time alumni recognition and storytelling','New fundraising, mentorship and sponsor opportunities'],ctaTitle:'Build the alumni connection.',ctaCopy:'See how YAT?STATS can become the digital hometown for your program.',cta:'Bring YAT?STATS to My Program',href:'#apply'},
+ player:{title:'Your story can stay connected to the place it started.',copy:'Current and former players should not disappear from the hometown story when the season ends. YAT?STATS is designed to keep the journey visible and the alumni relationship useful long after graduation.',points:['Share milestones with hometown fans and former teammates','Contribute stories and memories to your Golden Timeline','Reconnect with alumni, mentors and local opportunities'],ctaTitle:'Stay part of the story.',ctaCopy:'Tell us where you played and where your journey went next.',cta:'Connect My Player Story',href:'#apply'},
+ sponsor:{title:'Support the community instead of buying another forgettable banner.',copy:'Local businesses can help make the platform available to a school while receiving meaningful hometown exposure around players, alumni, families and stories people already care about.',points:['Hyper-local program alignment','Community goodwill and measurable digital visibility','A stronger story than a traditional booster donation'],ctaTitle:'Put your brand behind the hometown.',ctaCopy:'Explore how a local partnership could support a school community.',cta:'Explore Local Sponsorship',href:'#apply'}
 };
 const tabs=document.querySelectorAll('.aud-tab');
 const title=document.getElementById('role-title'),copy=document.getElementById('role-copy'),points=document.getElementById('role-points'),ctaTitle=document.getElementById('role-cta-title'),ctaCopy=document.getElementById('role-cta-copy'),cta=document.getElementById('role-cta'),roleSelect=document.getElementById('role');
-tabs.forEach(tab=>tab.addEventListener('click',()=>{tabs.forEach(t=>t.classList.remove('active'));tab.classList.add('active');const r=roleData[tab.dataset.role];title.textContent=r.title;copy.textContent=r.copy;points.innerHTML=r.points.map(p=>`<div>${p}</div>`).join('');ctaTitle.textContent=r.ctaTitle;ctaCopy.textContent=r.ctaCopy;cta.textContent=r.cta;if(roleSelect){const map={fan:0,coach:1,player:2,sponsor:3};roleSelect.selectedIndex=map[tab.dataset.role];}}));
+tabs.forEach(tab=>tab.addEventListener('click',()=>{tabs.forEach(t=>t.classList.remove('active'));tab.classList.add('active');const r=roleData[tab.dataset.role];title.textContent=r.title;copy.textContent=r.copy;points.innerHTML=r.points.map(p=>`<div>${p}</div>`).join('');ctaTitle.textContent=r.ctaTitle;ctaCopy.textContent=r.ctaCopy;cta.textContent=r.cta;cta.setAttribute('href',r.href);if(roleSelect){const map={fan:0,coach:1,player:2,sponsor:3};roleSelect.selectedIndex=map[tab.dataset.role];}}));
 
 document.getElementById('interest-form')?.addEventListener('submit',e=>{e.preventDefault();document.getElementById('form-note').textContent='Test branch only — this form is intentionally not connected to HighLevel yet.';});
 </script>
