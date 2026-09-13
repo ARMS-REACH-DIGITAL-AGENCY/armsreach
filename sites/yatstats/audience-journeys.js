@@ -1,17 +1,19 @@
 // Four audience-specific guided tours (Fan, Coach, Player, Sponsor).
-// Each is the same engine instantiated once per audience: a swipeable photo +
-// quote carousel IS the tour narration — no separate intro text, tab row, or
-// caption card — and whichever slide is active drives the live iframe below
-// it to the matching page on the real Hamilton subdomain. The Fan tour keeps
-// the original hero placement (eager-loaded, already tuned hotspots); Coach /
-// Player / Sponsor are standalone sections lower on the page and lazy-load
-// their iframe only once scrolled into view.
+// The tour strip is modeled directly on the real "Golden Line" career-strip
+// component from the microsite (mike_crozite_template's CareerStrip.tsx /
+// ZoomableCareerTimeline.tsx): a compact row of small photo+label cards that
+// scrolls horizontally and keeps growing with more entries — not a paginated
+// full-screen carousel. Clicking (or auto-advancing to) a card drives the
+// static live iframe below it; the iframe area itself never moves or scrolls.
+// The Fan tour keeps the original hero placement (eager-loaded, already tuned
+// hotspots); Coach / Player / Sponsor are standalone sections lower on the
+// page and lazy-load their iframe only once scrolled into view.
 (() => {
   if (window.__yatAudienceJourneys) return;
   window.__yatAudienceJourneys = true;
 
   const PLATFORM = 'https://hamilton.az.yatstats.com';
-  const TOUR_MS = 7000;
+  const TOUR_MS = 6000;
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
 
   // Cody Bellinger is a known Hamilton alumni record used as a stable tour example.
@@ -19,38 +21,39 @@
   const CODY_CARD = `${PLATFORM}/?view=active&player=180827#player-180827`;
 
   // A small pool of real photography already used elsewhere on this site.
-  // Reused across slides/sections as a placeholder — swap in real photography
-  // per stop once available.
+  // Reused across cards/sections as a placeholder — swap in real per-stop
+  // photography once available.
   const IMG_PITCHER = `${PLATFORM}/img/career-path-default.png`;
   const IMG_CARD_GALLERY = 'https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https%3A//assets.cdn.filesafe.space/8eYj1Uj7Ugt0PDUGHblx/media/69d3e9436ea2b5d7c0c73155.jpg';
   const IMG_FANS = 'https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https%3A//assets.cdn.filesafe.space/8eYj1Uj7Ugt0PDUGHblx/media/69aa5fab618c8d2e6017c698.png';
   const IMG_FIELD = 'https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https%3A//assets.cdn.filesafe.space/8eYj1Uj7Ugt0PDUGHblx/media/69aa5f8c7bdf3880b88d573f.png';
 
+  // ── CSS — the card strip is a close match to CareerStrip.tsx's real
+  // .golden-line-strip / .gl-card styling (colors, proportions, gold glow
+  // line), so this reads as "the same component" rather than a new one.
   const css = `
     .yat-tour{position:relative;width:min(1400px,calc(100% - 34px));margin:34px auto 0}
     .yat-audience-section .yat-tour{width:100%;margin:0}
     .yat-audience-section{overflow:hidden}
 
-    .yat-story-wrap{position:relative}
-    .yat-story-strip{position:relative;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;border:1px solid #2d3136;border-radius:14px 14px 0 0;background:#0b0d0e}
-    .yat-story-strip::-webkit-scrollbar{display:none}
-    .yat-story-slide{flex:0 0 100%;min-width:0;scroll-snap-align:start;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);min-height:360px}
-    .yat-story-photo{position:relative;overflow:hidden;background:#111;min-width:0}
-    .yat-story-photo img{width:100%;height:100%;object-fit:cover;display:block}
-    .yat-story-copy{display:flex;flex-direction:column;justify-content:center;gap:14px;padding:clamp(26px,4vw,44px);min-width:0;max-width:100%}
-    .yat-story-kicker{margin:0;color:#e8b73f;font:900 10px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase}
-    .yat-story-copy blockquote{margin:0;max-width:100%;overflow-wrap:break-word;font:800 clamp(1.35rem,2.6vw,2.2rem)/1.2 Manrope,Inter,sans-serif;letter-spacing:-.02em;color:#f3f4f5}
-    .yat-story-copy mark{background:linear-gradient(135deg,#efb936,#ffd76a);color:#14171a;padding:1px 8px;border-radius:5px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
-    .yat-story-sub{margin:0;color:#9199a1;font-size:.85rem;line-height:1.55;max-width:48ch;overflow-wrap:break-word}
-    .yat-story-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(5,7,8,.65);color:#fff;font-size:1.1rem;line-height:1;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(6px)}
-    .yat-story-nav:hover{border-color:#efb936;color:#efb936}
-    .yat-story-nav.prev{left:14px}.yat-story-nav.next{right:14px}
-    .yat-story-dots{display:flex;justify-content:center;gap:7px;padding:12px;background:#101214;border:1px solid #2d3136;border-top:0}
-    .yat-story-dot{width:7px;height:7px;border-radius:50%;background:#2d3136;border:0;cursor:pointer;padding:0}
-    .yat-story-dot.active{background:#efb936;width:20px;border-radius:4px}
+    .yat-gl-strip{position:relative;height:132px;overflow:hidden;isolation:isolate;background:linear-gradient(90deg,rgba(16,16,16,.98),rgba(8,8,8,.98));border:1px solid #2d3136;border-bottom:0;border-radius:14px 14px 0 0}
+    .yat-gl-line{position:absolute;left:18px;right:18px;bottom:9px;z-index:1;height:3px;background:linear-gradient(90deg,rgba(245,165,51,.12),#f5a533 16%,#ffc947 52%,#f5a533 100%);box-shadow:0 0 7px rgba(255,207,62,.85),0 0 18px rgba(255,180,32,.48);pointer-events:none}
+    .yat-gl-track-wrap{position:relative;z-index:2;height:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:16px 18px}
+    .yat-gl-track-wrap::-webkit-scrollbar{display:none}
+    .yat-gl-track{height:100%;display:flex;align-items:stretch;gap:10px}
+    .yat-gl-card{position:relative;flex:0 0 132px;display:grid;grid-template-columns:56px minmax(0,1fr);align-items:stretch;width:132px;padding:4px;border:1px solid rgba(255,255,255,.18);border-radius:0;background:linear-gradient(135deg,rgba(29,29,29,.98),rgba(7,7,7,.92));color:#fff;text-align:left;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.34);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+    .yat-gl-card:hover{transform:translateY(-2px) scale(1.01);border-color:rgba(245,200,90,.7)}
+    .yat-gl-card.active{border-color:#f5c85a;box-shadow:0 0 18px rgba(245,200,90,.32),0 10px 24px rgba(0,0,0,.5);transform:translateY(-2px)}
+    .yat-gl-photo{display:block;width:54px;height:92px;overflow:hidden;border:1px solid rgba(245,200,90,.5);background:#111}
+    .yat-gl-photo img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+    .yat-gl-copy{min-width:0;padding:4px 1px 3px 6px;align-self:stretch;display:flex;flex-direction:column}
+    .yat-gl-kicker,.yat-gl-label,.yat-gl-hint{display:block;overflow:hidden;text-overflow:ellipsis}
+    .yat-gl-kicker{white-space:nowrap;color:#f5c85a;font:800 8px/1 Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase}
+    .yat-gl-label{margin-top:4px;white-space:nowrap;color:#fff;font:800 12px/1 "Bebas Neue",Inter,sans-serif;letter-spacing:.04em;text-transform:uppercase}
+    .yat-gl-hint{margin-top:auto;white-space:normal;overflow-wrap:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:rgba(255,255,255,.68);font:700 8px/1.2 Inter,sans-serif}
 
-    .yat-live-platform{position:relative;border:1px solid #35393e;border-top:0;border-radius:0 0 14px 14px;overflow:hidden;background:#0b0d0e;box-shadow:0 26px 70px rgba(0,0,0,.42);margin-top:-1px}
-    .yat-live-platform.expanded{position:fixed;z-index:99998;inset:10px;margin:0;border-radius:12px;border-top:1px solid #35393e;display:grid;grid-template-rows:auto 1fr auto;background:#090a0b}
+    .yat-live-platform{position:relative;border:1px solid #35393e;border-radius:0 0 14px 14px;overflow:hidden;background:#0b0d0e;box-shadow:0 26px 70px rgba(0,0,0,.42)}
+    .yat-live-platform.expanded{position:fixed;z-index:99998;inset:10px;margin:0;border-radius:12px;display:grid;grid-template-rows:auto 1fr auto;background:#090a0b}
     body.yat-live-preview-lock{overflow:hidden}
     .yat-live-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:8px 10px 8px 13px;min-height:44px;border-bottom:1px solid #292d31;background:linear-gradient(180deg,#141618,#0e1011)}
     .yat-live-address{min-width:0;display:flex;align-items:center;gap:9px}.yat-live-dots{display:flex;gap:4px;flex:0 0 auto}.yat-live-dots i{display:block;width:6px;height:6px;border-radius:50%;background:#3c4146}.yat-live-dots i:nth-child(2){background:#785d20}.yat-live-dots i:nth-child(3){background:#6f2630}
@@ -65,16 +68,13 @@
     @media(max-width:980px){
       .yat-tour{width:min(100% - 24px,1400px);margin-top:25px}
       .yat-audience-section .yat-tour{width:100%;margin-top:0}
-      .yat-story-slide{grid-template-columns:minmax(0,1fr);min-height:0}
-      .yat-story-photo{height:44vw;min-height:190px;max-height:320px}
       .yat-live-frame-wrap{height:68vh;min-height:540px}.yat-live-action.open-full{display:none}
       .yat-live-platform.expanded{inset:0;border:0;border-radius:0}.yat-live-platform.expanded .yat-live-frame-wrap{min-height:0;height:auto}
     }
     @media(max-width:620px){
       .yat-tour{width:calc(100% - 18px)}
       .yat-audience-section .yat-tour{width:100%}
-      .yat-story-photo{height:52vw;min-height:0}
-      .yat-story-nav{width:32px;height:32px;font-size:.95rem}
+      .yat-gl-strip{height:118px}.yat-gl-card{flex-basis:112px;width:112px}.yat-gl-photo{width:46px;height:80px}
       .yat-live-url{max-width:47vw}.yat-live-frame-wrap{height:66vh;min-height:510px}.yat-live-footer{align-items:flex-start;flex-direction:column;gap:3px}.yat-live-callout-label{display:none}
     }
   `;
@@ -93,49 +93,49 @@
   const fanTour = {
     id: 'fan', kicker: 'Test drive the platform',
     stops: [
-      { image: IMG_PITCHER, quote: 'When a baseball player’s journey doesn’t end at graduation, <mark>neither should his story.</mark>', sub: 'Tap the search icon to find anyone in the entire YAT?STATS network.', url: PLATFORM, callout: 'GLOBAL SEARCH', x: 91, y: 7 },
-      { image: IMG_FANS, quote: 'A big alumni list only helps if <mark>you can actually find your guy.</mark>', sub: 'Sort and filter the gallery by name, level, graduating class and favorites.', url: PLATFORM, callout: 'SORT + FILTER', x: 87, y: 13 },
-      { image: IMG_CARD_GALLERY, quote: 'Every alumni card has <mark>another side.</mark>', sub: 'Flip a player card to move from the high-school story to current production.', url: CODY_CARD, callout: 'TAP / FLIP A PLAYER CARD', x: 22, y: 43 },
-      { image: IMG_FIELD, quote: 'Stats tell you what happened. <mark>They don’t have to lose where it started.</mark>', sub: 'Current production stays attached to the hometown identity.', url: `${CODY_PROFILE}#ppTab-stats`, callout: 'CURRENT STATS', x: 50, y: 79 },
-      { image: IMG_PITCHER, quote: 'The story <mark>keeps moving</mark> between the box scores.', sub: 'Player news follows milestones and roster moves as they happen.', url: `${CODY_PROFILE}#ppTab-news`, callout: 'PLAYER NEWS', x: 50, y: 79 },
-      { image: IMG_FANS, quote: 'Stats tell you what happened. <mark>Memories tell you why it mattered.</mark>', sub: 'The Golden Timeline follows a player from high school through the pros.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'THE GOLDEN TIMELINE', x: 37, y: 38 },
-      { image: IMG_CARD_GALLERY, quote: 'The people who lived it <mark>can help preserve it.</mark>', sub: 'Fans, family and teammates can add photos and memories to a player’s journey.', url: `${CODY_PROFILE}#ppTab-upload`, callout: 'ADD A MEMORY', x: 48, y: 58 },
+      { image: IMG_PITCHER, label: 'Search', hint: 'Find anybody, from anywhere in the network.', url: PLATFORM, callout: 'GLOBAL SEARCH', x: 91, y: 7 },
+      { image: IMG_FANS, label: 'Filter', hint: 'Sort by name, level, class and favorites.', url: PLATFORM, callout: 'SORT + FILTER', x: 87, y: 13 },
+      { image: IMG_CARD_GALLERY, label: 'Cards', hint: 'Flip a card for current production.', url: CODY_CARD, callout: 'TAP / FLIP A PLAYER CARD', x: 22, y: 43 },
+      { image: IMG_FIELD, label: 'Stats', hint: 'Production stays attached to home.', url: `${CODY_PROFILE}#ppTab-stats`, callout: 'CURRENT STATS', x: 50, y: 79 },
+      { image: IMG_PITCHER, label: 'News', hint: 'Milestones and roster moves, live.', url: `${CODY_PROFILE}#ppTab-news`, callout: 'PLAYER NEWS', x: 50, y: 79 },
+      { image: IMG_FANS, label: 'Line', hint: 'High school through the pros, one line.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'THE GOLDEN TIMELINE', x: 37, y: 38 },
+      { image: IMG_CARD_GALLERY, label: 'Memory', hint: 'Fans help document the journey.', url: `${CODY_PROFILE}#ppTab-upload`, callout: 'ADD A MEMORY', x: 48, y: 58 },
     ],
   };
 
   const coachTour = {
     id: 'coach', alt: false, kicker: 'For coaches & boosters',
     stops: [
-      { image: IMG_FIELD, quote: 'Your former players are already a community — <mark>scattered across old spreadsheets and group texts.</mark>', sub: 'Give the program a living alumni home instead.', url: PLATFORM, callout: 'YOUR PROGRAM COMMUNITY', x: 50, y: 10 },
-      { image: IMG_CARD_GALLERY, quote: 'Every era of the program, <mark>one gallery.</mark>', sub: 'Alumni tracking organized around your school, not scattered across whichever team a player is on now.', url: `${PLATFORM}/?view=active`, callout: 'ACTIVE ALUMNI GALLERY', x: 50, y: 50 },
-      { image: IMG_PITCHER, quote: 'Show boosters and families <mark>where a former player is now.</mark>', sub: 'Flip a card from the high-school story to current college or pro production.', url: CODY_CARD, callout: 'FLIP A PLAYER CARD', x: 22, y: 43 },
-      { image: IMG_FANS, quote: 'Stay relevant <mark>before you ask for anything.</mark>', sub: 'Milestones and updates give alumni and families a reason to keep checking in.', url: `${CODY_PROFILE}#ppTab-news`, callout: 'ALUMNI NEWS & UPDATES', x: 50, y: 79 },
-      { image: IMG_FIELD, quote: 'Championships, coaches and memories — <mark>preserved on one timeline.</mark>', sub: 'The Golden Timeline carries the program’s history forward with every player.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'THE GOLDEN TIMELINE', x: 37, y: 38 },
-      { image: IMG_CARD_GALLERY, quote: 'A stronger pitch than <mark>another banner.</mark>', sub: 'A sponsor-ready community gives local partners a more meaningful offer.', url: PLATFORM, callout: 'SPONSOR-READY COMMUNITY', x: 85, y: 14 },
+      { image: IMG_FIELD, label: 'Home', hint: 'A living alumni home for the program.', url: PLATFORM, callout: 'YOUR PROGRAM COMMUNITY', x: 50, y: 10 },
+      { image: IMG_CARD_GALLERY, label: 'Roster', hint: 'Every era of the program, one place.', url: `${PLATFORM}/?view=active`, callout: 'ACTIVE ALUMNI GALLERY', x: 50, y: 50 },
+      { image: IMG_PITCHER, label: 'Flip', hint: 'Show where a former player is now.', url: CODY_CARD, callout: 'FLIP A PLAYER CARD', x: 22, y: 43 },
+      { image: IMG_FANS, label: 'Engage', hint: 'Reasons to check in before you ask.', url: `${CODY_PROFILE}#ppTab-news`, callout: 'ALUMNI NEWS & UPDATES', x: 50, y: 79 },
+      { image: IMG_FIELD, label: 'Legacy', hint: 'Championships and memories, preserved.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'THE GOLDEN TIMELINE', x: 37, y: 38 },
+      { image: IMG_CARD_GALLERY, label: 'Backer', hint: 'A stronger pitch than another banner.', url: PLATFORM, callout: 'SPONSOR-READY COMMUNITY', x: 85, y: 14 },
     ],
   };
 
   const playerTour = {
     id: 'player', alt: true, kicker: 'For players & alumni',
     stops: [
-      { image: IMG_PITCHER, quote: 'High school is the anchor. <mark>It’s not the ceiling.</mark>', sub: 'One profile follows your journey through college, pro ball and beyond.', url: CODY_PROFILE, callout: 'PLAYER PROFILE', x: 50, y: 14 },
-      { image: IMG_FIELD, quote: 'Current production <mark>stays attached to home.</mark>', sub: 'Fans who knew you before college or pro ball can still follow what you’re doing now.', url: `${CODY_PROFILE}#ppTab-stats`, callout: 'CURRENT STATS', x: 50, y: 79 },
-      { image: IMG_FANS, quote: 'Build the record <mark>a stat sheet can’t.</mark>', sub: 'Photos and milestones from every stage of the journey live on the Golden Timeline.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'THE GOLDEN TIMELINE', x: 37, y: 38 },
-      { image: IMG_CARD_GALLERY, quote: 'The hometown image <mark>never disappears.</mark>', sub: 'Your card flips from the high-school story to what you’re doing right now.', url: CODY_CARD, callout: 'FLIP YOUR PLAYER CARD', x: 22, y: 43 },
-      { image: IMG_PITCHER, quote: 'Share milestones with <mark>the people who already care.</mark>', sub: 'Hometown fans and former teammates follow along without hunting across unrelated feeds.', url: `${CODY_PROFILE}#ppTab-news`, callout: 'PLAYER NEWS', x: 50, y: 79 },
-      { image: IMG_FIELD, quote: 'Playing ends. <mark>The alumni identity doesn’t.</mark>', sub: 'Add your own photos and memories to the profile the program keeps.', url: `${CODY_PROFILE}#ppTab-upload`, callout: 'ADD A MEMORY', x: 48, y: 58 },
+      { image: IMG_PITCHER, label: 'Career', hint: 'One profile follows the whole journey.', url: CODY_PROFILE, callout: 'PLAYER PROFILE', x: 50, y: 14 },
+      { image: IMG_FIELD, label: 'Stats', hint: 'Production stays attached to home.', url: `${CODY_PROFILE}#ppTab-stats`, callout: 'CURRENT STATS', x: 50, y: 79 },
+      { image: IMG_FANS, label: 'Line', hint: 'Build the record a stat sheet can’t.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'THE GOLDEN TIMELINE', x: 37, y: 38 },
+      { image: IMG_CARD_GALLERY, label: 'Flip', hint: 'The hometown image never disappears.', url: CODY_CARD, callout: 'FLIP YOUR PLAYER CARD', x: 22, y: 43 },
+      { image: IMG_PITCHER, label: 'News', hint: 'Share milestones with people who care.', url: `${CODY_PROFILE}#ppTab-news`, callout: 'PLAYER NEWS', x: 50, y: 79 },
+      { image: IMG_FIELD, label: 'Memory', hint: 'Playing ends. The identity doesn’t.', url: `${CODY_PROFILE}#ppTab-upload`, callout: 'ADD A MEMORY', x: 48, y: 58 },
     ],
   };
 
   const sponsorTour = {
     id: 'sponsor', alt: false, kicker: 'For local partners',
     stops: [
-      { image: IMG_FANS, quote: 'Parents, alumni and former teammates already care — <mark>because these are their people.</mark>', sub: 'Back a hometown community that already has real attention.', url: PLATFORM, callout: 'AN ACTIVE HOMETOWN COMMUNITY', x: 50, y: 10 },
-      { image: IMG_PITCHER, quote: 'Nostalgia isn’t decoration. <mark>It’s an engagement engine.</mark>', sub: 'The Golden Timeline surfaces exactly the memories that make a sponsor message land.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'THE GOLDEN TIMELINE', x: 37, y: 38 },
-      { image: IMG_CARD_GALLERY, quote: 'Put your brand <mark>inside the community.</mark>', sub: 'Appear around the alumni, players and stories people already value.', url: `${PLATFORM}/?view=active`, callout: 'WHERE YOUR BRAND WOULD APPEAR', x: 50, y: 50 },
-      { image: IMG_FIELD, quote: 'Real players. <mark>Not a mockup.</mark>', sub: 'Every flipped card is a reminder this is a real alumni community.', url: CODY_CARD, callout: 'A REAL PLAYER, NOT A MOCKUP', x: 22, y: 43 },
-      { image: IMG_FANS, quote: 'More than <mark>a booster donation.</mark>', sub: 'Fund a useful platform and earn measurable hometown exposure in return.', url: PLATFORM, callout: 'A STRONGER LOCAL OFFER', x: 85, y: 14 },
-      { image: IMG_PITCHER, quote: 'One school is the proof. <mark>Not the ceiling.</mark>', sub: 'The same sponsorship model can extend to every program that activates YAT?STATS.', url: PLATFORM, callout: 'ONE OF THOUSANDS OF PROGRAMS', x: 70, y: 65 },
+      { image: IMG_FANS, label: 'People', hint: 'Real hometown attention, already there.', url: PLATFORM, callout: 'AN ACTIVE HOMETOWN COMMUNITY', x: 50, y: 10 },
+      { image: IMG_PITCHER, label: 'Legacy', hint: 'Nostalgia is an engagement engine.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'THE GOLDEN TIMELINE', x: 37, y: 38 },
+      { image: IMG_CARD_GALLERY, label: 'Reach', hint: 'Put your brand inside the community.', url: `${PLATFORM}/?view=active`, callout: 'WHERE YOUR BRAND WOULD APPEAR', x: 50, y: 50 },
+      { image: IMG_FIELD, label: 'Player', hint: 'A real alumni community, not a mockup.', url: CODY_CARD, callout: 'A REAL PLAYER, NOT A MOCKUP', x: 22, y: 43 },
+      { image: IMG_FANS, label: 'Value', hint: 'More than a booster donation.', url: PLATFORM, callout: 'A STRONGER LOCAL OFFER', x: 85, y: 14 },
+      { image: IMG_PITCHER, label: 'Scale', hint: 'One school is the proof, not the ceiling.', url: PLATFORM, callout: 'ONE OF THOUSANDS OF PROGRAMS', x: 70, y: 65 },
     ],
   };
 
@@ -143,21 +143,21 @@
 
   function buildTourMarkup(tour) {
     return `
-      <div class="yat-story-wrap">
-        <div class="yat-story-strip" role="region" aria-roledescription="carousel" aria-label="${tour.kicker}">
-          ${tour.stops.map((stop) => `
-            <div class="yat-story-slide">
-              <div class="yat-story-photo"><img src="${stop.image}" alt="" loading="lazy"></div>
-              <div class="yat-story-copy">
-                <p class="yat-story-kicker">${tour.kicker}</p>
-                <blockquote>${stop.quote}</blockquote>
-                <p class="yat-story-sub">${stop.sub}</p>
-              </div>
-            </div>`).join('')}
+      <div class="yat-gl-strip" role="region" aria-label="${tour.kicker} tour">
+        <div class="yat-gl-line" aria-hidden="true"></div>
+        <div class="yat-gl-track-wrap">
+          <div class="yat-gl-track" role="list">
+            ${tour.stops.map((stop, index) => `
+              <button type="button" class="yat-gl-card${index === 0 ? ' active' : ''}" role="listitem" data-index="${index}" aria-label="${stop.label}">
+                <span class="yat-gl-photo"><img src="${stop.image}" alt="" loading="lazy"></span>
+                <span class="yat-gl-copy">
+                  <span class="yat-gl-kicker">${String(index + 1).padStart(2, '0')}</span>
+                  <span class="yat-gl-label">${stop.label}</span>
+                  <span class="yat-gl-hint">${stop.hint}</span>
+                </span>
+              </button>`).join('')}
+          </div>
         </div>
-        <button type="button" class="yat-story-nav prev" aria-label="Previous story">‹</button>
-        <button type="button" class="yat-story-nav next" aria-label="Next story">›</button>
-        <div class="yat-story-dots">${tour.stops.map((_, i) => `<button type="button" class="yat-story-dot${i === 0 ? ' active' : ''}" aria-label="Go to story ${i + 1}"></button>`).join('')}</div>
       </div>
       <div class="yat-live-platform">
         <div class="yat-live-bar">
@@ -173,19 +173,16 @@
       </div>`;
   }
 
-  // Wires one mounted tour block's interactivity. The story strip uses native
-  // scroll-snap so touch/trackpad swiping "just works"; an IntersectionObserver
-  // watches which slide is actually in view (from a swipe, an arrow click, or
-  // the auto-advance timer) and that's the single source of truth for which
-  // stop is "active" — driving the dot state, the callout, and the iframe.
-  // `lazy` defers the first iframe load (and the auto-advance timer) until the
-  // block scrolls into view, and pauses the timer again once it scrolls out.
+  // Wires one mounted tour block's interactivity. The card strip itself is a
+  // plain, continuously scrollable row (no snapping) — exactly like the real
+  // Golden Line strip — so clicking a card (or the auto-advance timer) is the
+  // single source of truth for which stop is "active", driving the card
+  // highlight and the STATIC iframe below it. The iframe area never scrolls
+  // or changes shape; only its content and the active card change.
+  // `lazy` defers the first iframe load (and the auto-advance timer) until
+  // the block scrolls into view, and pauses the timer again once it scrolls out.
   function wireTour(container, tour, { lazy = false } = {}) {
-    const strip = container.querySelector('.yat-story-strip');
-    const slides = [...container.querySelectorAll('.yat-story-slide')];
-    const dots = [...container.querySelectorAll('.yat-story-dot')];
-    const prevBtn = container.querySelector('.yat-story-nav.prev');
-    const nextBtn = container.querySelector('.yat-story-nav.next');
+    const cards = [...container.querySelectorAll('.yat-gl-card')];
     const frame = container.querySelector('.yat-live-frame');
     const loader = container.querySelector('.yat-live-loading');
     const urlLabel = container.querySelector('.yat-live-url');
@@ -211,20 +208,20 @@
 
     function startTimer() {
       if (reducedMotion || interacted || tourTimer) return;
-      tourTimer = setInterval(() => goTo((activeIndex + 1) % tour.stops.length), TOUR_MS);
+      tourTimer = setInterval(() => applyStop((activeIndex + 1) % tour.stops.length), TOUR_MS);
     }
 
-    function goTo(index, userInitiated = false) {
-      index = Math.max(0, Math.min(tour.stops.length - 1, index));
-      if (userInitiated) pauseTour();
-      strip.scrollTo({ left: slides[index].offsetLeft, behavior: reducedMotion ? 'auto' : 'smooth' });
-    }
-
-    function applyStop(index) {
+    function applyStop(index, userInitiated = false) {
       const stop = tour.stops[index];
       if (!stop) return;
       activeIndex = index;
-      dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+      if (userInitiated) pauseTour();
+
+      cards.forEach((card, i) => {
+        const isActive = i === index;
+        card.classList.toggle('active', isActive);
+        if (isActive) card.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest', inline: 'nearest' });
+      });
 
       calloutLabel.textContent = stop.callout;
       callout.style.setProperty('--tour-x', `${stop.x}%`);
@@ -244,32 +241,14 @@
       }
     }
 
-    // root:strip means slide 0 reads as "in view" the instant it mounts,
-    // regardless of whether the section itself is scrolled into the page
-    // viewport — so slides aren't observed until begin() actually runs.
-    const slideObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
-          const index = slides.indexOf(entry.target);
-          if (index !== -1) applyStop(index);
-        }
-      });
-    }, { root: strip, threshold: [0.6] });
-
     function begin() {
       if (started) return;
       started = true;
       applyStop(0);
-      slides.forEach((slide) => slideObserver.observe(slide));
       startTimer();
     }
 
-    prevBtn.addEventListener('click', () => goTo(activeIndex - 1, true));
-    nextBtn.addEventListener('click', () => goTo(activeIndex + 1, true));
-    dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i, true)));
-    strip.addEventListener('pointerdown', () => pauseTour(), { once: true });
-    strip.addEventListener('touchstart', () => pauseTour(), { once: true, passive: true });
-
+    cards.forEach((card) => card.addEventListener('click', () => { begin(); applyStop(Number(card.dataset.index), true); }));
     frame.addEventListener('load', () => { loader.classList.add('hidden'); frame.classList.add('loaded'); });
     frameWrap.addEventListener('pointerenter', () => pauseTour());
     frameWrap.addEventListener('touchstart', () => pauseTour(), { passive: true });
