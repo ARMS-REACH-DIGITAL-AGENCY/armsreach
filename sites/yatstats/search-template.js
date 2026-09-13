@@ -1,14 +1,16 @@
 (() => {
   if (window.__yatHomepageLoader) return;
   window.__yatHomepageLoader = true;
-  const styleScript = document.createElement('script');
-  styleScript.src = './homepage-platform-style.js';
-  styleScript.async = false;
-  document.head.appendChild(styleScript);
-  styleScript.onload = () => {
-    const tourScript = document.createElement('script');
-    tourScript.src = './audience-tours.js';
-    tourScript.async = false;
-    document.head.appendChild(tourScript);
-  };
+
+  function loadScript(src, onload) {
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = false;
+    if (onload) script.addEventListener('load', onload, { once: true });
+    document.head.appendChild(script);
+  }
+
+  loadScript('./homepage-platform-style.js', () => {
+    loadScript('./hero-journey.js');
+  });
 })();
