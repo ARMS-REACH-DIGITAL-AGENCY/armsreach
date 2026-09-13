@@ -2,8 +2,15 @@
   if (window.__yatHomepageLoader) return;
   window.__yatHomepageLoader = true;
 
-  const script = document.createElement('script');
-  script.src = './hero-journey.js';
-  script.async = false;
-  document.head.appendChild(script);
+  function loadScript(src, onload) {
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = false;
+    if (onload) script.addEventListener('load', onload, { once: true });
+    document.head.appendChild(script);
+  }
+
+  loadScript('./homepage-platform-style.js', () => {
+    loadScript('./hero-journey.js');
+  });
 })();
