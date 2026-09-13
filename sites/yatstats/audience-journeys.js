@@ -22,6 +22,15 @@
   const TOUR_MS = 6000;
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
 
+  // The real site drops from 5 columns to 4 below ~1120px of actual
+  // viewport width. Rendering the iframe at a fixed width comfortably above
+  // that (and a fixed height covering two full rows), then CSS-scaling the
+  // whole thing to fit whatever the wrap's real width is, means the site
+  // inside always renders as if it had FRAME_W of room -- it never reflows
+  // to 4-across, no matter how narrow the page around it gets.
+  const FRAME_W = 1200;
+  const FRAME_H = 920;
+
   // Cody Bellinger is a known Hamilton alumni record used as a stable tour example.
   const CODY_PROFILE = `${PLATFORM}/player/180827/cody-bellinger`;
   const CODY_CARD = `${PLATFORM}/?view=active&player=180827#player-180827`;
@@ -73,7 +82,13 @@
     .yat-live-address{min-width:0;display:flex;align-items:center;gap:9px}.yat-live-dots{display:flex;gap:4px;flex:0 0 auto}.yat-live-dots i{display:block;width:6px;height:6px;border-radius:50%;background:#3c4146}.yat-live-dots i:nth-child(2){background:#785d20}.yat-live-dots i:nth-child(3){background:#6f2630}
     .yat-live-url{min-width:0;color:#777c82;font-size:.6rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.yat-live-url strong{color:#cacdd0;margin-right:6px}
     .yat-live-actions{display:flex;gap:6px;flex:0 0 auto}.yat-live-action{display:inline-flex;align-items:center;justify-content:center;min-height:29px;padding:0 9px;border:1px solid #30343a;border-radius:6px;background:#17191c;color:#c8cbce;font:800 8px/1 Inter,sans-serif;text-decoration:none;cursor:pointer}.yat-live-action:hover{border-color:#645124;color:#efc454}.yat-live-close{display:none}.yat-live-platform.expanded .yat-live-close{display:inline-flex}
-    .yat-live-frame-wrap{position:relative;width:100%;height:min(58vh,600px);background:#fff}.yat-live-platform.expanded .yat-live-frame-wrap{height:auto;min-height:0}
+    /* The iframe always renders at a fixed internal size (wide enough for
+       the real site's 5-across layout) and is then CSS-scaled as one whole
+       unit to fit whatever width the wrap actually has -- exactly like an
+       <img> shrinking. The site inside never learns the container changed
+       size, so it can never reflow to 4-across. */
+    .yat-live-frame-wrap{position:relative;width:100%;overflow:hidden;background:#fff}
+    .yat-live-platform.expanded .yat-live-frame-wrap{height:auto;min-height:0}
 
     /* Prototype: the WHOLE strip scrolls as one unit, graphic included --
        matching the real Golden Line strip (CareerStrip.tsx), where the
@@ -85,12 +100,12 @@
     .yat-number-link{flex:0 0 auto;display:flex;align-items:center;border:0;background:none;padding:0 16px;font:800 1.15rem/1 Manrope,Inter,sans-serif;color:#14171a;cursor:pointer;white-space:nowrap}
     .yat-number-link:hover,.yat-number-link.active{color:#c99a1e}
     .yat-live-loading{position:absolute;z-index:4;inset:0;display:grid;place-items:center;background:#0b0d0e;color:#878c91;font:700 9px/1.4 Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;transition:opacity .2s ease}.yat-live-loading.hidden{opacity:0;pointer-events:none}.yat-live-loading span:before{content:"";display:block;width:23px;height:23px;margin:0 auto 10px;border:2px solid #33373c;border-top-color:#efb936;border-radius:50%;animation:yatSpin .8s linear infinite}@keyframes yatSpin{to{transform:rotate(360deg)}}
-    .yat-live-frame{position:relative;z-index:2;width:100%;height:100%;border:0;background:#fff;opacity:0;transition:opacity .2s ease}.yat-live-frame.loaded{opacity:1}
+    .yat-live-frame{position:absolute;top:0;left:0;z-index:2;transform-origin:0 0;border:0;background:#fff;opacity:0;transition:opacity .2s ease}.yat-live-frame.loaded{opacity:1}
     .yat-live-footer{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:8px 12px;border-top:1px solid #292d31;background:#0d0f10;color:#6f747a;font-size:.58rem}.yat-live-footer strong{color:#aeb2b6}.yat-live-footer em{font-style:normal;color:#cba744}
 
     @media(max-width:980px){
       .header-inner{min-height:62px!important}.brand img{width:132px!important}.section{padding:62px 0!important}.shell{width:min(100% - 30px,1280px)!important}
-      .yat-live-frame-wrap{height:68vh;min-height:540px}.yat-live-action.open-full{display:none}
+      .yat-live-action.open-full{display:none}
       .yat-live-platform.expanded{inset:0;border:0;border-radius:0}.yat-live-platform.expanded .yat-live-frame-wrap{min-height:0;height:auto}
     }
     @media(max-width:620px){
@@ -98,7 +113,7 @@
       .yat-frame{grid-template-columns:minmax(0,1fr);height:auto}
       .yat-frame-photo{height:36vw;min-height:150px}
       .yat-frame-copy{padding:14px 16px 16px}
-      .yat-live-url{max-width:47vw}.yat-live-frame-wrap{height:60vh;min-height:460px}.yat-live-footer{align-items:flex-start;flex-direction:column;gap:3px}
+      .yat-live-url{max-width:47vw}.yat-live-footer{align-items:flex-start;flex-direction:column;gap:3px}
       .yat-frame-wide{height:130px}.yat-frame-wide .yat-frame-photo{flex-basis:190px;min-width:190px}.yat-number-link{padding:0 12px;font-size:1rem}
     }
   `;
@@ -303,6 +318,7 @@
   }
 
   function wireNumberDemo(container, tour) {
+    setupResponsiveFrame(container);
     const links = [...container.querySelectorAll('.yat-number-link')];
     const frame = container.querySelector('.yat-live-frame');
     const loader = container.querySelector('.yat-live-loading');
@@ -355,6 +371,28 @@
     setIframe(realStops[0]?.url || PLATFORM);
   }
 
+  // Locks the iframe's own rendered size to FRAME_W x FRAME_H (so the site
+  // inside always sees the same "viewport" and always lays out 5-across),
+  // then scales the whole element down/up to match the wrap's real width --
+  // the same trick as an <img> shrinking. Re-measures on any resize of the
+  // wrap (window resize, expand/close, sidebar layout changes, etc.).
+  function setupResponsiveFrame(container) {
+    const wrap = container.querySelector('.yat-live-frame-wrap');
+    const frame = container.querySelector('.yat-live-frame');
+    frame.style.width = `${FRAME_W}px`;
+    frame.style.height = `${FRAME_H}px`;
+
+    function resize() {
+      const scale = wrap.clientWidth / FRAME_W;
+      frame.style.transform = `scale(${scale})`;
+      wrap.style.height = `${FRAME_H * scale}px`;
+    }
+
+    resize();
+    if ('ResizeObserver' in window) new ResizeObserver(resize).observe(wrap);
+    else window.addEventListener('resize', resize);
+  }
+
   // ── Shared engine ────────────────────────────────────────────────────────
 
   function frameMarkup(stop, index) {
@@ -400,6 +438,7 @@
   // never moves, resizes, or carries anything drawn on top of it.
   // `lazy` defers the first iframe load until the block scrolls into view.
   function wireTour(container, tour, { lazy = false } = {}) {
+    setupResponsiveFrame(container);
     const strip = container.querySelector('.yat-frame-strip');
     const frames = [...container.querySelectorAll('.yat-frame')];
     const ctas = [...container.querySelectorAll('.yat-frame-cta')];
