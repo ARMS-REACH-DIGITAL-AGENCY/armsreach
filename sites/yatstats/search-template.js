@@ -11,6 +11,8 @@
   }
 
   loadScript('./homepage-platform-style.js', () => {
-    loadScript('./hero-journey.js');
+    loadScript('./hero-journey.js', () => {
+      loadScript('./hero-compact-override.js');
+    });
   });
 })();
