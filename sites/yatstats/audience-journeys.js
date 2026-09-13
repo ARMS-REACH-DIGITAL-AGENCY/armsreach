@@ -371,6 +371,14 @@
     setIframe(realStops[0]?.url || PLATFORM);
   }
 
+  // Clicking anything inside an iframe shifts the OUTER document's focus
+  // onto the <iframe> element itself, and browsers then auto-scroll the
+  // outer page to bring that newly-focused element into view -- native
+  // behavior, nothing to do with the microsite's own code. Snap the outer
+  // scroll position back the instant that happens so the page never jumps.
+  let lastOuterScrollY = window.scrollY || 0;
+  window.addEventListener('scroll', () => { lastOuterScrollY = window.scrollY; }, { passive: true });
+
   // Locks the iframe's own rendered size to FRAME_W x FRAME_H (so the site
   // inside always sees the same "viewport" and always lays out 5-across),
   // then scales the whole element down/up to match the wrap's real width --
@@ -391,6 +399,12 @@
     resize();
     if ('ResizeObserver' in window) new ResizeObserver(resize).observe(wrap);
     else window.addEventListener('resize', resize);
+
+    // The iframe gaining focus is the moment the browser is about to
+    // auto-scroll the outer page -- cancel that on the next frame.
+    frame.addEventListener('focus', () => {
+      requestAnimationFrame(() => window.scrollTo(window.scrollX, lastOuterScrollY));
+    });
   }
 
   // ── Shared engine ────────────────────────────────────────────────────────
