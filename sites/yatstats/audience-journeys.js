@@ -22,14 +22,14 @@
   const TOUR_MS = 6000;
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
 
-  // The real site drops from 5 columns to 4 below ~1120px of actual
+  // The real site drops from 5 columns to 4 below 1401px of actual
   // viewport width. Rendering the iframe at a fixed width comfortably above
   // that (and a fixed height covering two full rows), then CSS-scaling the
   // whole thing to fit whatever the wrap's real width is, means the site
   // inside always renders as if it had FRAME_W of room -- it never reflows
   // to 4-across, no matter how narrow the page around it gets.
-  const FRAME_W = 1200;
-  const FRAME_H = 920;
+  const FRAME_W = 1500;
+  const FRAME_H = 950;
 
   // Cody Bellinger is a known Hamilton alumni record used as a stable tour example.
   const CODY_PROFILE = `${PLATFORM}/player/180827/cody-bellinger`;
