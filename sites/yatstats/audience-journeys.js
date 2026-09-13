@@ -374,10 +374,41 @@
   // Clicking anything inside an iframe shifts the OUTER document's focus
   // onto the <iframe> element itself, and browsers then auto-scroll the
   // outer page to bring that newly-focused element into view -- native
-  // behavior, nothing to do with the microsite's own code. Snap the outer
-  // scroll position back the instant that happens so the page never jumps.
-  let lastOuterScrollY = window.scrollY || 0;
-  window.addEventListener('scroll', () => { lastOuterScrollY = window.scrollY; }, { passive: true });
+  // behavior, nothing to do with the microsite's own code (confirmed: the
+  // real site's own scrollIntoView calls only ever touch its own document).
+  // A one-shot correction on the `focus` event wasn't enough. Two likely
+  // reasons: the browser's own auto-scroll can land over more than one
+  // frame (so a single restore gets overwritten by the tail end of it), and
+  // capturing window.scrollY *inside* the focus handler can already be too
+  // late if the browser applies its correction synchronously as part of
+  // the same focus dispatch. Fixed by tracking the scroll position
+  // continuously -- but only while NOT guarding, so the bad jump itself
+  // can never overwrite the last known-good value -- and then reverting
+  // every scroll event (not just the first) for a short window after focus
+  // moves into the iframe.
+  //
+  // Note: click/pointer events happening *inside* iframe content never
+  // reach the outer document at all (that's the whole point of the frame
+  // boundary), so the iframe's own `focus` event -- which the outer
+  // document DOES receive as a proxy whenever focus moves anywhere inside
+  // it -- is the only usable signal here, not pointerdown on our wrapper.
+  let lastGoodScrollY = window.scrollY || 0;
+  let scrollGuardActive = false;
+  let scrollGuardTimer = null;
+
+  function armScrollGuard() {
+    scrollGuardActive = true;
+    clearTimeout(scrollGuardTimer);
+    scrollGuardTimer = setTimeout(() => { scrollGuardActive = false; }, 600);
+  }
+
+  window.addEventListener('scroll', () => {
+    if (scrollGuardActive) {
+      if (window.scrollY !== lastGoodScrollY) window.scrollTo(window.scrollX, lastGoodScrollY);
+    } else {
+      lastGoodScrollY = window.scrollY;
+    }
+  }, { passive: true });
 
   // Locks the iframe's own rendered size to FRAME_W x FRAME_H (so the site
   // inside always sees the same "viewport" and always lays out 5-across),
@@ -400,11 +431,7 @@
     if ('ResizeObserver' in window) new ResizeObserver(resize).observe(wrap);
     else window.addEventListener('resize', resize);
 
-    // The iframe gaining focus is the moment the browser is about to
-    // auto-scroll the outer page -- cancel that on the next frame.
-    frame.addEventListener('focus', () => {
-      requestAnimationFrame(() => window.scrollTo(window.scrollX, lastOuterScrollY));
-    });
+    frame.addEventListener('focus', armScrollGuard);
   }
 
   // ── Shared engine ────────────────────────────────────────────────────────
