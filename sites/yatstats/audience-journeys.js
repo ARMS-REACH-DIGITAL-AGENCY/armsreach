@@ -410,6 +410,32 @@
     }
   }, { passive: true });
 
+  // A cross-origin iframe's own `focus` event is not a reliable signal in
+  // every browser for "focus just moved into this iframe" -- the documented
+  // cross-browser way to detect that is the reverse: the outer *window*
+  // itself receives a `blur` the instant focus leaves it for the iframe's
+  // content, at which point `document.activeElement` is the iframe element.
+  // Arm on both signals so whichever one a given browser actually fires
+  // still catches the jump.
+  window.addEventListener('blur', () => {
+    const active = document.activeElement;
+    if (active && active.classList && active.classList.contains('yat-live-frame')) {
+      armScrollGuard();
+    }
+  });
+
+  // Belt-and-suspenders: neither event above is part of any spec written for
+  // this exact purpose, so don't stake the fix on either firing reliably in
+  // every engine. Poll activeElement directly -- as long as focus is sitting
+  // inside one of our live frames, keep re-arming (and therefore keep
+  // correcting scroll position) regardless of what events did or didn't fire.
+  setInterval(() => {
+    const active = document.activeElement;
+    if (active && active.classList && active.classList.contains('yat-live-frame')) {
+      armScrollGuard();
+    }
+  }, 150);
+
   // Locks the iframe's own rendered size to FRAME_W x FRAME_H (so the site
   // inside always sees the same "viewport" and always lays out 5-across),
   // then scales the whole element down/up to match the wrap's real width --
