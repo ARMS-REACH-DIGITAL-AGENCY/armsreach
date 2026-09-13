@@ -73,7 +73,16 @@
     .yat-live-address{min-width:0;display:flex;align-items:center;gap:9px}.yat-live-dots{display:flex;gap:4px;flex:0 0 auto}.yat-live-dots i{display:block;width:6px;height:6px;border-radius:50%;background:#3c4146}.yat-live-dots i:nth-child(2){background:#785d20}.yat-live-dots i:nth-child(3){background:#6f2630}
     .yat-live-url{min-width:0;color:#777c82;font-size:.6rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.yat-live-url strong{color:#cacdd0;margin-right:6px}
     .yat-live-actions{display:flex;gap:6px;flex:0 0 auto}.yat-live-action{display:inline-flex;align-items:center;justify-content:center;min-height:29px;padding:0 9px;border:1px solid #30343a;border-radius:6px;background:#17191c;color:#c8cbce;font:800 8px/1 Inter,sans-serif;text-decoration:none;cursor:pointer}.yat-live-action:hover{border-color:#645124;color:#efc454}.yat-live-close{display:none}.yat-live-platform.expanded .yat-live-close{display:inline-flex}
-    .yat-live-frame-wrap{position:relative;width:100%;height:min(68vh,675px);background:#fff}.yat-live-platform.expanded .yat-live-frame-wrap{height:auto;min-height:0}
+    .yat-live-frame-wrap{position:relative;width:100%;height:min(86vh,880px);background:#fff}.yat-live-platform.expanded .yat-live-frame-wrap{height:auto;min-height:0}
+
+    /* Prototype: the graphic stays fixed on the left; only the index to its
+       right scrolls. Proves the strip can hold far more than a handful of
+       stops without each one eating a full screen width. */
+    .yat-frame-wide{display:flex;height:clamp(210px,24vw,300px)}
+    .yat-frame-wide .yat-frame-photo{flex:0 0 46%;min-width:0}
+    .yat-number-strip{flex:1;min-width:0;display:flex;align-items:center;gap:34px;overflow-x:auto;padding:0 32px;background:#fdfdfc;scrollbar-width:thin}
+    .yat-number-link{flex:0 0 auto;border:0;background:none;padding:0;font:800 1.5rem/1 Manrope,Inter,sans-serif;color:#14171a;cursor:pointer;white-space:nowrap}
+    .yat-number-link:hover,.yat-number-link.active{color:#c99a1e}
     .yat-live-loading{position:absolute;z-index:4;inset:0;display:grid;place-items:center;background:#0b0d0e;color:#878c91;font:700 9px/1.4 Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;transition:opacity .2s ease}.yat-live-loading.hidden{opacity:0;pointer-events:none}.yat-live-loading span:before{content:"";display:block;width:23px;height:23px;margin:0 auto 10px;border:2px solid #33373c;border-top-color:#efb936;border-radius:50%;animation:yatSpin .8s linear infinite}@keyframes yatSpin{to{transform:rotate(360deg)}}
     .yat-live-frame{position:relative;z-index:2;width:100%;height:100%;border:0;background:#fff;opacity:0;transition:opacity .2s ease}.yat-live-frame.loaded{opacity:1}
     .yat-live-footer{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:8px 12px;border-top:1px solid #292d31;background:#0d0f10;color:#6f747a;font-size:.58rem}.yat-live-footer strong{color:#aeb2b6}.yat-live-footer em{font-style:normal;color:#cba744}
@@ -89,6 +98,7 @@
       .yat-frame-photo{height:36vw;min-height:150px}
       .yat-frame-copy{padding:14px 16px 16px}
       .yat-live-url{max-width:47vw}.yat-live-frame-wrap{height:66vh;min-height:510px}.yat-live-footer{align-items:flex-start;flex-direction:column;gap:3px}
+      .yat-frame-wide{height:150px}.yat-frame-wide .yat-frame-photo{flex-basis:38%}.yat-number-strip{gap:22px;padding:0 16px}.yat-number-link{font-size:1.1rem}
     }
   `;
 
@@ -258,6 +268,92 @@
     ],
   };
 
+  // ── Prototype: 1–1000 index strip ───────────────────────────────────────
+  // A literal proof that the strip can hold far more than a handful of
+  // stops: the graphic stays put on the left, and 1000 numbered links sit
+  // in a plain scrollable row to its right (only 1–9 visible on load).
+  // Clicking a number cycles through the tour's real feature URLs so the
+  // "click drives the iframe" wiring is still genuinely demonstrated.
+
+  function buildNumberDemoMarkup(tour) {
+    const numbers = Array.from({ length: 1000 }, (_, i) => i + 1)
+      .map((n) => `<button type="button" class="yat-number-link" data-n="${n}">${n}</button>`)
+      .join('');
+    return `
+      <div class="yat-frame yat-frame-wide">
+        <div class="yat-frame-photo yat-rotating">
+          <img class="yat-frame-bg" src="${CAREER_BG}" alt="">
+          <img class="yat-rotating-cutout yat-cutout-a" alt="">
+          <img class="yat-rotating-cutout yat-cutout-b" alt="">
+        </div>
+        <div class="yat-number-strip" role="list" aria-label="Feature index, 1 to 1000">${numbers}</div>
+      </div>
+      <div class="yat-live-platform">
+        <div class="yat-live-bar">
+          <div class="yat-live-address"><span class="yat-live-dots"><i></i><i></i><i></i></span><span class="yat-live-url"><strong>LIVE YAT?STATS</strong>hamilton.az.yatstats.com</span></div>
+          <div class="yat-live-actions"><button type="button" class="yat-live-action yat-live-expand">Expand</button><a class="yat-live-action open-full yat-live-open" href="${PLATFORM}" target="_blank" rel="noopener">Open full site ↗</a><button type="button" class="yat-live-action yat-live-close">Close</button></div>
+        </div>
+        <div class="yat-live-frame-wrap">
+          <div class="yat-live-loading"><span>Loading the live community</span></div>
+          <iframe class="yat-live-frame" title="Live YAT?STATS tour" loading="lazy" allow="fullscreen; autoplay; clipboard-write"></iframe>
+        </div>
+        <div class="yat-live-footer"><span><strong>LIVE PLATFORM:</strong> everything inside the frame is the real Hamilton subdomain.</span><span><em>Click a number to change the live view (prototype — cycles through the real stops).</em></span></div>
+      </div>`;
+  }
+
+  function wireNumberDemo(container, tour) {
+    const links = [...container.querySelectorAll('.yat-number-link')];
+    const frame = container.querySelector('.yat-live-frame');
+    const loader = container.querySelector('.yat-live-loading');
+    const urlLabel = container.querySelector('.yat-live-url');
+    const openFull = container.querySelector('.yat-live-open');
+    const liveShell = container.querySelector('.yat-live-platform');
+    const expand = container.querySelector('.yat-live-expand');
+    const close = container.querySelector('.yat-live-close');
+    const realStops = tour.stops.filter((stop) => !stop.intro);
+    let lastUrl = '';
+
+    function setIframe(url) {
+      if (!url || lastUrl === url) return;
+      lastUrl = url;
+      openFull.href = url;
+      try {
+        const parsed = new URL(url);
+        urlLabel.innerHTML = `<strong>LIVE YAT?STATS</strong>${parsed.hostname}${parsed.pathname === '/' ? '' : parsed.pathname}${parsed.hash || ''}`;
+      } catch {}
+      loader.classList.remove('hidden');
+      frame.classList.remove('loaded');
+      frame.src = url;
+    }
+
+    links.forEach((link, i) => link.addEventListener('click', () => {
+      links.forEach((other) => other.classList.remove('active'));
+      link.classList.add('active');
+      setIframe(realStops[i % realStops.length]?.url);
+    }));
+
+    frame.addEventListener('load', () => { loader.classList.add('hidden'); frame.classList.add('loaded'); });
+    expand.addEventListener('click', () => {
+      liveShell.classList.add('expanded');
+      document.body.classList.add('yat-live-preview-lock');
+      close.focus();
+    });
+    close.addEventListener('click', () => {
+      liveShell.classList.remove('expanded');
+      document.body.classList.remove('yat-live-preview-lock');
+      expand.focus();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && liveShell.classList.contains('expanded')) {
+        liveShell.classList.remove('expanded');
+        document.body.classList.remove('yat-live-preview-lock');
+        expand.focus();
+      }
+    });
+
+    setIframe(realStops[0]?.url || PLATFORM);
+  }
+
   // ── Shared engine ────────────────────────────────────────────────────────
 
   function frameMarkup(stop, index) {
@@ -416,9 +512,12 @@
     const tour = document.createElement('section');
     tour.id = 'yat-guided-tour';
     tour.className = 'yat-tour';
-    tour.innerHTML = buildTourMarkup(fanTour);
+    // Prototype: 1-1000 index strip standing in for the feature/benefit
+    // stops, per the "would you hide half the site at 100%" test — swap
+    // back to buildTourMarkup/wireTour once the real stop count is settled.
+    tour.innerHTML = buildNumberDemoMarkup(fanTour);
     oldSearch.insertAdjacentElement('afterend', tour);
-    wireTour(tour, fanTour, { lazy: false });
+    wireNumberDemo(tour, fanTour);
     startCutoutRotation(tour.querySelector('.yat-frame-photo.yat-rotating'));
     return tour;
   }
