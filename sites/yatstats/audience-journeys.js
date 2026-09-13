@@ -1,18 +1,24 @@
 // Four audience-specific guided tours (Fan, Coach, Player, Sponsor).
-// The tour strip is modeled directly on the real "Golden Line" career-strip
-// component from the microsite (mike_crozite_template's CareerStrip.tsx /
-// ZoomableCareerTimeline.tsx): a compact row of small photo+label cards that
-// scrolls horizontally and keeps growing with more entries — not a paginated
-// full-screen carousel. Clicking (or auto-advancing to) a card drives the
-// static live iframe below it; the iframe area itself never moves or scrolls.
-// The Fan tour keeps the original hero placement (eager-loaded, already tuned
-// hotspots); Coach / Player / Sponsor are standalone sections lower on the
-// page and lazy-load their iframe only once scrolled into view.
+// This is the whole homepage narrative compressed into one horizontal strip
+// instead of a vertical scroll: a two-column frame (photo/graphic left, copy
+// right) that people slide through left-to-right. The very first frame is the
+// existing homepage hero/tagline itself (same rotating high-school-silhouette
+// graphic as before, on the career-path background) — not a separate hero
+// section above it. Every frame after that is a feature/benefit with a CTA;
+// clicking it drives the static live iframe below. The iframe never scrolls
+// or resizes and carries no overlay — it's just the real site, plainly shown.
+// Fan mounts eagerly in the original hero placement; Coach/Player/Sponsor are
+// standalone sections lower on the page and lazy-load their iframe only once
+// scrolled into view.
 (() => {
   if (window.__yatAudienceJourneys) return;
   window.__yatAudienceJourneys = true;
 
+  const S3_BASE = 'https://yatstats-assets.s3.us-west-2.amazonaws.com';
+  const CUTOUT_PREFIX = `${S3_BASE}/players/cutouts/`;
   const PLATFORM = 'https://hamilton.az.yatstats.com';
+  const CAREER_BG = `${PLATFORM}/img/career-path-default.png`;
+  const ROTATE_MS = 5200;
   const TOUR_MS = 6000;
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
 
@@ -21,38 +27,46 @@
   const CODY_CARD = `${PLATFORM}/?view=active&player=180827#player-180827`;
 
   // A small pool of real photography already used elsewhere on this site.
-  // Reused across cards/sections as a placeholder — swap in real per-stop
-  // photography once available.
-  const IMG_PITCHER = `${PLATFORM}/img/career-path-default.png`;
+  // Reused across frames/sections as a placeholder — swap in dedicated
+  // per-stop photography once available.
   const IMG_CARD_GALLERY = 'https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https%3A//assets.cdn.filesafe.space/8eYj1Uj7Ugt0PDUGHblx/media/69d3e9436ea2b5d7c0c73155.jpg';
   const IMG_FANS = 'https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https%3A//assets.cdn.filesafe.space/8eYj1Uj7Ugt0PDUGHblx/media/69aa5fab618c8d2e6017c698.png';
   const IMG_FIELD = 'https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https%3A//assets.cdn.filesafe.space/8eYj1Uj7Ugt0PDUGHblx/media/69aa5f8c7bdf3880b88d573f.png';
 
-  // ── CSS — the card strip is a close match to CareerStrip.tsx's real
-  // .golden-line-strip / .gl-card styling (colors, proportions, gold glow
-  // line), so this reads as "the same component" rather than a new one.
   const css = `
-    .yat-tour{position:relative;width:min(1400px,calc(100% - 34px));margin:34px auto 0}
-    .yat-audience-section .yat-tour{width:100%;margin:0}
-    .yat-audience-section{overflow:hidden}
+    /* Density pass carried over from the old hero: keep the header compact. */
+    .header-inner{min-height:58px!important}.brand img{width:126px!important}.nav{gap:16px!important}.nav a{font-size:.72rem!important}.button.small{min-height:34px!important;padding:7px 12px!important;font-size:.69rem!important}
+    .section{padding:70px 0!important}.section-head{max-width:780px!important;margin-bottom:32px!important}.section-head h2{font-size:clamp(2rem,3.6vw,3.65rem)!important}.section-head p{font-size:.9rem!important}.shell{width:min(1280px,calc(100% - 42px))!important}
+    .hero{padding:0 0 34px!important;background:#08090a!important;overflow:hidden!important}
+    .hero>.shell{width:100%!important;max-width:none!important;margin:0!important}
+    .hero:before{display:none!important}
+    .hero-grid{display:block!important;width:100%!important}
+    .hero-grid>.product-wrap,.hero-grid>div:first-child{display:none!important}
+    .hero-media{display:none!important}
 
-    .yat-gl-strip{position:relative;height:132px;overflow:hidden;isolation:isolate;background:linear-gradient(90deg,rgba(16,16,16,.98),rgba(8,8,8,.98));border:1px solid #2d3136;border-bottom:0;border-radius:14px 14px 0 0}
-    .yat-gl-line{position:absolute;left:18px;right:18px;bottom:9px;z-index:1;height:3px;background:linear-gradient(90deg,rgba(245,165,51,.12),#f5a533 16%,#ffc947 52%,#f5a533 100%);box-shadow:0 0 7px rgba(255,207,62,.85),0 0 18px rgba(255,180,32,.48);pointer-events:none}
-    .yat-gl-track-wrap{position:relative;z-index:2;height:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:16px 18px}
-    .yat-gl-track-wrap::-webkit-scrollbar{display:none}
-    .yat-gl-track{height:100%;display:flex;align-items:stretch;gap:10px}
-    .yat-gl-card{position:relative;flex:0 0 132px;display:grid;grid-template-columns:56px minmax(0,1fr);align-items:stretch;width:132px;padding:4px;border:1px solid rgba(255,255,255,.18);border-radius:0;background:linear-gradient(135deg,rgba(29,29,29,.98),rgba(7,7,7,.92));color:#fff;text-align:left;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.34);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
-    .yat-gl-card:hover{transform:translateY(-2px) scale(1.01);border-color:rgba(245,200,90,.7)}
-    .yat-gl-card.active{border-color:#f5c85a;box-shadow:0 0 18px rgba(245,200,90,.32),0 10px 24px rgba(0,0,0,.5);transform:translateY(-2px)}
-    .yat-gl-photo{display:block;width:54px;height:92px;overflow:hidden;border:1px solid rgba(245,200,90,.5);background:#111}
-    .yat-gl-photo img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
-    .yat-gl-copy{min-width:0;padding:4px 1px 3px 6px;align-self:stretch;display:flex;flex-direction:column}
-    .yat-gl-kicker,.yat-gl-label,.yat-gl-hint{display:block;overflow:hidden;text-overflow:ellipsis}
-    .yat-gl-kicker{white-space:nowrap;color:#f5c85a;font:800 8px/1 Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase}
-    .yat-gl-label{margin-top:4px;white-space:nowrap;color:#fff;font:800 12px/1 "Bebas Neue",Inter,sans-serif;letter-spacing:.04em;text-transform:uppercase}
-    .yat-gl-hint{margin-top:auto;white-space:normal;overflow-wrap:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:rgba(255,255,255,.68);font:700 8px/1.2 Inter,sans-serif}
+    /* Remove the old duplicate search UI. The live product itself is now the demonstration. */
+    #global-search{display:none!important}
+    #proof .proof-shot{display:none!important}#proof .proof-card{padding-top:2px!important}#proof .metrics{margin-top:0!important;border-top:0!important}
 
-    .yat-live-platform{position:relative;border:1px solid #35393e;border-radius:0 0 14px 14px;overflow:hidden;background:#0b0d0e;box-shadow:0 26px 70px rgba(0,0,0,.42)}
+    .yat-tour{position:relative;width:min(1400px,calc(100% - 34px));margin:0 auto}
+    .yat-audience-section .yat-tour{width:100%}
+
+    .yat-frame-strip{position:relative;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;border-radius:10px 10px 0 0;overflow:hidden}
+    .yat-frame-strip::-webkit-scrollbar{display:none}
+    .yat-frame-strip:after{content:"";position:absolute;left:0;right:0;bottom:0;z-index:3;height:3px;background:linear-gradient(90deg,rgba(245,165,51,.12),#f5a533 16%,#ffc947 52%,#f5a533 100%);box-shadow:0 0 7px rgba(255,207,62,.85),0 0 18px rgba(255,180,32,.48);pointer-events:none}
+    .yat-frame{flex:0 0 100%;min-width:0;scroll-snap-align:start;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:clamp(210px,24vw,300px)}
+    .yat-frame-photo{position:relative;overflow:hidden;background:#111;min-width:0}
+    .yat-frame-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+    .yat-frame-photo.yat-rotating .yat-rotating-cutout{width:auto;left:2%;right:auto;object-fit:contain;object-position:left bottom;opacity:0;filter:drop-shadow(0 14px 20px rgba(0,0,0,.4));transition:opacity .85s ease}
+    .yat-frame-photo.yat-rotating .yat-rotating-cutout.active{opacity:1}
+    .yat-frame-copy{background:#fdfdfc;color:#14171a;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:clamp(16px,2.6vw,30px);min-width:0}
+    .yat-frame-copy blockquote{margin:0;max-width:100%;overflow-wrap:break-word;font:800 clamp(1rem,1.7vw,1.5rem)/1.28 Manrope,Inter,sans-serif;letter-spacing:-.01em;color:#14171a}
+    .yat-frame-copy mark{background:linear-gradient(135deg,#efb936,#ffd76a);color:#14171a;padding:1px 7px;border-radius:4px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+    .yat-frame-hint{margin:0;max-width:46ch;overflow-wrap:break-word;color:#54585e;font-size:.78rem;line-height:1.5}
+    .yat-frame-cta{align-self:flex-start;margin-top:2px;display:inline-flex;align-items:center;gap:6px;border:0;background:none;padding:0;color:#96730f;font:800 .72rem/1 Inter,sans-serif;letter-spacing:.07em;text-transform:uppercase;cursor:pointer}
+    .yat-frame-cta:hover{color:#c99a1e}
+
+    .yat-live-platform{position:relative;border:1px solid #35393e;border-radius:0 0 10px 10px;overflow:hidden;background:#0b0d0e;box-shadow:0 26px 70px rgba(0,0,0,.42)}
     .yat-live-platform.expanded{position:fixed;z-index:99998;inset:10px;margin:0;border-radius:12px;display:grid;grid-template-rows:auto 1fr auto;background:#090a0b}
     body.yat-live-preview-lock{overflow:hidden}
     .yat-live-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:8px 10px 8px 13px;min-height:44px;border-bottom:1px solid #292d31;background:linear-gradient(180deg,#141618,#0e1011)}
@@ -62,20 +76,19 @@
     .yat-live-frame-wrap{position:relative;width:100%;height:min(68vh,675px);background:#fff}.yat-live-platform.expanded .yat-live-frame-wrap{height:auto;min-height:0}
     .yat-live-loading{position:absolute;z-index:4;inset:0;display:grid;place-items:center;background:#0b0d0e;color:#878c91;font:700 9px/1.4 Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;transition:opacity .2s ease}.yat-live-loading.hidden{opacity:0;pointer-events:none}.yat-live-loading span:before{content:"";display:block;width:23px;height:23px;margin:0 auto 10px;border:2px solid #33373c;border-top-color:#efb936;border-radius:50%;animation:yatSpin .8s linear infinite}@keyframes yatSpin{to{transform:rotate(360deg)}}
     .yat-live-frame{position:relative;z-index:2;width:100%;height:100%;border:0;background:#fff;opacity:0;transition:opacity .2s ease}.yat-live-frame.loaded{opacity:1}
-    .yat-live-callout{position:absolute;z-index:5;left:var(--tour-x,90%);top:var(--tour-y,10%);transform:translate(-50%,-50%);pointer-events:none;transition:left .45s ease,top .45s ease,opacity .25s ease;filter:drop-shadow(0 7px 15px rgba(0,0,0,.35))}.yat-live-callout-dot{width:15px;height:15px;border:2px solid #111;border-radius:50%;background:#f5bd38;box-shadow:0 0 0 6px rgba(245,189,56,.25),0 0 0 13px rgba(245,189,56,.09);animation:yatPulse 1.7s ease-in-out infinite}.yat-live-callout-label{position:absolute;left:22px;top:50%;transform:translateY(-50%);white-space:nowrap;padding:6px 8px;border:1px solid rgba(245,189,56,.5);border-radius:6px;background:rgba(8,9,10,.90);color:#f6ca60;font:900 7px/1 Inter,sans-serif;letter-spacing:.09em;text-transform:uppercase}@keyframes yatPulse{50%{box-shadow:0 0 0 9px rgba(245,189,56,.18),0 0 0 18px rgba(245,189,56,.03)}}
     .yat-live-footer{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:8px 12px;border-top:1px solid #292d31;background:#0d0f10;color:#6f747a;font-size:.58rem}.yat-live-footer strong{color:#aeb2b6}.yat-live-footer em{font-style:normal;color:#cba744}
 
     @media(max-width:980px){
-      .yat-tour{width:min(100% - 24px,1400px);margin-top:25px}
-      .yat-audience-section .yat-tour{width:100%;margin-top:0}
+      .header-inner{min-height:62px!important}.brand img{width:132px!important}.section{padding:62px 0!important}.shell{width:min(100% - 30px,1280px)!important}
       .yat-live-frame-wrap{height:68vh;min-height:540px}.yat-live-action.open-full{display:none}
       .yat-live-platform.expanded{inset:0;border:0;border-radius:0}.yat-live-platform.expanded .yat-live-frame-wrap{min-height:0;height:auto}
     }
     @media(max-width:620px){
-      .yat-tour{width:calc(100% - 18px)}
-      .yat-audience-section .yat-tour{width:100%}
-      .yat-gl-strip{height:118px}.yat-gl-card{flex-basis:112px;width:112px}.yat-gl-photo{width:46px;height:80px}
-      .yat-live-url{max-width:47vw}.yat-live-frame-wrap{height:66vh;min-height:510px}.yat-live-footer{align-items:flex-start;flex-direction:column;gap:3px}.yat-live-callout-label{display:none}
+      .section{padding:54px 0!important}
+      .yat-frame{grid-template-columns:minmax(0,1fr);height:auto}
+      .yat-frame-photo{height:36vw;min-height:150px}
+      .yat-frame-copy{padding:14px 16px 16px}
+      .yat-live-url{max-width:47vw}.yat-live-frame-wrap{height:66vh;min-height:510px}.yat-live-footer{align-items:flex-start;flex-direction:column;gap:3px}
     }
   `;
 
@@ -84,80 +97,191 @@
   style.textContent = css;
   document.head.appendChild(style);
 
+  // ── Rotating high-school silhouette (the existing homepage hero graphic) ──
+  // Reused verbatim as the photo for the Fan tour's first ("intro") frame.
+
+  function shuffle(list) {
+    const copy = [...list];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function imageExists(url, timeout = 4500) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      let done = false;
+      const finish = (value) => { if (done) return; done = true; clearTimeout(timer); resolve(value); };
+      const timer = setTimeout(() => finish(false), timeout);
+      img.onload = () => finish(Boolean(img.naturalWidth && img.naturalHeight));
+      img.onerror = () => finish(false);
+      img.src = url;
+    });
+  }
+
+  async function listS3Cutouts() {
+    const found = [];
+    let token = '';
+    for (let page = 0; page < 3; page++) {
+      const params = new URLSearchParams({ 'list-type': '2', prefix: 'players/cutouts/', 'max-keys': '1000' });
+      if (token) params.set('continuation-token', token);
+      const response = await fetch(`${S3_BASE}/?${params}`, { mode: 'cors', cache: 'no-store' });
+      if (!response.ok) throw new Error(`S3 list ${response.status}`);
+      const xml = new DOMParser().parseFromString(await response.text(), 'application/xml');
+      xml.querySelectorAll('Key').forEach((node) => {
+        const key = node.textContent || '';
+        if (/^players\/cutouts\/[^/]+\.png$/i.test(key)) found.push(`${S3_BASE}/${key}`);
+      });
+      const truncated = xml.querySelector('IsTruncated')?.textContent === 'true';
+      token = xml.querySelector('NextContinuationToken')?.textContent || '';
+      if (!truncated || !token) break;
+    }
+    return shuffle([...new Set(found)]);
+  }
+
+  async function discoverCutoutsFromPlayers() {
+    const fragments = shuffle(['an', 'er', 'on', 'ar', 'el', 'in', 'en', 'al', 'ma', 'ro', 'ch', 'br', 'wi', 'li', 'mi', 'jo', 'da', 'co']).slice(0, 7);
+    const payloads = await Promise.allSettled(fragments.map(async (q) => {
+      const r = await fetch(`${PLATFORM}/api/players/search?q=${encodeURIComponent(q)}&limit=35`, { cache: 'no-store' });
+      if (!r.ok) return [];
+      const data = await r.json();
+      return Array.isArray(data?.players) ? data.players : [];
+    }));
+    const ids = [];
+    payloads.forEach((result) => {
+      if (result.status === 'fulfilled') result.value.forEach((p) => {
+        const id = String(p?.playerId || p?.playerid || p?.id || '').trim();
+        if (id) ids.push(id);
+      });
+    });
+    // Stable known Hamilton example first, then randomized discoveries.
+    const unique = ['180827', ...shuffle([...new Set(ids)])].slice(0, 72);
+    const valid = [];
+    for (let i = 0; i < unique.length && valid.length < 22; i += 6) {
+      const checks = await Promise.all(unique.slice(i, i + 6).map(async (id) => {
+        const url = `${CUTOUT_PREFIX}${encodeURIComponent(id)}.png`;
+        return (await imageExists(url, 3000)) ? url : null;
+      }));
+      valid.push(...checks.filter(Boolean));
+    }
+    return shuffle([...new Set(valid)]);
+  }
+
+  async function buildCutoutPool() {
+    try {
+      const listed = await listS3Cutouts();
+      if (listed.length) return listed;
+    } catch (err) {
+      console.info('YAT?STATS hero: direct S3 listing unavailable; using player-index fallback.');
+    }
+    try { return await discoverCutoutsFromPlayers(); }
+    catch (err) { console.warn('YAT?STATS hero: cutout discovery failed.', err); return []; }
+  }
+
+  async function startCutoutRotation(introPhotoEl) {
+    if (!introPhotoEl) return;
+    const imgs = [introPhotoEl.querySelector('.yat-cutout-a'), introPhotoEl.querySelector('.yat-cutout-b')];
+    const pool = await buildCutoutPool();
+    if (!pool.length) return;
+    let active = 0;
+    let index = Math.floor(Math.random() * pool.length);
+
+    async function show(url, first = false) {
+      const next = first ? imgs[0] : imgs[1 - active];
+      await new Promise((resolve) => { next.onload = resolve; next.onerror = resolve; next.src = url; });
+      if (!next.naturalWidth) return;
+      requestAnimationFrame(() => {
+        imgs.forEach((img) => img.classList.remove('active'));
+        next.classList.add('active');
+        active = imgs.indexOf(next);
+      });
+    }
+
+    await show(pool[index], true);
+    if (reducedMotion || pool.length < 2) return;
+    setInterval(() => { index = (index + 1) % pool.length; show(pool[index]); }, ROTATE_MS);
+  }
+
   // ── Tour content, one dataset per audience ─────────────────────────────
-  // Photos are reused from the site's existing image pool (placeholder —
-  // swap in dedicated photography per stop). Hotspot x/y on the callout dot
-  // are approximate on every stop except Fan's, which were tuned against
-  // real screenshots of the live site.
+  // The Fan tour's first stop is the homepage's own hero/tagline frame (no
+  // CTA — it's the intro, not a feature). Every other stop is a feature with
+  // a CTA that drives the live iframe when clicked. Photos are reused from
+  // the site's existing image pool as a placeholder.
 
   const fanTour = {
-    id: 'fan', kicker: 'Test drive the platform',
+    id: 'fan',
     stops: [
-      { image: IMG_PITCHER, label: 'Search', hint: 'Find anybody, from anywhere in the network.', url: PLATFORM, callout: 'GLOBAL SEARCH', x: 91, y: 7 },
-      { image: IMG_FANS, label: 'Filter', hint: 'Sort by name, level, class and favorites.', url: PLATFORM, callout: 'SORT + FILTER', x: 87, y: 13 },
-      { image: IMG_CARD_GALLERY, label: 'Cards', hint: 'Flip a card for current production.', url: CODY_CARD, callout: 'TAP / FLIP A PLAYER CARD', x: 22, y: 43 },
-      { image: IMG_FIELD, label: 'Stats', hint: 'Production stays attached to home.', url: `${CODY_PROFILE}#ppTab-stats`, callout: 'CURRENT STATS', x: 50, y: 79 },
-      { image: IMG_PITCHER, label: 'News', hint: 'Milestones and roster moves, live.', url: `${CODY_PROFILE}#ppTab-news`, callout: 'PLAYER NEWS', x: 50, y: 79 },
-      { image: IMG_FANS, label: 'Line', hint: 'High school through the pros, one line.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'THE GOLDEN TIMELINE', x: 37, y: 38 },
-      { image: IMG_CARD_GALLERY, label: 'Memory', hint: 'Fans help document the journey.', url: `${CODY_PROFILE}#ppTab-upload`, callout: 'ADD A MEMORY', x: 48, y: 58 },
+      { intro: true, quote: '“When a baseball player’s journey doesn’t end at graduation, <mark>neither should his story.</mark>”' },
+      { image: IMG_FANS, quote: 'A big alumni list only helps if <mark>you can actually find your guy.</mark>', sub: 'Search the entire network by player, school or team.', url: PLATFORM, callout: 'Search the network' },
+      { image: IMG_CARD_GALLERY, quote: 'Every alumni card has <mark>another side.</mark>', sub: 'Flip a card to move from the high-school story to current production.', url: CODY_CARD, callout: 'Flip a player card' },
+      { image: IMG_FIELD, quote: 'Stats tell you what happened. <mark>They don’t have to lose where it started.</mark>', sub: 'Current production stays attached to the hometown identity.', url: `${CODY_PROFILE}#ppTab-stats`, callout: 'See current stats' },
+      { image: IMG_FANS, quote: 'Stats tell you what happened. <mark>Memories tell you why it mattered.</mark>', sub: 'The Golden Timeline follows a player from high school through the pros.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'See the Golden Timeline' },
+      { image: IMG_CARD_GALLERY, quote: 'The people who lived it <mark>can help preserve it.</mark>', sub: 'Fans, family and teammates can add photos and memories.', url: `${CODY_PROFILE}#ppTab-upload`, callout: 'Add a memory' },
     ],
   };
 
   const coachTour = {
-    id: 'coach', alt: false, kicker: 'For coaches & boosters',
+    id: 'coach', alt: false,
     stops: [
-      { image: IMG_FIELD, label: 'Home', hint: 'A living alumni home for the program.', url: PLATFORM, callout: 'YOUR PROGRAM COMMUNITY', x: 50, y: 10 },
-      { image: IMG_CARD_GALLERY, label: 'Roster', hint: 'Every era of the program, one place.', url: `${PLATFORM}/?view=active`, callout: 'ACTIVE ALUMNI GALLERY', x: 50, y: 50 },
-      { image: IMG_PITCHER, label: 'Flip', hint: 'Show where a former player is now.', url: CODY_CARD, callout: 'FLIP A PLAYER CARD', x: 22, y: 43 },
-      { image: IMG_FANS, label: 'Engage', hint: 'Reasons to check in before you ask.', url: `${CODY_PROFILE}#ppTab-news`, callout: 'ALUMNI NEWS & UPDATES', x: 50, y: 79 },
-      { image: IMG_FIELD, label: 'Legacy', hint: 'Championships and memories, preserved.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'THE GOLDEN TIMELINE', x: 37, y: 38 },
-      { image: IMG_CARD_GALLERY, label: 'Backer', hint: 'A stronger pitch than another banner.', url: PLATFORM, callout: 'SPONSOR-READY COMMUNITY', x: 85, y: 14 },
+      { image: IMG_FIELD, quote: 'Your former players are already a community — <mark>scattered across old spreadsheets and group texts.</mark>', sub: 'Give the program a living alumni home instead.', url: PLATFORM, callout: 'See your program' },
+      { image: IMG_CARD_GALLERY, quote: 'Every era of the program, <mark>one gallery.</mark>', sub: 'Alumni tracking organized around your school, not scattered by team.', url: `${PLATFORM}/?view=active`, callout: 'See the alumni gallery' },
+      { image: IMG_FANS, quote: 'Show boosters and families <mark>where a former player is now.</mark>', sub: 'Flip a card from the high-school story to current production.', url: CODY_CARD, callout: 'Flip a player card' },
+      { image: IMG_FIELD, quote: 'Stay relevant <mark>before you ask for anything.</mark>', sub: 'Milestones and updates give families a reason to check in.', url: `${CODY_PROFILE}#ppTab-news`, callout: 'See alumni news' },
+      { image: IMG_CARD_GALLERY, quote: 'Championships, coaches and memories — <mark>preserved on one timeline.</mark>', sub: 'The Golden Timeline carries the program’s history forward.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'See the Golden Timeline' },
+      { image: IMG_FANS, quote: 'A stronger pitch than <mark>another banner.</mark>', sub: 'A sponsor-ready community gives local partners a real offer.', url: PLATFORM, callout: 'See the community' },
     ],
   };
 
   const playerTour = {
-    id: 'player', alt: true, kicker: 'For players & alumni',
+    id: 'player', alt: true,
     stops: [
-      { image: IMG_PITCHER, label: 'Career', hint: 'One profile follows the whole journey.', url: CODY_PROFILE, callout: 'PLAYER PROFILE', x: 50, y: 14 },
-      { image: IMG_FIELD, label: 'Stats', hint: 'Production stays attached to home.', url: `${CODY_PROFILE}#ppTab-stats`, callout: 'CURRENT STATS', x: 50, y: 79 },
-      { image: IMG_FANS, label: 'Line', hint: 'Build the record a stat sheet can’t.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'THE GOLDEN TIMELINE', x: 37, y: 38 },
-      { image: IMG_CARD_GALLERY, label: 'Flip', hint: 'The hometown image never disappears.', url: CODY_CARD, callout: 'FLIP YOUR PLAYER CARD', x: 22, y: 43 },
-      { image: IMG_PITCHER, label: 'News', hint: 'Share milestones with people who care.', url: `${CODY_PROFILE}#ppTab-news`, callout: 'PLAYER NEWS', x: 50, y: 79 },
-      { image: IMG_FIELD, label: 'Memory', hint: 'Playing ends. The identity doesn’t.', url: `${CODY_PROFILE}#ppTab-upload`, callout: 'ADD A MEMORY', x: 48, y: 58 },
+      { image: IMG_CARD_GALLERY, quote: 'High school is the anchor. <mark>It’s not the ceiling.</mark>', sub: 'One profile follows your journey through college, pro ball and beyond.', url: CODY_PROFILE, callout: 'See a player profile' },
+      { image: IMG_FIELD, quote: 'Current production <mark>stays attached to home.</mark>', sub: 'Fans who knew you before can still follow what you’re doing now.', url: `${CODY_PROFILE}#ppTab-stats`, callout: 'See current stats' },
+      { image: IMG_FANS, quote: 'Build the record <mark>a stat sheet can’t.</mark>', sub: 'Photos and milestones live on the Golden Timeline.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'See the Golden Timeline' },
+      { image: IMG_CARD_GALLERY, quote: 'The hometown image <mark>never disappears.</mark>', sub: 'Your card flips from the high-school story to right now.', url: CODY_CARD, callout: 'Flip your player card' },
+      { image: IMG_FIELD, quote: 'Share milestones with <mark>the people who already care.</mark>', sub: 'Hometown fans and former teammates follow along.', url: `${CODY_PROFILE}#ppTab-news`, callout: 'See player news' },
+      { image: IMG_FANS, quote: 'Playing ends. <mark>The alumni identity doesn’t.</mark>', sub: 'Add your own photos and memories to the profile.', url: `${CODY_PROFILE}#ppTab-upload`, callout: 'Add a memory' },
     ],
   };
 
   const sponsorTour = {
-    id: 'sponsor', alt: false, kicker: 'For local partners',
+    id: 'sponsor', alt: false,
     stops: [
-      { image: IMG_FANS, label: 'People', hint: 'Real hometown attention, already there.', url: PLATFORM, callout: 'AN ACTIVE HOMETOWN COMMUNITY', x: 50, y: 10 },
-      { image: IMG_PITCHER, label: 'Legacy', hint: 'Nostalgia is an engagement engine.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'THE GOLDEN TIMELINE', x: 37, y: 38 },
-      { image: IMG_CARD_GALLERY, label: 'Reach', hint: 'Put your brand inside the community.', url: `${PLATFORM}/?view=active`, callout: 'WHERE YOUR BRAND WOULD APPEAR', x: 50, y: 50 },
-      { image: IMG_FIELD, label: 'Player', hint: 'A real alumni community, not a mockup.', url: CODY_CARD, callout: 'A REAL PLAYER, NOT A MOCKUP', x: 22, y: 43 },
-      { image: IMG_FANS, label: 'Value', hint: 'More than a booster donation.', url: PLATFORM, callout: 'A STRONGER LOCAL OFFER', x: 85, y: 14 },
-      { image: IMG_PITCHER, label: 'Scale', hint: 'One school is the proof, not the ceiling.', url: PLATFORM, callout: 'ONE OF THOUSANDS OF PROGRAMS', x: 70, y: 65 },
+      { image: IMG_CARD_GALLERY, quote: 'Parents, alumni and former teammates already care — <mark>because these are their people.</mark>', sub: 'Back a hometown community that already has real attention.', url: PLATFORM, callout: 'See the community' },
+      { image: IMG_FIELD, quote: 'Nostalgia isn’t decoration. <mark>It’s an engagement engine.</mark>', sub: 'The Golden Timeline surfaces the memories that make a message land.', url: `${CODY_PROFILE}#playerCareerImages`, callout: 'See the Golden Timeline' },
+      { image: IMG_FANS, quote: 'Put your brand <mark>inside the community.</mark>', sub: 'Appear around the alumni and stories people already value.', url: `${PLATFORM}/?view=active`, callout: 'See where you’d appear' },
+      { image: IMG_CARD_GALLERY, quote: 'Real players. <mark>Not a mockup.</mark>', sub: 'Every flipped card is a real alumni community.', url: CODY_CARD, callout: 'Flip a player card' },
+      { image: IMG_FIELD, quote: 'More than <mark>a booster donation.</mark>', sub: 'Fund a useful platform and earn measurable hometown exposure.', url: PLATFORM, callout: 'See the platform' },
+      { image: IMG_FANS, quote: 'One school is the proof. <mark>Not the ceiling.</mark>', sub: 'The same model can extend to every program that activates YAT?STATS.', url: PLATFORM, callout: 'See the platform' },
     ],
   };
 
   // ── Shared engine ────────────────────────────────────────────────────────
 
+  function frameMarkup(stop, index) {
+    const photoHtml = stop.intro
+      ? `<img class="yat-frame-bg" src="${CAREER_BG}" alt="">
+         <img class="yat-rotating-cutout yat-cutout-a" alt="">
+         <img class="yat-rotating-cutout yat-cutout-b" alt="">`
+      : `<img src="${stop.image}" alt="" loading="lazy">`;
+    const ctaHtml = stop.intro ? '' : `<button type="button" class="yat-frame-cta" data-index="${index}">${stop.callout} →</button>`;
+    return `
+      <div class="yat-frame">
+        <div class="yat-frame-photo${stop.intro ? ' yat-rotating' : ''}">${photoHtml}</div>
+        <div class="yat-frame-copy">
+          <blockquote>${stop.quote}</blockquote>
+          ${stop.sub ? `<p class="yat-frame-hint">${stop.sub}</p>` : ''}
+          ${ctaHtml}
+        </div>
+      </div>`;
+  }
+
   function buildTourMarkup(tour) {
     return `
-      <div class="yat-gl-strip" role="region" aria-label="${tour.kicker} tour">
-        <div class="yat-gl-line" aria-hidden="true"></div>
-        <div class="yat-gl-track-wrap">
-          <div class="yat-gl-track" role="list">
-            ${tour.stops.map((stop, index) => `
-              <button type="button" class="yat-gl-card${index === 0 ? ' active' : ''}" role="listitem" data-index="${index}" aria-label="${stop.label}">
-                <span class="yat-gl-photo"><img src="${stop.image}" alt="" loading="lazy"></span>
-                <span class="yat-gl-copy">
-                  <span class="yat-gl-kicker">${String(index + 1).padStart(2, '0')}</span>
-                  <span class="yat-gl-label">${stop.label}</span>
-                  <span class="yat-gl-hint">${stop.hint}</span>
-                </span>
-              </button>`).join('')}
-          </div>
-        </div>
+      <div class="yat-frame-strip" role="region" aria-label="YAT?STATS tour">
+        ${tour.stops.map((stop, index) => frameMarkup(stop, index)).join('')}
       </div>
       <div class="yat-live-platform">
         <div class="yat-live-bar">
@@ -166,29 +290,26 @@
         </div>
         <div class="yat-live-frame-wrap">
           <div class="yat-live-loading"><span>Loading the live community</span></div>
-          <iframe class="yat-live-frame" title="Live YAT?STATS ${tour.kicker} tour" loading="lazy" allow="fullscreen; autoplay; clipboard-write"></iframe>
-          <div class="yat-live-callout" aria-hidden="true"><div class="yat-live-callout-dot"></div><div class="yat-live-callout-label"></div></div>
+          <iframe class="yat-live-frame" title="Live YAT?STATS tour" loading="lazy" allow="fullscreen; autoplay; clipboard-write"></iframe>
         </div>
-        <div class="yat-live-footer"><span><strong>LIVE PLATFORM:</strong> everything inside the frame is the real Hamilton subdomain.</span><span><em>Tour stops change the live view. You can interact with it at any time.</em></span></div>
+        <div class="yat-live-footer"><span><strong>LIVE PLATFORM:</strong> everything inside the frame is the real Hamilton subdomain.</span><span><em>Click a stop above to change the live view.</em></span></div>
       </div>`;
   }
 
-  // Wires one mounted tour block's interactivity. The card strip itself is a
-  // plain, continuously scrollable row (no snapping) — exactly like the real
-  // Golden Line strip — so clicking a card (or the auto-advance timer) is the
-  // single source of truth for which stop is "active", driving the card
-  // highlight and the STATIC iframe below it. The iframe area never scrolls
-  // or changes shape; only its content and the active card change.
-  // `lazy` defers the first iframe load (and the auto-advance timer) until
-  // the block scrolls into view, and pauses the timer again once it scrolls out.
+  // Wires one mounted tour block. The frame strip is a plain, continuously
+  // scrollable row (swipe/drag/scroll — no arrows, no dots); scrolling just
+  // browses frames and never touches the iframe. Clicking a frame's CTA is
+  // the only thing that changes the STATIC iframe below, which otherwise
+  // never moves, resizes, or carries anything drawn on top of it.
+  // `lazy` defers the first iframe load until the block scrolls into view.
   function wireTour(container, tour, { lazy = false } = {}) {
-    const cards = [...container.querySelectorAll('.yat-gl-card')];
+    const strip = container.querySelector('.yat-frame-strip');
+    const frames = [...container.querySelectorAll('.yat-frame')];
+    const ctas = [...container.querySelectorAll('.yat-frame-cta')];
     const frame = container.querySelector('.yat-live-frame');
     const loader = container.querySelector('.yat-live-loading');
     const urlLabel = container.querySelector('.yat-live-url');
     const openFull = container.querySelector('.yat-live-open');
-    const callout = container.querySelector('.yat-live-callout');
-    const calloutLabel = container.querySelector('.yat-live-callout-label');
     const liveShell = container.querySelector('.yat-live-platform');
     const frameWrap = container.querySelector('.yat-live-frame-wrap');
     const expand = container.querySelector('.yat-live-expand');
@@ -207,48 +328,41 @@
     }
 
     function startTimer() {
-      if (reducedMotion || interacted || tourTimer) return;
-      tourTimer = setInterval(() => applyStop((activeIndex + 1) % tour.stops.length), TOUR_MS);
+      if (reducedMotion || interacted || tourTimer || frames.length < 2) return;
+      tourTimer = setInterval(() => {
+        activeIndex = (activeIndex + 1) % frames.length;
+        strip.scrollTo({ left: frames[activeIndex].offsetLeft, behavior: 'smooth' });
+      }, TOUR_MS);
     }
 
-    function applyStop(index, userInitiated = false) {
-      const stop = tour.stops[index];
-      if (!stop) return;
-      activeIndex = index;
-      if (userInitiated) pauseTour();
-
-      cards.forEach((card, i) => {
-        const isActive = i === index;
-        card.classList.toggle('active', isActive);
-        if (isActive) card.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest', inline: 'nearest' });
-      });
-
-      calloutLabel.textContent = stop.callout;
-      callout.style.setProperty('--tour-x', `${stop.x}%`);
-      callout.style.setProperty('--tour-y', `${stop.y}%`);
-
-      openFull.href = stop.url;
+    function setIframe(url) {
+      if (!url || lastUrl === url) return;
+      lastUrl = url;
+      openFull.href = url;
       try {
-        const parsed = new URL(stop.url);
+        const parsed = new URL(url);
         urlLabel.innerHTML = `<strong>LIVE YAT?STATS</strong>${parsed.hostname}${parsed.pathname === '/' ? '' : parsed.pathname}${parsed.hash || ''}`;
       } catch {}
-
-      if (lastUrl !== stop.url) {
-        lastUrl = stop.url;
-        loader.classList.remove('hidden');
-        frame.classList.remove('loaded');
-        frame.src = stop.url;
-      }
+      loader.classList.remove('hidden');
+      frame.classList.remove('loaded');
+      frame.src = url;
     }
 
     function begin() {
       if (started) return;
       started = true;
-      applyStop(0);
+      setIframe(tour.stops.find((stop) => !stop.intro)?.url || PLATFORM);
       startTimer();
     }
 
-    cards.forEach((card) => card.addEventListener('click', () => { begin(); applyStop(Number(card.dataset.index), true); }));
+    strip.addEventListener('pointerdown', () => pauseTour(), { once: true });
+    strip.addEventListener('touchstart', () => pauseTour(), { once: true, passive: true });
+    ctas.forEach((cta) => cta.addEventListener('click', () => {
+      begin();
+      pauseTour();
+      setIframe(tour.stops[Number(cta.dataset.index)]?.url);
+    }));
+
     frame.addEventListener('load', () => { loader.classList.add('hidden'); frame.classList.add('loaded'); });
     frameWrap.addEventListener('pointerenter', () => pauseTour());
     frameWrap.addEventListener('touchstart', () => pauseTour(), { passive: true });
@@ -296,12 +410,16 @@
   function mountFanTour() {
     const oldSearch = document.getElementById('global-search');
     if (!oldSearch || document.getElementById('yat-guided-tour')) return;
+    const grid = document.querySelector('.hero-grid');
+    if (grid) grid.dataset.journeyHero = '2';
+
     const tour = document.createElement('section');
     tour.id = 'yat-guided-tour';
     tour.className = 'yat-tour';
     tour.innerHTML = buildTourMarkup(fanTour);
     oldSearch.insertAdjacentElement('afterend', tour);
     wireTour(tour, fanTour, { lazy: false });
+    startCutoutRotation(tour.querySelector('.yat-frame-photo.yat-rotating'));
     return tour;
   }
 
