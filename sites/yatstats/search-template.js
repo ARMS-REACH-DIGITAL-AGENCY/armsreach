@@ -12,7 +12,9 @@
 
   loadScript('./homepage-platform-style.js', () => {
     loadScript('./hero-journey.js', () => {
-      loadScript('./story-timeline-override.js');
+      loadScript('./story-timeline-override.js', () => {
+        loadScript('./live-frame-fit-override.js');
+      });
     });
   });
 })();
