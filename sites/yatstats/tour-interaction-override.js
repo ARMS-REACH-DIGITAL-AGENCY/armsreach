@@ -1,0 +1,232 @@
+(() => {
+  if (window.__yatTourInteractionOverride) return;
+  window.__yatTourInteractionOverride = true;
+
+  const PLATFORM_ORIGIN = 'https://hamilton.az.yatstats.com';
+  const S3 = 'https://yatstats-assets.s3.us-west-2.amazonaws.com';
+  const CAREER_BG = `${PLATFORM_ORIGIN}/img/career-path-default.png`;
+  const HS_BG = `${S3}/players/then/180827.jpg`;
+  const NOW_BG = `${S3}/players/now/180827.jpg`;
+  const SCHOOL_BG = `${S3}/schools/5004.png`;
+
+  const TOPIC_BACKGROUNDS = {
+    'Why YAT?STATS': { src: CAREER_BG, pos: 'center 48%' },
+    'Home School': { src: HS_BG, pos: 'center 34%' },
+    'Search': { src: SCHOOL_BG, pos: '18% 50%', contain: true },
+    'Flip Cards': { src: HS_BG, pos: 'center 28%' },
+    'Player Profile': { src: NOW_BG, pos: 'center 28%' },
+    'Favorite / Super Fan': { src: SCHOOL_BG, pos: '18% 50%', contain: true },
+    'Golden Timeline': { src: CAREER_BG, pos: 'center 50%' },
+    'Contribute': { src: HS_BG, pos: 'center 35%' },
+
+    'Your Journey': { src: CAREER_BG, pos: 'center 48%' },
+    'Stats + News': { src: NOW_BG, pos: 'center 26%' },
+    'Stay Connected': { src: HS_BG, pos: 'center 35%' },
+
+    'The Question': { src: CAREER_BG, pos: 'center 48%' },
+    'Your Clubhouse': { src: SCHOOL_BG, pos: '18% 50%', contain: true },
+    'Program History': { src: HS_BG, pos: 'center 30%' },
+    'ARMS': { src: SCHOOL_BG, pos: '18% 50%', contain: true },
+    'Fundraising': { src: HS_BG, pos: 'center 38%' },
+    'Sponsors': { src: SCHOOL_BG, pos: '18% 50%', contain: true },
+
+    'Why It Works': { src: HS_BG, pos: 'center 38%' },
+    'Sponsor a School': { src: SCHOOL_BG, pos: '18% 50%', contain: true },
+    'Brand Alignment': { src: HS_BG, pos: 'center 33%' },
+    'Relevant Exposure': { src: NOW_BG, pos: 'center 25%' },
+    'ARMS + Leads': { src: SCHOOL_BG, pos: '18% 50%', contain: true },
+    'Scale': { src: CAREER_BG, pos: 'center 48%' }
+  };
+
+  const TOUR_ACTIONS = {
+    'Home School': { action: 'openLogin', selector: '#openAccount,[data-open-account]' },
+    'Search': { action: 'openSearch', selector: '#openSearch' },
+    'Flip Cards': { action: 'flipAll', selector: '#flipAllCards' },
+    'Favorite / Super Fan': { action: 'openFavorites', selector: '[data-open-favorites],#openFavorites' },
+    'Player Profile': { action: 'openPlayerProfile', selector: '.yat-card[data-playerid="180827"]' },
+    'Stats + News': { action: 'openStats', selector: '#ppTab-stats' },
+    'Golden Timeline': { action: 'openGoldenTimeline', selector: '#playerCareerImages' },
+    'Contribute': { action: 'openUpload', selector: '#ppTab-upload' },
+    'Program History': { action: 'openAllTime', selector: '[href="#sec-alltime"]' },
+    'Sponsors': { action: 'openPartners', selector: '[href="#sec-partner"]' }
+  };
+
+  const style = document.createElement('style');
+  style.id = 'yat-tour-interaction-override-style';
+  style.textContent = `
+    /* The live site is a scaled photograph: always pin it to the top of its viewport. */
+    .wrap{align-items:flex-start!important}
+    .stage{
+      top:0!important;
+      transform-origin:top center!important;
+    }
+
+    /* Background/person changes dissolve instead of popping between story points. */
+    .slide .bg,
+    .slide .person{
+      transition:opacity .42s ease, filter .42s ease!important;
+      will-change:opacity;
+    }
+    .slide:not(.is-active) .person{opacity:.22!important}
+    .slide.is-active .person{opacity:1!important}
+    .slide:not(.is-active) .bg{opacity:.62!important}
+    .slide.is-active .bg{opacity:1!important}
+    .slide .bg.topic-contain{
+      object-fit:contain!important;
+      background:radial-gradient(circle at 19% 50%,rgba(122,31,43,.28),transparent 34%),#101214!important;
+      padding:18px 58% 18px 2%!important;
+      filter:brightness(.72) saturate(.9)!important;
+    }
+    @media (prefers-reduced-motion: reduce){
+      .slide .bg,.slide .person{transition:none!important}
+    }
+  `;
+  document.head.appendChild(style);
+
+  function waitForTour(attempt = 0) {
+    const track = document.getElementById('track');
+    const frame = document.getElementById('frame');
+    const stage = document.getElementById('stage');
+    const loader = document.getElementById('loader');
+    const url = document.getElementById('url');
+    const label = document.getElementById('label');
+    if (!track || !frame || !stage || !loader || !url || !label) {
+      if (attempt < 180) window.setTimeout(() => waitForTour(attempt + 1), 40);
+      return;
+    }
+    install(track, frame, stage, loader, url, label);
+  }
+
+  function install(track, frame, stage, loader, url, label) {
+    if (track.dataset.tourBehavior === '1') return;
+    track.dataset.tourBehavior = '1';
+
+    const slides = [...track.querySelectorAll('.slide')];
+    const progress = [...document.querySelectorAll('.progress button')];
+    let active = -1;
+    let syncTimer = 0;
+    let bridgeReady = false;
+
+    /* Assign a topic-specific visual bed to each stop now, while keeping the assets swappable later. */
+    slides.forEach((slide) => {
+      const topic = slide.querySelector('.cap')?.textContent?.trim() || '';
+      const bg = slide.querySelector('.bg');
+      const config = TOPIC_BACKGROUNDS[topic];
+      if (!bg || !config) return;
+      bg.src = config.src;
+      bg.style.objectPosition = config.pos || 'center center';
+      bg.classList.toggle('topic-contain', !!config.contain);
+    });
+
+    /*
+      Keep the live Hamilton iframe stable. The original tour swaps frame.src whenever
+      the stop URL changes; that is what caused the visible reload from slide 3 -> 4.
+      Intercept subsequent .src assignments and preserve the current DOM/session state.
+    */
+    const nativeSrc = Object.getOwnPropertyDescriptor(HTMLIFrameElement.prototype, 'src');
+    if (nativeSrc?.get && nativeSrc?.set) {
+      try {
+        Object.defineProperty(frame, 'src', {
+          configurable: true,
+          enumerable: true,
+          get() { return nativeSrc.get.call(frame); },
+          set(requested) {
+            frame.dataset.requestedUrl = String(requested || '');
+            loader.classList.add('hidden');
+            /* Deliberately do not call the native setter: no navigation, no reload. */
+          }
+        });
+      } catch (_) {}
+    }
+
+    function reanchorStage() {
+      const match = String(stage.style.transform || '').match(/scale\(([^)]+)\)/);
+      const scale = match ? match[1] : '1';
+      stage.style.setProperty('top', '0', 'important');
+      stage.style.setProperty('transform-origin', 'top center', 'important');
+      stage.style.setProperty('transform', `translateX(-50%) scale(${scale})`, 'important');
+    }
+
+    let stageMutating = false;
+    const stageObserver = new MutationObserver(() => {
+      if (stageMutating) return;
+      stageMutating = true;
+      requestAnimationFrame(() => {
+        reanchorStage();
+        stageMutating = false;
+      });
+    });
+    stageObserver.observe(stage, { attributes: true, attributeFilter: ['style'] });
+    reanchorStage();
+    window.addEventListener('resize', () => requestAnimationFrame(reanchorStage), { passive: true });
+    document.querySelectorAll('[data-device]').forEach((button) => {
+      button.addEventListener('click', () => window.setTimeout(reanchorStage, 0));
+    });
+
+    function sendTourAction(index) {
+      const slide = slides[index];
+      if (!slide) return;
+      const topic = slide.querySelector('.cap')?.textContent?.trim() || '';
+      const command = TOUR_ACTIONS[topic];
+      const payload = {
+        source: 'yatstats-corporate-tour',
+        type: 'YAT_TOUR_ACTION',
+        topic,
+        action: command?.action || 'highlightOnly',
+        selector: command?.selector || null,
+        bridgeReady
+      };
+      try { frame.contentWindow?.postMessage(payload, PLATFORM_ORIGIN); } catch (_) {}
+    }
+
+    function syncActive(index) {
+      index = Math.max(0, Math.min(slides.length - 1, index));
+      if (index === active) return;
+      active = index;
+      slides.forEach((slide, i) => slide.classList.toggle('is-active', i === active));
+
+      /* The iframe remains on its current page; the laser/callout tells the user where to act. */
+      url.textContent = 'hamilton.az.yatstats.com';
+      loader.classList.add('hidden');
+      sendTourAction(active);
+    }
+
+    function activeFromProgress() {
+      const i = progress.findIndex((button) => button.classList.contains('active'));
+      if (i >= 0) syncActive(i);
+    }
+
+    const progressObserver = new MutationObserver(() => activeFromProgress());
+    progress.forEach((button) => progressObserver.observe(button, { attributes: true, attributeFilter: ['class'] }));
+
+    track.addEventListener('scroll', () => {
+      clearTimeout(syncTimer);
+      syncTimer = window.setTimeout(() => {
+        const i = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+        syncActive(i);
+      }, 95);
+    }, { passive: true });
+
+    window.addEventListener('message', (event) => {
+      if (event.origin !== PLATFORM_ORIGIN) return;
+      if (event.data?.type === 'YAT_TOUR_ACK') bridgeReady = true;
+    });
+
+    frame.addEventListener('load', () => {
+      loader.classList.add('hidden');
+      reanchorStage();
+      try {
+        frame.contentWindow?.postMessage({source:'yatstats-corporate-tour',type:'YAT_TOUR_HELLO'}, PLATFORM_ORIGIN);
+      } catch (_) {}
+    });
+
+    slides.forEach((slide, i) => slide.classList.toggle('is-active', i === 0));
+    syncActive(0);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => waitForTour(), { once: true });
+  } else {
+    waitForTour();
+  }
+})();
