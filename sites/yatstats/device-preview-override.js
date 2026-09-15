@@ -3,6 +3,7 @@
   window.__yatDevicePreviewOverride = true;
 
   const PLATFORM_ORIGIN = 'https://hamilton.az.yatstats.com';
+  const MAX_ZOOM = 3;
   const DEVICE_SIZES = {
     desktop: { w: 1500, h: 930 },
     tablet: { w: 1024, h: 900 },
@@ -76,6 +77,20 @@
     .browser-lock{color:#9f8550;font-size:8px}
     .crumbs{min-width:0;display:flex;align-items:center;gap:3px;overflow:hidden;text-overflow:ellipsis}.crumb-host{color:#e3e5e6}.crumb-sep{color:#555b60}.crumb-path{color:#858b90;overflow:hidden;text-overflow:ellipsis}
     .browser-open{flex:0 0 auto;color:#8c9297;text-decoration:none;font:500 8px/1 Oswald,sans-serif;text-transform:uppercase}
+    .browser-zoom-reset{
+      display:none;
+      flex:0 0 auto;
+      height:20px;
+      min-width:24px;
+      padding:0 5px;
+      border:1px solid #353a3e;
+      border-radius:999px;
+      background:#090a0b;
+      color:#d8bd79;
+      font:600 7px/1 Oswald,sans-serif;
+      cursor:pointer;
+    }
+    .device-shell.zoomed .browser-zoom-reset{display:inline-flex;align-items:center;justify-content:center}
 
     .device-viewport{
       position:relative;
@@ -83,6 +98,7 @@
       min-height:0;
       overflow:hidden;
       background:#020303;
+      touch-action:none;
     }
     .device-viewport .wrap{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important}
 
@@ -183,6 +199,7 @@
       .browser-chrome{gap:5px;padding:3px 5px!important}
       .browser-lights i{width:5px;height:5px}.browser-navicons{display:none}
       .browser-address{height:19px;font-size:6.7px;padding-inline:6px}.browser-open{font-size:6.5px}
+      .browser-zoom-reset{height:18px;min-width:21px;font-size:6.3px;padding-inline:4px}
       .device-switcher button{height:19px!important;min-height:19px!important;padding-inline:6px!important;font-size:6.5px!important}
     }
   `;
@@ -214,6 +231,7 @@
       <span class="browser-lights"><i></i><i></i><i></i></span>
       <span class="browser-navicons"><span>‹</span><span>›</span><span>↻</span></span>
       <div class="browser-address"><span class="browser-lock">●</span><span class="crumbs" id="actualCrumbs"></span></div>
+      <button class="browser-zoom-reset" id="actualZoomReset" type="button" aria-label="Reset preview zoom" title="Reset preview zoom">1×</button>
       <a class="browser-open" id="actualOpen" target="_blank" rel="noopener">Open ↗</a>`;
     const viewport = document.createElement('div');
     viewport.className = 'device-viewport';
@@ -231,8 +249,36 @@
 
     const crumbs = document.getElementById('actualCrumbs');
     const actualOpen = document.getElementById('actualOpen');
+    const zoomReset = document.getElementById('actualZoomReset');
     let currentUrl = PLATFORM_ORIGIN;
     let device = document.querySelector('[data-device].active')?.dataset.device || 'desktop';
+    let fitScale = 1;
+    let zoomScale = 1;
+    let panX = 0;
+    let panY = 0;
+    let pinchStartZoom = 1;
+    let pinchStartPanX = 0;
+    let pinchStartPanY = 0;
+    let panGestureStartX = 0;
+    let panGestureStartY = 0;
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function trustedMicrositeOrigin(origin) {
+      try {
+        const u = new URL(origin);
+        if (u.protocol !== 'https:') return false;
+        return (
+          u.hostname === 'yatstats.com' ||
+          u.hostname.endsWith('.yatstats.com') ||
+          (u.hostname.startsWith('mike-crozite-template-') && u.hostname.endsWith('-arms-reach-digital-agency.vercel.app'))
+        );
+      } catch (_) {
+        return false;
+      }
+    }
 
     function renderUrl(value) {
       try {
@@ -247,43 +293,147 @@
       }
     }
 
-    function fitDevice() {
+    function sendZoomState() {
+      try {
+        frame.contentWindow?.postMessage({
+          source: 'yatstats-corporate-tour',
+          type: 'YAT_EMBED_ZOOM_STATE',
+          zoom: zoomScale
+        }, '*');
+      } catch (_) {}
+    }
+
+    function applyStageTransform() {
+      const d = DEVICE_SIZES[device] || DEVICE_SIZES.desktop;
+      const totalScale = fitScale * zoomScale;
+      const availableW = Math.max(1, viewport.clientWidth);
+      const availableH = Math.max(1, viewport.clientHeight);
+      const scaledW = d.w * totalScale;
+      const scaledH = d.h * totalScale;
+      const overflowX = Math.max(0, (scaledW - availableW) / 2);
+      const overflowY = Math.max(0, scaledH - availableH);
+
+      panX = clamp(panX, -overflowX, overflowX);
+      panY = clamp(panY, -overflowY, 0);
+
+      stage.style.width = d.w + 'px';
+      stage.style.height = d.h + 'px';
+      stage.style.top = panY + 'px';
+      stage.style.left = `calc(50% + ${panX}px)`;
+      stage.style.transformOrigin = 'top center';
+      stage.style.transform = `translateX(-50%) scale(${totalScale})`;
+      shell.classList.toggle('zoomed', zoomScale > 1.01);
+      if (zoomReset) zoomReset.textContent = zoomScale > 1.01 ? `${zoomScale.toFixed(1)}×` : '1×';
+    }
+
+    function resetZoom() {
+      zoomScale = 1;
+      panX = 0;
+      panY = 0;
+      applyStageTransform();
+      sendZoomState();
+    }
+
+    function fitDevice(reset = false) {
       device = document.querySelector('[data-device].active')?.dataset.device || device || 'desktop';
       shell.classList.remove('desktop','tablet','mobile');
       shell.classList.add(device);
       const d = DEVICE_SIZES[device] || DEVICE_SIZES.desktop;
-      const chromeH = parseFloat(getComputedStyle(shell).getPropertyValue('--chrome-h')) || 31;
       const availableW = Math.max(1, viewport.clientWidth);
       const availableH = Math.max(1, viewport.clientHeight);
-      const scale = Math.min(availableW / d.w, availableH / d.h, 1);
-      stage.style.width = d.w + 'px';
-      stage.style.height = d.h + 'px';
-      stage.style.top = '0';
-      stage.style.left = '50%';
-      stage.style.transformOrigin = 'top center';
-      stage.style.transform = `translateX(-50%) scale(${scale})`;
+      fitScale = Math.min(availableW / d.w, availableH / d.h, 1);
+      if (reset) {
+        zoomScale = 1;
+        panX = 0;
+        panY = 0;
+      }
       viewport.style.minHeight = '0';
-      shell.style.setProperty('--viewport-scale', String(scale));
+      shell.style.setProperty('--viewport-scale', String(fitScale));
+      applyStageTransform();
+      sendZoomState();
     }
 
     /* Existing buttons continue to change the actual responsive viewport; this layer only changes the hardware shell + fit. */
     document.querySelectorAll('[data-device]').forEach((button) => {
       button.addEventListener('click', () => {
         device = button.dataset.device || 'desktop';
-        requestAnimationFrame(fitDevice);
-        setTimeout(fitDevice, 30);
+        zoomScale = 1;
+        panX = 0;
+        panY = 0;
+        requestAnimationFrame(() => fitDevice(true));
+        setTimeout(() => fitDevice(true), 30);
       });
     });
 
+    zoomReset?.addEventListener('click', resetZoom);
+
     /*
-      Real URL reporting: the parent cannot inspect a cross-origin iframe location directly.
-      If the microsite emits YAT_LOCATION / YAT_TOUR_LOCATION, render that exact location.
-      Until that bridge is live, keep the last location we actually know rather than lying.
+      The microsite bridge reports the real cross-origin URL and relays pinch/pan
+      gestures. The parent owns the visual magnification, so zoom never escapes
+      the clipped fake-device viewport or changes the corporate page zoom.
     */
     window.addEventListener('message', (event) => {
+      if (event.source !== frame.contentWindow) return;
+      if (!trustedMicrositeOrigin(event.origin)) return;
       const data = event.data || {};
+      if (data.source !== 'yatstats-microsite') return;
+
       if (data.type === 'YAT_LOCATION' || data.type === 'YAT_TOUR_LOCATION') {
         if (typeof data.href === 'string' && /^https?:\/\//.test(data.href)) renderUrl(data.href);
+        return;
+      }
+
+      if (data.type === 'YAT_EMBED_GESTURE') {
+        if (data.phase === 'start') {
+          pinchStartZoom = zoomScale;
+          pinchStartPanX = panX;
+          pinchStartPanY = panY;
+          return;
+        }
+        if (data.phase === 'change') {
+          const scaleDelta = Number(data.scale);
+          if (!Number.isFinite(scaleDelta) || scaleDelta <= 0) return;
+          const d = DEVICE_SIZES[device] || DEVICE_SIZES.desktop;
+          const focalX = clamp(Number(data.centerX) || .5, 0, 1);
+          const focalY = clamp(Number(data.centerY) || .5, 0, 1);
+          const oldTotal = fitScale * pinchStartZoom;
+          zoomScale = clamp(pinchStartZoom * scaleDelta, 1, MAX_ZOOM);
+          const newTotal = fitScale * zoomScale;
+          const logicalX = (focalX - .5) * d.w;
+          const logicalY = focalY * d.h;
+
+          /* Keep the point under the fingers approximately stationary while magnifying. */
+          panX = pinchStartPanX - logicalX * (newTotal - oldTotal);
+          panY = pinchStartPanY - logicalY * (newTotal - oldTotal);
+          applyStageTransform();
+          return;
+        }
+        if (data.phase === 'end') {
+          applyStageTransform();
+          sendZoomState();
+        }
+        return;
+      }
+
+      if (data.type === 'YAT_EMBED_PAN') {
+        if (data.phase === 'start') {
+          panGestureStartX = panX;
+          panGestureStartY = panY;
+          return;
+        }
+        if (data.phase === 'change' && zoomScale > 1.001) {
+          const totalScale = fitScale * zoomScale;
+          const dx = Number(data.deltaX) || 0;
+          const dy = Number(data.deltaY) || 0;
+          panX = panGestureStartX + dx * totalScale;
+          panY = panGestureStartY + dy * totalScale;
+          applyStageTransform();
+        }
+        return;
+      }
+
+      if (data.type === 'YAT_EMBED_ZOOM_RESET') {
+        resetZoom();
       }
     });
 
@@ -296,19 +446,22 @@
     });
 
     frame.addEventListener('load', () => {
-      fitDevice();
-      try { frame.contentWindow?.postMessage({ source:'yatstats-corporate-tour', type:'YAT_REQUEST_LOCATION' }, '*'); } catch (_) {}
+      fitDevice(true);
+      try {
+        frame.contentWindow?.postMessage({ source:'yatstats-corporate-tour', type:'YAT_TOUR_HELLO' }, '*');
+        frame.contentWindow?.postMessage({ source:'yatstats-corporate-tour', type:'YAT_REQUEST_LOCATION' }, '*');
+      } catch (_) {}
     });
 
     if ('ResizeObserver' in window) {
-      const ro = new ResizeObserver(() => requestAnimationFrame(fitDevice));
+      const ro = new ResizeObserver(() => requestAnimationFrame(() => fitDevice(false)));
       ro.observe(viewport);
       ro.observe(shell);
     }
-    window.addEventListener('resize', () => requestAnimationFrame(fitDevice), { passive:true });
+    window.addEventListener('resize', () => requestAnimationFrame(() => fitDevice(false)), { passive:true });
 
     renderUrl(currentUrl);
-    fitDevice();
+    fitDevice(true);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => install(), { once:true });
