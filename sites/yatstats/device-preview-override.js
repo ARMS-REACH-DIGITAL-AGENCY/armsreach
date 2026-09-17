@@ -458,9 +458,11 @@
     // no visible sign the handshake failed. Retrying for a few seconds costs
     // nothing once the real reply arrives (it just stops) and closes that gap
     // regardless of how long hydration actually takes.
+    let handshakeRetryTimer = null;
     frame.addEventListener('load', () => {
       fitDevice(true);
       handshakeConfirmed = false;
+      clearInterval(handshakeRetryTimer); // A prior in-flight retry loop must not keep running (or pile up) past this new load.
       const attemptHandshake = () => {
         try {
           frame.contentWindow?.postMessage({ source:'yatstats-corporate-tour', type:'YAT_TOUR_HELLO' }, '*');
@@ -469,9 +471,9 @@
       };
       attemptHandshake();
       let attempts = 0;
-      const retryTimer = setInterval(() => {
+      handshakeRetryTimer = setInterval(() => {
         attempts++;
-        if (handshakeConfirmed || attempts >= 12) { clearInterval(retryTimer); return; }
+        if (handshakeConfirmed || attempts >= 12) { clearInterval(handshakeRetryTimer); return; }
         attemptHandshake();
       }, 300);
     });

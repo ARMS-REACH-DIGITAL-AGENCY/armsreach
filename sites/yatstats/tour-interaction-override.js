@@ -231,10 +231,12 @@
     // hydrated, which lags the browser's 'load' event, especially right
     // after a fresh cross-origin navigation. Retry until confirmed rather
     // than risk a single dropped HELLO leaving bridgeReady stuck false.
+    let helloRetryTimer = null;
     frame.addEventListener('load', () => {
       loader.classList.add('hidden');
       reanchorStage();
       bridgeReady = false;
+      clearInterval(helloRetryTimer); // A prior in-flight retry loop must not keep running (or pile up) past this new load.
       const attempt = () => {
         try {
           frame.contentWindow?.postMessage({source:'yatstats-corporate-tour',type:'YAT_TOUR_HELLO'}, '*');
@@ -242,9 +244,9 @@
       };
       attempt();
       let attempts = 0;
-      const retryTimer = setInterval(() => {
+      helloRetryTimer = setInterval(() => {
         attempts++;
-        if (bridgeReady || attempts >= 12) { clearInterval(retryTimer); return; }
+        if (bridgeReady || attempts >= 12) { clearInterval(helloRetryTimer); return; }
         attempt();
       }, 300);
     });
