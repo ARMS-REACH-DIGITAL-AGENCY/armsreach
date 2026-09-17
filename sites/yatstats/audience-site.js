@@ -2,7 +2,11 @@
   if (window.__yatAudienceSite) return;
   window.__yatAudienceSite = true;
 
-  const PLATFORM = 'https://hamilton.az.yatstats.com';
+  // TEMPORARY: pointed at the fix-home-school-in-iframe preview build so it
+  // can be tested through the actual corporate-site embed, exactly where the
+  // bug shows up. Revert to 'https://hamilton.az.yatstats.com' once testing
+  // is done -- this must not stay pointed at a branch preview.
+  const PLATFORM = 'https://mike-crozite-template-git-fix-c4ba17-arms-reach-digital-agency.vercel.app';
   const CODY = `${PLATFORM}/5004/player/180827/cody-bellinger`;
   const CARD = `${PLATFORM}/?view=active&player=180827#player-180827`;
   const S3 = 'https://yatstats-assets.s3.us-west-2.amazonaws.com';
