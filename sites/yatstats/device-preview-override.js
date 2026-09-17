@@ -189,7 +189,7 @@
       .device-shell.mobile{width:min(58%,430px)!important}
     }
     @media(max-width:620px){
-      .live{min-height:0!important;height:calc(100dvh - var(--hh) - var(--story))!important;grid-template-rows:minmax(0,1fr) 26px!important}
+      .live{min-height:0!important;height:calc(100dvh - var(--story))!important;grid-template-rows:minmax(0,1fr) 26px!important}
       .device-area{padding-top:3px!important}
       .device-shell{--chrome-h:27px}
       .device-shell.desktop{width:100%!important;border-width:1px!important;border-radius:5px!important}
