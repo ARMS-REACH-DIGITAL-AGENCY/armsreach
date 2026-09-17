@@ -226,12 +226,27 @@
       if (event.data?.type === 'YAT_TOUR_ACK') bridgeReady = true;
     });
 
+    // Same reasoning as device-preview-override.js's own retry loop: the
+    // framed page's bridge only starts listening once its React app has
+    // hydrated, which lags the browser's 'load' event, especially right
+    // after a fresh cross-origin navigation. Retry until confirmed rather
+    // than risk a single dropped HELLO leaving bridgeReady stuck false.
     frame.addEventListener('load', () => {
       loader.classList.add('hidden');
       reanchorStage();
-      try {
-        frame.contentWindow?.postMessage({source:'yatstats-corporate-tour',type:'YAT_TOUR_HELLO'}, '*');
-      } catch (_) {}
+      bridgeReady = false;
+      const attempt = () => {
+        try {
+          frame.contentWindow?.postMessage({source:'yatstats-corporate-tour',type:'YAT_TOUR_HELLO'}, '*');
+        } catch (_) {}
+      };
+      attempt();
+      let attempts = 0;
+      const retryTimer = setInterval(() => {
+        attempts++;
+        if (bridgeReady || attempts >= 12) { clearInterval(retryTimer); return; }
+        attempt();
+      }, 300);
     });
 
     slides.forEach((slide, i) => slide.classList.toggle('is-active', i === 0));

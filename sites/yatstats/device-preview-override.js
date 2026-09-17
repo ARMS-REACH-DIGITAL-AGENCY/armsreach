@@ -372,6 +372,8 @@
       gestures. The parent owns the visual magnification, so zoom never escapes
       the clipped fake-device viewport or changes the corporate page zoom.
     */
+    let handshakeConfirmed = false;
+
     window.addEventListener('message', (event) => {
       if (event.source !== frame.contentWindow) return;
       if (!trustedMicrositeOrigin(event.origin)) return;
@@ -379,6 +381,7 @@
       if (data.source !== 'yatstats-microsite') return;
 
       if (data.type === 'YAT_LOCATION' || data.type === 'YAT_TOUR_LOCATION') {
+        handshakeConfirmed = true;
         if (typeof data.href === 'string' && /^https?:\/\//.test(data.href)) renderUrl(data.href);
         return;
       }
@@ -445,12 +448,32 @@
       }
     });
 
+    // The framed page's own bridge script only starts listening once its
+    // React app has hydrated, which is measurably later than the browser's
+    // 'load' event -- especially right after a full cross-origin navigation
+    // (e.g. Hamilton -> Basha via Global Search), which reloads the entire
+    // app fresh. A single HELLO sent exactly on 'load' can arrive before
+    // anything is listening for it and be silently dropped: the address bar
+    // then just keeps showing whatever it last displayed, with no error and
+    // no visible sign the handshake failed. Retrying for a few seconds costs
+    // nothing once the real reply arrives (it just stops) and closes that gap
+    // regardless of how long hydration actually takes.
     frame.addEventListener('load', () => {
       fitDevice(true);
-      try {
-        frame.contentWindow?.postMessage({ source:'yatstats-corporate-tour', type:'YAT_TOUR_HELLO' }, '*');
-        frame.contentWindow?.postMessage({ source:'yatstats-corporate-tour', type:'YAT_REQUEST_LOCATION' }, '*');
-      } catch (_) {}
+      handshakeConfirmed = false;
+      const attemptHandshake = () => {
+        try {
+          frame.contentWindow?.postMessage({ source:'yatstats-corporate-tour', type:'YAT_TOUR_HELLO' }, '*');
+          frame.contentWindow?.postMessage({ source:'yatstats-corporate-tour', type:'YAT_REQUEST_LOCATION' }, '*');
+        } catch (_) {}
+      };
+      attemptHandshake();
+      let attempts = 0;
+      const retryTimer = setInterval(() => {
+        attempts++;
+        if (handshakeConfirmed || attempts >= 12) { clearInterval(retryTimer); return; }
+        attemptHandshake();
+      }, 300);
     });
 
     if ('ResizeObserver' in window) {
