@@ -244,11 +244,15 @@
       };
       attempt();
       let attempts = 0;
+      // Widened to match device-preview-override.js's own retry window: a
+      // cold serverless start on a school subdomain that hasn't been hit
+      // recently can take several seconds before any JS reaches the browser,
+      // well past what hydration lag alone would need.
       helloRetryTimer = setInterval(() => {
         attempts++;
-        if (bridgeReady || attempts >= 12) { clearInterval(helloRetryTimer); return; }
+        if (bridgeReady || attempts >= 75) { clearInterval(helloRetryTimer); return; }
         attempt();
-      }, 300);
+      }, 400);
     });
 
     slides.forEach((slide, i) => slide.classList.toggle('is-active', i === 0));

@@ -471,11 +471,17 @@
       };
       attemptHandshake();
       let attempts = 0;
+      // 3.6s only covers React hydration lag. A school subdomain that hasn't
+      // been visited recently can also hit a cold serverless start on top of
+      // that -- several seconds of server-side rendering before any JS even
+      // reaches the browser -- so this needs real margin, not just enough
+      // for hydration. 30s/75 attempts costs nothing once it lands; it only
+      // matters when the handshake would otherwise never complete at all.
       handshakeRetryTimer = setInterval(() => {
         attempts++;
-        if (handshakeConfirmed || attempts >= 12) { clearInterval(handshakeRetryTimer); return; }
+        if (handshakeConfirmed || attempts >= 75) { clearInterval(handshakeRetryTimer); return; }
         attemptHandshake();
-      }, 300);
+      }, 400);
     });
 
     if ('ResizeObserver' in window) {
