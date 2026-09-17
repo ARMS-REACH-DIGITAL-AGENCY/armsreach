@@ -4,6 +4,20 @@
 
   const PLATFORM_ORIGIN = 'https://hamilton.az.yatstats.com';
   const S3 = 'https://yatstats-assets.s3.us-west-2.amazonaws.com';
+
+  // The iframe starts on Hamilton but can navigate to any other school
+  // subdomain (Perry, Basha, ...) via the site's own global search. Messages
+  // to/from it must not be pinned to Hamilton's origin specifically or the
+  // bridge silently goes dead the moment a visitor searches their way to a
+  // different school.
+  function trustedMicrositeOrigin(origin) {
+    try {
+      const host = new URL(origin).hostname;
+      return host === 'yatstats.com' || host.endsWith('.yatstats.com');
+    } catch (_) {
+      return false;
+    }
+  }
   const CAREER_BG = `${PLATFORM_ORIGIN}/img/career-path-default.png`;
   const HS_BG = `${S3}/players/then/180827.jpg`;
   const NOW_BG = `${S3}/players/now/180827.jpg`;
@@ -39,7 +53,7 @@
   };
 
   const TOUR_ACTIONS = {
-    'Home School': { action: 'openLogin', selector: '#openAccount,[data-open-account]' },
+    'Home School': { action: 'openLogin', selector: '#btnAccount' },
     'Search': { action: 'openSearch', selector: '#openSearch' },
     'Flip Cards': { action: 'flipAll', selector: '#flipAllCards' },
     'Favorite / Super Fan': { action: 'openFavorites', selector: '[data-open-favorites],#openFavorites' },
@@ -176,7 +190,7 @@
         selector: command?.selector || null,
         bridgeReady
       };
-      try { frame.contentWindow?.postMessage(payload, PLATFORM_ORIGIN); } catch (_) {}
+      try { frame.contentWindow?.postMessage(payload, '*'); } catch (_) {}
     }
 
     function syncActive(index) {
@@ -208,7 +222,7 @@
     }, { passive: true });
 
     window.addEventListener('message', (event) => {
-      if (event.origin !== PLATFORM_ORIGIN) return;
+      if (!trustedMicrositeOrigin(event.origin)) return;
       if (event.data?.type === 'YAT_TOUR_ACK') bridgeReady = true;
     });
 
@@ -216,7 +230,7 @@
       loader.classList.add('hidden');
       reanchorStage();
       try {
-        frame.contentWindow?.postMessage({source:'yatstats-corporate-tour',type:'YAT_TOUR_HELLO'}, PLATFORM_ORIGIN);
+        frame.contentWindow?.postMessage({source:'yatstats-corporate-tour',type:'YAT_TOUR_HELLO'}, '*');
       } catch (_) {}
     });
 
