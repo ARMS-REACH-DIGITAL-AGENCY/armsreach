@@ -145,9 +145,6 @@
     .device-shell.mobile .browser-lights,.device-shell.mobile .browser-navicons{display:none}
     .device-shell.mobile .browser-chrome{padding-inline:7px}
 
-    /* Make the live-site image hug the top; never vertically float. */
-    .stage{top:0!important;transform-origin:top center!important}
-
     /* Device choices belong with the device, not in the fake browser toolbar. */
     .live .foot{
       height:28px!important;
@@ -307,12 +304,20 @@
       panX = clamp(panX, -overflowX, overflowX);
       panY = clamp(panY, -overflowY, 0);
 
+      // Explicit, rounded pixel positioning instead of left:50% + a
+      // translateX(-50%) transform: that combo can land on a fractional
+      // sub-pixel position once a non-round scale factor is involved,
+      // leaving a hairline seam on one edge that exposes the viewport's
+      // dark background -- reads as a faint blurry line against a
+      // high-contrast photo. Computing and rounding the left edge directly
+      // keeps the scaled layer pixel-aligned.
+      const left = Math.round((availableW - scaledW) / 2 + panX);
       stage.style.width = d.w + 'px';
       stage.style.height = d.h + 'px';
-      stage.style.top = panY + 'px';
-      stage.style.left = `calc(50% + ${panX}px)`;
-      stage.style.transformOrigin = 'top center';
-      stage.style.transform = `translateX(-50%) scale(${totalScale})`;
+      stage.style.top = Math.round(panY) + 'px';
+      stage.style.left = left + 'px';
+      stage.style.transformOrigin = 'top left';
+      stage.style.transform = `scale(${totalScale})`;
       shell.classList.toggle('zoomed', zoomScale > 1.01);
       if (zoomReset) zoomReset.textContent = zoomScale > 1.01 ? `${zoomScale.toFixed(1)}×` : '1×';
     }

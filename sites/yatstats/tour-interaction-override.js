@@ -68,13 +68,6 @@
   const style = document.createElement('style');
   style.id = 'yat-tour-interaction-override-style';
   style.textContent = `
-    /* The live site is a scaled photograph: always pin it to the top of its viewport. */
-    .wrap{align-items:flex-start!important}
-    .stage{
-      top:0!important;
-      transform-origin:top center!important;
-    }
-
     /* Background/person changes dissolve instead of popping between story points. */
     .slide .bg,
     .slide .person{
@@ -153,29 +146,19 @@
       } catch (_) {}
     }
 
-    function reanchorStage() {
-      const match = String(stage.style.transform || '').match(/scale\(([^)]+)\)/);
-      const scale = match ? match[1] : '1';
-      stage.style.setProperty('top', '0', 'important');
-      stage.style.setProperty('transform-origin', 'top center', 'important');
-      stage.style.setProperty('transform', `translateX(-50%) scale(${scale})`, 'important');
-    }
-
-    let stageMutating = false;
-    const stageObserver = new MutationObserver(() => {
-      if (stageMutating) return;
-      stageMutating = true;
-      requestAnimationFrame(() => {
-        reanchorStage();
-        stageMutating = false;
-      });
-    });
-    stageObserver.observe(stage, { attributes: true, attributeFilter: ['style'] });
-    reanchorStage();
-    window.addEventListener('resize', () => requestAnimationFrame(reanchorStage), { passive: true });
-    document.querySelectorAll('[data-device]').forEach((button) => {
-      button.addEventListener('click', () => window.setTimeout(reanchorStage, 0));
-    });
+    // device-preview-override.js, always loaded right after this script on
+    // every page, owns .stage entirely -- its own fit/zoom/pan system
+    // computes exact rounded pixel positioning. This older reanchor loop
+    // pre-dates that and fought it: a MutationObserver reactively rewrote
+    // any style change back to a translateX(-50%)-based transform a frame
+    // later, permanently winning the fight (it's reactive, so it always
+    // gets the last word) and silently undoing the newer positioning --
+    // and any pinch-zoom pan -- on every update. A flag-based guard here
+    // does not work either: this script's own install() resolves
+    // synchronously (the DOM is already built by the time it runs), before
+    // device-preview-override.js's script tag has even executed to set
+    // that flag. Since the two scripts are never loaded without each
+    // other, this whole mechanism is simply removed rather than gated.
 
     function sendTourAction(index) {
       const slide = slides[index];
@@ -234,7 +217,6 @@
     let helloRetryTimer = null;
     frame.addEventListener('load', () => {
       loader.classList.add('hidden');
-      reanchorStage();
       bridgeReady = false;
       clearInterval(helloRetryTimer); // A prior in-flight retry loop must not keep running (or pile up) past this new load.
       const attempt = () => {
