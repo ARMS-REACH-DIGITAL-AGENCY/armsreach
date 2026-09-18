@@ -29,7 +29,7 @@
       align-items:flex-start;
       justify-content:center;
       overflow:hidden;
-      padding:10px 8px 12px;
+      padding:10px 8px 18px;
       background:radial-gradient(circle at 50% 24%,rgba(255,255,255,.045),transparent 40%);
     }
     .device-shell{
@@ -174,7 +174,7 @@
     .device-switcher button.active{border-color:#9e8248!important;color:#dfbf73!important;background:rgba(200,169,110,.08)!important}
 
     @media(max-width:900px){
-      .device-area{padding:8px 3px 8px!important;min-height:0!important}
+      .device-area{padding:8px 3px 14px!important;min-height:0!important}
     }
     @media(max-width:620px){
       .live{min-height:0!important;height:calc(100dvh - var(--story))!important;grid-template-rows:minmax(0,1fr) 26px!important}
@@ -334,7 +334,6 @@
       device = document.querySelector('[data-device].active')?.dataset.device || device || 'desktop';
       shell.classList.remove('desktop','tablet','mobile');
       shell.classList.add(device);
-      const d = DEVICE_SIZES[device] || DEVICE_SIZES.desktop;
 
       // Fit against the OUTER area's box, not the shell/viewport -- their
       // size is about to become an effect of this calculation (below), so
@@ -348,6 +347,19 @@
 
       const availableW = Math.max(1, area.clientWidth - areaPadX - borderW * 2);
       const availableH = Math.max(1, area.clientHeight - areaPadY - chromeH - borderW * 2);
+
+      // A phone is never wider than it is tall, so a fixed real-device ratio
+      // makes sense for mobile/tablet. Desktop has no such constraint, and a
+      // fixed "pretend browser" canvas smaller than the corporate page's own
+      // width undersells the platform's actual wide-screen layout (both side
+      // drawers open, a full card grid). So desktop always renders at native
+      // 1:1 scale, exactly as wide and tall as the corporate page gives it --
+      // the same container the slideshow above it already fills -- instead
+      // of being a fixed, separately-scaled-down size.
+      if (device === 'desktop') {
+        DEVICE_SIZES.desktop = { w: availableW, h: availableH };
+      }
+      const d = DEVICE_SIZES[device] || DEVICE_SIZES.desktop;
       fitScale = Math.min(availableW / d.w, availableH / d.h, 1);
 
       // The shell itself is sized to the real device aspect ratio (chrome
