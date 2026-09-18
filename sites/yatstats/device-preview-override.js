@@ -5,7 +5,7 @@
   const PLATFORM_ORIGIN = 'https://hamilton.az.yatstats.com';
   const MAX_ZOOM = 3;
   const DEVICE_SIZES = {
-    desktop: { w: 1500, h: 930 },
+    desktop: { w: 1500, h: 1400 },
     tablet: { w: 1024, h: 900 },
     mobile: { w: 390, h: 844 }
   };
@@ -26,10 +26,10 @@
       position:relative;
       min-height:0;
       display:flex;
-      align-items:center;
+      align-items:flex-start;
       justify-content:center;
       overflow:hidden;
-      padding:7px 8px 12px;
+      padding:10px 8px 12px;
       background:radial-gradient(circle at 50% 24%,rgba(255,255,255,.045),transparent 40%);
     }
     .device-shell{
@@ -177,11 +177,11 @@
     .device-switcher button.active{border-color:#9e8248!important;color:#dfbf73!important;background:rgba(200,169,110,.08)!important}
 
     @media(max-width:900px){
-      .device-area{padding:5px 3px 8px!important;min-height:0!important}
+      .device-area{padding:8px 3px 8px!important;min-height:0!important}
     }
     @media(max-width:620px){
       .live{min-height:0!important;height:calc(100dvh - var(--story))!important;grid-template-rows:minmax(0,1fr) 26px!important}
-      .device-area{padding:3px 4px 8px!important}
+      .device-area{padding:6px 4px 8px!important}
       .device-shell{--chrome-h:27px}
       .device-shell.desktop{border-width:1px!important;border-radius:5px!important}
       .device-shell.desktop:after{display:none}
