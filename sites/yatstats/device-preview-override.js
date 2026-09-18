@@ -9,6 +9,15 @@
     tablet: { w: 1024, h: 900 },
     mobile: { w: 390, h: 844 }
   };
+  // Desktop's width floor, independent of the live-mutated
+  // DEVICE_SIZES.desktop below: the real site's own CSS only turns on
+  // side-by-side dual-drawer layout at min-width:780px
+  // (SortFilterDrawerControls.tsx). A visitor on a phone selecting
+  // "desktop mode" needs the iframe to actually render at a genuine
+  // desktop-scale width -- scaled down to fit their small screen -- or
+  // they will just see the site's narrow mobile layout (single drawer,
+  // full-screen overlay) no matter which mode is picked.
+  const DESKTOP_MIN_W = 1500;
 
   const style = document.createElement('style');
   style.id = 'yat-device-preview-style';
@@ -352,12 +361,21 @@
       // makes sense for mobile/tablet. Desktop has no such constraint, and a
       // fixed "pretend browser" canvas smaller than the corporate page's own
       // width undersells the platform's actual wide-screen layout (both side
-      // drawers open, a full card grid). So desktop always renders at native
-      // 1:1 scale, exactly as wide and tall as the corporate page gives it --
-      // the same container the slideshow above it already fills -- instead
-      // of being a fixed, separately-scaled-down size.
+      // drawers open, a full card grid). So on an actually-wide viewer,
+      // desktop renders at native 1:1 scale, exactly as wide and tall as the
+      // corporate page gives it -- the same container the slideshow above it
+      // already fills. But that same logic falls apart on a phone: never let
+      // it shrink the desktop canvas below DESKTOP_MIN, or a mobile visitor
+      // selecting "desktop mode" would just get an iframe rendered at their
+      // own narrow phone width -- showing the real site's mobile layout, not
+      // a desktop one, regardless of which mode they picked.
       if (device === 'desktop') {
-        DEVICE_SIZES.desktop = { w: availableW, h: availableH };
+        // Only width needs a floor: the real site's dual-drawer layout is
+        // gated purely on min-width. Height has no such gate and should
+        // just match whatever the container gives, or a perfectly normal
+        // (not enormous) desktop browser window would get scaled down for
+        // no reason.
+        DEVICE_SIZES.desktop = { w: Math.max(availableW, DESKTOP_MIN_W), h: availableH };
       }
       const d = DEVICE_SIZES[device] || DEVICE_SIZES.desktop;
       fitScale = Math.min(availableW / d.w, availableH / d.h, 1);
