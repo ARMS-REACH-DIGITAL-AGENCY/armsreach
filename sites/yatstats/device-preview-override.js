@@ -26,23 +26,21 @@
       position:relative;
       min-height:0;
       display:flex;
-      align-items:flex-start;
+      align-items:center;
       justify-content:center;
       overflow:hidden;
-      padding:7px 8px 0;
+      padding:7px 8px 12px;
       background:radial-gradient(circle at 50% 24%,rgba(255,255,255,.045),transparent 40%);
     }
     .device-shell{
       --chrome-h:31px;
       position:relative;
-      width:min(100%,1450px);
-      height:100%;
       min-height:0;
       display:flex;
       flex-direction:column;
       align-items:stretch;
       background:#0a0b0c;
-      transition:width .25s ease,border-radius .25s ease,padding .25s ease,box-shadow .25s ease;
+      transition:border-radius .25s ease,box-shadow .25s ease;
     }
     .browser-chrome{
       flex:0 0 var(--chrome-h);
@@ -104,7 +102,6 @@
 
     /* Desktop monitor / laptop silhouette */
     .device-shell.desktop{
-      max-width:1450px;
       border:2px solid #3d4247;
       border-radius:10px 10px 6px 6px;
       box-shadow:0 14px 35px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.025) inset;
@@ -124,7 +121,6 @@
 
     /* Tablet bezel */
     .device-shell.tablet{
-      width:min(78%,980px);
       border:7px solid #24282c;
       border-radius:16px;
       box-shadow:0 14px 35px rgba(0,0,0,.45);
@@ -137,7 +133,6 @@
 
     /* Phone bezel */
     .device-shell.mobile{
-      width:min(36%,430px);
       border:7px solid #24282c;
       border-radius:24px;
       box-shadow:0 14px 35px rgba(0,0,0,.48);
@@ -182,20 +177,16 @@
     .device-switcher button.active{border-color:#9e8248!important;color:#dfbf73!important;background:rgba(200,169,110,.08)!important}
 
     @media(max-width:900px){
-      .device-area{padding:5px 3px 0!important;min-height:0!important}
-      .device-shell{height:100%!important}
-      .device-shell.desktop{width:99%!important}
-      .device-shell.tablet{width:82%!important}
-      .device-shell.mobile{width:min(58%,430px)!important}
+      .device-area{padding:5px 3px 8px!important;min-height:0!important}
     }
     @media(max-width:620px){
       .live{min-height:0!important;height:calc(100dvh - var(--story))!important;grid-template-rows:minmax(0,1fr) 26px!important}
-      .device-area{padding-top:3px!important}
+      .device-area{padding:3px 4px 8px!important}
       .device-shell{--chrome-h:27px}
-      .device-shell.desktop{width:100%!important;border-width:1px!important;border-radius:5px!important}
+      .device-shell.desktop{border-width:1px!important;border-radius:5px!important}
       .device-shell.desktop:after{display:none}
-      .device-shell.tablet{width:94%!important;border-width:5px!important;border-radius:12px!important}
-      .device-shell.mobile{width:min(72%,410px)!important;border-width:5px!important;border-radius:19px!important}
+      .device-shell.tablet{border-width:5px!important;border-radius:12px!important}
+      .device-shell.mobile{border-width:5px!important;border-radius:19px!important}
       .browser-chrome{gap:5px;padding:3px 5px!important}
       .browser-lights i{width:5px;height:5px}.browser-navicons{display:none}
       .browser-address{height:19px;font-size:6.7px;padding-inline:6px}.browser-open{font-size:6.5px}
@@ -339,9 +330,29 @@
       shell.classList.remove('desktop','tablet','mobile');
       shell.classList.add(device);
       const d = DEVICE_SIZES[device] || DEVICE_SIZES.desktop;
-      const availableW = Math.max(1, viewport.clientWidth);
-      const availableH = Math.max(1, viewport.clientHeight);
+
+      // Fit against the OUTER area's box, not the shell/viewport -- their
+      // size is about to become an effect of this calculation (below), so
+      // using them as the input here would be circular and would let a
+      // stale size feed back into itself.
+      const areaStyle = getComputedStyle(area);
+      const areaPadX = parseFloat(areaStyle.paddingLeft) + parseFloat(areaStyle.paddingRight);
+      const areaPadY = parseFloat(areaStyle.paddingTop) + parseFloat(areaStyle.paddingBottom);
+      const chromeH = parseFloat(getComputedStyle(shell).getPropertyValue('--chrome-h')) || 31;
+      const borderW = parseFloat(getComputedStyle(shell).borderLeftWidth) || 0;
+
+      const availableW = Math.max(1, area.clientWidth - areaPadX - borderW * 2);
+      const availableH = Math.max(1, area.clientHeight - areaPadY - chromeH - borderW * 2);
       fitScale = Math.min(availableW / d.w, availableH / d.h, 1);
+
+      // The shell itself is sized to the real device aspect ratio (chrome
+      // bar + scaled content), not stretched to fill whatever shape the
+      // container happens to be -- that mismatch is what left a dead black
+      // rectangle inside the fake browser instead of an actual monitor/
+      // tablet/phone silhouette, and stretched mobile/tablet out of shape.
+      shell.style.width = (d.w * fitScale + borderW * 2) + 'px';
+      shell.style.height = (chromeH + d.h * fitScale + borderW * 2) + 'px';
+
       if (reset) {
         zoomScale = 1;
         panX = 0;
@@ -485,9 +496,11 @@
     });
 
     if ('ResizeObserver' in window) {
+      // Watch the independent container, not shell/viewport -- their size is
+      // now a RESULT of fitDevice() itself, so observing them would just
+      // chase their own output on every call.
       const ro = new ResizeObserver(() => requestAnimationFrame(() => fitDevice(false)));
-      ro.observe(viewport);
-      ro.observe(shell);
+      ro.observe(area);
     }
     window.addEventListener('resize', () => requestAnimationFrame(() => fitDevice(false)), { passive:true });
 
