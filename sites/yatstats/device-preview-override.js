@@ -17,7 +17,17 @@
   // desktop-scale width -- scaled down to fit their small screen -- or
   // they will just see the site's narrow mobile layout (single drawer,
   // full-screen overlay) no matter which mode is picked.
-  const DESKTOP_MIN_W = 1500;
+  // 1500 (the old fixed desktop canvas width) was needlessly wide for what
+  // this actually needs to prove: the dual-drawer breakpoint only requires
+  // 780px, and the real site's own multi-column grid was already showing 5
+  // columns at Chrome's default ~980px "desktop site" width. On a narrow
+  // phone screen the width floor forces a hard zoom-out (visible height also
+  // shrinks by that same factor, since one scale applies to both axes), so
+  // a needlessly high floor was quietly undoing the height floor below --
+  // more logical room, but too small a fraction of it ever became visible
+  // pixels. 1100 clears the real breakpoint with margin and shows the same
+  // wide grid, at meaningfully less zoom-out on a phone.
+  const DESKTOP_MIN_W = 1100;
   // Desktop's height floor for .device-area itself (chrome bar, padding and
   // border included) -- enough room for the roster strip/stat row plus a
   // full two rows of flip cards, so the desktop demo can actually show off
