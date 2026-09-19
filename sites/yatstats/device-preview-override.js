@@ -371,11 +371,26 @@
       // a desktop one, regardless of which mode they picked.
       if (device === 'desktop') {
         // Only width needs a floor: the real site's dual-drawer layout is
-        // gated purely on min-width. Height has no such gate and should
-        // just match whatever the container gives, or a perfectly normal
-        // (not enormous) desktop browser window would get scaled down for
-        // no reason.
-        DEVICE_SIZES.desktop = { w: Math.max(availableW, DESKTOP_MIN_W), h: availableH };
+        // gated purely on min-width. Height has no floor -- but it can't
+        // just be set to availableH outright either. fitScale is one
+        // uniform number applied to both dimensions, driven by whichever of
+        // width/height is tighter. Handing height the raw availableH value
+        // makes availableH/h always equal exactly 1 by construction, so it
+        // can never be the tighter ratio -- the scale ends up permanently
+        // width-only. On a phone that means a small width-driven scale
+        // shrinks a very tall logical canvas down to a short strip sitting
+        // at the top of the mockup box, dead space filling the rest below
+        // it, even though the box itself is plenty tall.
+        //
+        // Matching the logical canvas's aspect ratio to the mockup box's
+        // own fixes this: scaling to fit width then also exactly fills the
+        // available height, using the whole box instead of a fraction of
+        // it. On an actually-wide viewer (availableW already >= the floor)
+        // this reduces to exactly h = availableH, the same 1:1 behavior as
+        // before -- it only changes the narrow/phone case.
+        const w = Math.max(availableW, DESKTOP_MIN_W);
+        const h = w * (availableH / availableW);
+        DEVICE_SIZES.desktop = { w, h };
       }
       const d = DEVICE_SIZES[device] || DEVICE_SIZES.desktop;
       fitScale = Math.min(availableW / d.w, availableH / d.h, 1);
