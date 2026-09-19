@@ -220,7 +220,7 @@
       .bodycopy{font-size:clamp(8.5px,1.45vw,10.5px)!important}
       .step{top:10px!important;right:11px!important}
       .progress{left:clamp(175px,30vw,270px)!important;right:72px!important}
-      .live{min-height:calc(100dvh - var(--story))!important}
+      .live{height:calc(100dvh - var(--story))!important;min-height:430px!important}
     }
 
     @media(max-width:620px){
@@ -266,7 +266,7 @@
       .progress button{min-width:14px!important}
       .arrows{right:6px!important;bottom:4px!important;gap:3px!important}
       .arrows button{width:25px!important;height:23px!important}
-      .live{min-height:calc(100dvh - var(--story))!important}
+      .live{height:calc(100dvh - var(--story))!important;min-height:400px!important}
     }
   `;
   document.head.appendChild(style);

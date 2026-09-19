@@ -18,13 +18,6 @@
   // they will just see the site's narrow mobile layout (single drawer,
   // full-screen overlay) no matter which mode is picked.
   const DESKTOP_MIN_W = 1500;
-  // Desktop's height floor for .device-area itself (chrome bar, padding and
-  // border included) -- enough room for the roster strip/stat row plus a
-  // full two rows of flip cards, so the desktop demo can actually show off
-  // comparing several players at once instead of cutting the first row off
-  // partway through. Tune this single number if real card rows come out
-  // taller or shorter than estimated.
-  const DESKTOP_MIN_AREA_H = 860;
 
   const style = document.createElement('style');
   style.id = 'yat-device-preview-style';
@@ -190,10 +183,10 @@
     .device-switcher button.active{border-color:#9e8248!important;color:#dfbf73!important;background:rgba(200,169,110,.08)!important}
 
     @media(max-width:900px){
-      .device-area{padding:8px 3px 14px!important}
+      .device-area{padding:8px 3px 14px!important;min-height:0!important}
     }
     @media(max-width:620px){
-      .live{min-height:calc(100dvh - var(--story))!important;grid-template-rows:minmax(0,1fr) 26px!important}
+      .live{min-height:0!important;height:calc(100dvh - var(--story))!important;grid-template-rows:minmax(0,1fr) 26px!important}
       .device-area{padding:6px 4px 8px!important}
       .device-shell{--chrome-h:27px}
       .device-shell.desktop{border-width:1px!important;border-radius:5px!important}
@@ -350,18 +343,6 @@
       device = document.querySelector('[data-device].active')?.dataset.device || device || 'desktop';
       shell.classList.remove('desktop','tablet','mobile');
       shell.classList.add(device);
-
-      // Desktop mode renders at whatever height the page naturally gives it
-      // (see below), so on a normal browser window that's often barely
-      // enough for one row of cards before running out of room -- the whole
-      // point of the demo is showing several players compared at once. Give
-      // it a real floor and let the PAGE scroll to reach it (audience-site.js
-      // switched .app/.live from a fixed height to a min-height for exactly
-      // this) rather than squeezing the gallery into whatever's left after
-      // the slideshow. Set before reading clientHeight below so the forced
-      // reflow picks up the new value immediately. Tablet/mobile keep their
-      // own natural fit -- clear this so it doesn't leak into those modes.
-      area.style.minHeight = device === 'desktop' ? DESKTOP_MIN_AREA_H + 'px' : '';
 
       // Fit against the OUTER area's box, not the shell/viewport -- their
       // size is about to become an effect of this calculation (below), so
