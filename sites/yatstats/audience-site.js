@@ -89,7 +89,18 @@
   const nav=document.getElementById('nav'),menu=document.getElementById('menu');menu.onclick=()=>nav.classList.toggle('open');
   const track=document.getElementById('track'),slides=[...track.children],dots=[...document.querySelectorAll('.progress button')],frame=document.getElementById('frame'),loader=document.getElementById('loader'),url=document.getElementById('url'),open=document.getElementById('open'),callout=document.getElementById('callout'),label=document.getElementById('label'),wrap=document.getElementById('wrap'),stage=document.getElementById('stage');
   let active=0,device='desktop',last='',timer;
-  function fit(){const d=devices[device],w=Math.max(1,wrap.clientWidth-20),h=Math.max(1,wrap.clientHeight-14),s=Math.min(1,w/d.w,h/d.h);stage.style.width=d.w+'px';stage.style.height=d.h+'px';stage.style.transform=`translate(-50%,-50%) scale(${s})`}
+  // device-preview-override.js, always loaded right after this script, takes
+  // full ownership of #stage sizing once it installs (its DESKTOP_MIN_W floor
+  // is what keeps a phone's "desktop mode" actually wide enough for the real
+  // site's 5-column grid). This original fit() predates that and is wired to
+  // the exact same triggers -- device button clicks, iframe load, resize, and
+  // a ResizeObserver on #wrap -- so leaving it live let it race the newer
+  // system and intermittently overwrite #stage back to a narrower width with
+  // no floor, collapsing the grid to a single column. The click handler below
+  // still needs to run (it owns toggling .active, which the newer script
+  // reads to know which device is selected); only the competing sizing write
+  // needs to stop once the override has taken over.
+  function fit(){if(document.querySelector('.live')?.dataset.deviceMockup==='1')return;const d=devices[device],w=Math.max(1,wrap.clientWidth-20),h=Math.max(1,wrap.clientHeight-14),s=Math.min(1,w/d.w,h/d.h);stage.style.width=d.w+'px';stage.style.height=d.h+'px';stage.style.transform=`translate(-50%,-50%) scale(${s})`}
   function go(i,scroll=true){active=Math.max(0,Math.min(page.stops.length-1,i));const s=page.stops[active];dots.forEach((d,n)=>d.classList.toggle('active',n===active));label.textContent=s.callout;callout.style.setProperty('--x',(s.x||50)+'%');callout.style.setProperty('--y',(s.y||20)+'%');open.href=s.url;try{const u=new URL(s.url);url.textContent=u.hostname+(u.pathname==='/'?'':u.pathname)+(u.hash||'')}catch{}if(last!==s.url){last=s.url;loader.classList.remove('hidden');frame.src=s.url}if(scroll)slides[active].scrollIntoView({behavior:reduced?'auto':'smooth',inline:'start',block:'nearest'})}
   track.addEventListener('scroll',()=>{clearTimeout(timer);timer=setTimeout(()=>{const i=Math.round(track.scrollLeft/Math.max(1,track.clientWidth));if(i!==active)go(i,false)},90)},{passive:true});
   track.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){e.preventDefault();track.scrollLeft+=e.deltaY}},{passive:false});
