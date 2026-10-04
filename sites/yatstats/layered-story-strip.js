@@ -148,7 +148,9 @@
       max-width:860px!important;
       margin:0!important;
       color:#b0b3b6!important;
-      font:300 clamp(9px,.70vw,12px)/1.35 Oswald,sans-serif!important;
+      font:500 clamp(10px,.76vw,13px)/1.45 var(--ui,'Archivo','Helvetica Neue',Arial,sans-serif)!important;
+      letter-spacing:-.01em!important;
+      text-transform:none!important;
     }
     .step{
       position:absolute!important;
@@ -217,7 +219,7 @@
       }
       .person,.person.yati{width:clamp(108px,23vw,172px)!important;height:107%!important}
       .title{font-size:clamp(21px,4vw,32px)!important}
-      .bodycopy{font-size:clamp(8.5px,1.45vw,10.5px)!important}
+      .bodycopy{font-size:clamp(9.5px,1.55vw,11.5px)!important;line-height:1.42!important}
       .step{top:10px!important;right:11px!important}
       .progress{left:clamp(175px,30vw,270px)!important;right:72px!important}
       .live{height:calc(100dvh - var(--story))!important;min-height:430px!important}
@@ -251,8 +253,8 @@
       .title{font-size:clamp(18px,5.7vw,25px)!important;margin-bottom:4px!important}
       .bodycopy{
         max-width:100%!important;
-        font-size:clamp(7.5px,2.25vw,9.2px)!important;
-        line-height:1.28!important;
+        font-size:clamp(9px,2.45vw,10.5px)!important;
+        line-height:1.4!important;
         display:-webkit-box!important;
         -webkit-line-clamp:3!important;
         -webkit-box-orient:vertical!important;
