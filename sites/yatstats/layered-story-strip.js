@@ -139,7 +139,7 @@
       max-width:900px!important;
       margin:0 0 5px!important;
       color:#f3f3f1!important;
-      font:400 clamp(25px,2.45vw,43px)/.94 'Bebas Neue',Oswald,sans-serif!important;
+      font:700 clamp(25px,2.45vw,43px)/1.02 Oswald,sans-serif!important;
       letter-spacing:.005em!important;
       text-transform:uppercase!important;
       text-wrap:balance!important;
