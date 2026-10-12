@@ -114,6 +114,72 @@
       object-position:center bottom!important;
     }
 
+    /* The coach-facing iceberg slide makes the platform model visible at a glance:
+       the public Community Hub earns attention; ARMS does the relationship work below. */
+    .slide-iceberg .bg{display:none!important}
+    .slide-iceberg .visual{
+      background:
+        radial-gradient(circle at 12% 15%,rgba(255,255,255,.12),transparent 24%),
+        linear-gradient(180deg,#263a45 0 35%,#0a202d 35% 100%)!important;
+    }
+    .slide-iceberg .visual:before{
+      background:
+        linear-gradient(90deg,rgba(1,8,12,.02) 0%,rgba(1,8,12,.16) 24%,rgba(4,5,6,.84) 44%,rgba(4,5,6,.97) 72%,#040506 100%),
+        linear-gradient(180deg,transparent 33%,rgba(95,190,222,.28) 35%,rgba(0,0,0,.18) 37%,rgba(0,0,0,.42) 100%)!important;
+    }
+    .iceberg-visual{
+      position:absolute;
+      z-index:5;
+      left:2%;
+      top:6%;
+      width:clamp(176px,21vw,315px);
+      height:84%;
+      color:#07131b;
+      filter:drop-shadow(0 15px 18px rgba(0,0,0,.35));
+    }
+    .iceberg-waterline{
+      position:absolute;
+      z-index:6;
+      left:-3%;
+      right:-3%;
+      top:35%;
+      height:2px;
+      background:linear-gradient(90deg,transparent,#78d4ee 16%,#d8f7ff 52%,#78d4ee 84%,transparent);
+      box-shadow:0 0 10px rgba(120,212,238,.75);
+    }
+    .iceberg-tip,
+    .iceberg-depth{
+      position:absolute;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      text-transform:uppercase;
+    }
+    .iceberg-tip{
+      left:25%;
+      top:0;
+      width:50%;
+      height:36%;
+      padding-top:13%;
+      clip-path:polygon(50% 0,100% 100%,0 100%);
+      background:linear-gradient(145deg,#fff,#cbdde2 70%,#9dbac4);
+    }
+    .iceberg-depth{
+      left:4%;
+      top:35%;
+      width:92%;
+      height:63%;
+      padding:5% 10% 0;
+      clip-path:polygon(23% 0,77% 0,100% 100%,0 100%);
+      background:linear-gradient(155deg,#d4f2fb,#76b9ce 55%,#39788f);
+    }
+    .iceberg-tip b{font:700 clamp(8px,.75vw,12px)/1 Oswald,sans-serif;letter-spacing:.06em}
+    .iceberg-tip small{margin-top:3px;font:600 clamp(5px,.42vw,7px)/1 Oswald,sans-serif;letter-spacing:.05em}
+    .iceberg-depth b{font:700 clamp(20px,2vw,31px)/1 Oswald,sans-serif;letter-spacing:.08em}
+    .iceberg-depth small{max-width:82%;margin-top:5px;font:600 clamp(5px,.47vw,8px)/1.35 Oswald,sans-serif;letter-spacing:.05em}
+
     /* LAYER 3 — story copy. Same layer at every breakpoint; it only scales. */
     .copy{
       position:absolute!important;
@@ -218,6 +284,7 @@
         padding:14px 6% 27px clamp(175px,30vw,270px)!important;
       }
       .person,.person.yati{width:clamp(108px,23vw,172px)!important;height:107%!important}
+      .iceberg-visual{left:1%;width:clamp(158px,27vw,226px)}
       .title{font-size:clamp(21px,4vw,32px)!important}
       .bodycopy{font-size:clamp(9.5px,1.55vw,11.5px)!important;line-height:1.42!important}
       .step{top:10px!important;right:11px!important}
@@ -243,6 +310,7 @@
         height:104%!important;
       }
       .person.yati{left:3%!important;width:clamp(82px,24vw,116px)!important}
+      .iceberg-visual{left:0;width:29%;min-width:102px}
       .copy{
         position:absolute!important;
         inset:0!important;
