@@ -37,12 +37,16 @@
     'Stats + News': { src: NOW_BG, pos: 'center 26%' },
     'Stay Connected': { src: HS_BG, pos: 'center 35%' },
 
-    'The Question': { src: CAREER_BG, pos: 'center 48%' },
-    'Your Clubhouse': { src: SCHOOL_BG, pos: '18% 50%', contain: true },
-    'Program History': { src: HS_BG, pos: 'center 30%' },
+    'Your Community Hub': { src: SCHOOL_BG, pos: '18% 50%', contain: true },
+    'Why It Matters': { src: HS_BG, pos: 'center 30%' },
+    'Fan Experience': { src: NOW_BG, pos: 'center 26%' },
+    'Living History': { src: HS_BG, pos: 'center 30%' },
     'ARMS': { src: SCHOOL_BG, pos: '18% 50%', contain: true },
-    'Fundraising': { src: HS_BG, pos: 'center 38%' },
-    'Sponsors': { src: SCHOOL_BG, pos: '18% 50%', contain: true },
+    'Program Voice': { src: HS_BG, pos: 'center 38%' },
+    'Your Role': { src: SCHOOL_BG, pos: '18% 50%', contain: true },
+    'Advancement': { src: NOW_BG, pos: 'center 26%' },
+    'Local Support': { src: SCHOOL_BG, pos: '18% 50%', contain: true },
+    'The Partnership': { src: CAREER_BG, pos: 'center 48%' },
 
     'Why It Works': { src: HS_BG, pos: 'center 38%' },
     'Sponsor a School': { src: SCHOOL_BG, pos: '18% 50%', contain: true },
@@ -61,8 +65,9 @@
     'Stats + News': { action: 'openStats', selector: '#ppTab-stats' },
     'Golden Timeline': { action: 'openGoldenTimeline', selector: '#playerCareerImages' },
     'Contribute': { action: 'openUpload', selector: '#ppTab-upload' },
-    'Program History': { action: 'openAllTime', selector: '[href="#sec-alltime"]' },
-    'Sponsors': { action: 'openPartners', selector: '[href="#sec-partner"]' }
+    'Fan Experience': { action: 'openFantasy', selector: '[href="#sec-fantasy"]' },
+    'Living History': { action: 'openAllTime', selector: '[href="#sec-alltime"]' },
+    'Local Support': { action: 'openPartners', selector: '[href="#sec-partner"]' }
   };
 
   const style = document.createElement('style');
