@@ -1,0 +1,1344 @@
+Run at Mon Oct 12 2026 04:23:09 GMT-0700 (Mountain Standard Time)
+
+=== test-1 https://mike-crozite-template-7ug66mq32-arms-reach-digital-agency.vercel.app/5004#sec-fantasy
+ROUND 1
+|
+GAME 1
+GAME 2
+GAME 3
+WEEK 2 | OCT 12 – OCT 18
+TOP 1
+1
+2
+3
+4
+5
+6
+7
+8
+9
+R
+DAILY
+STATS
+CARDINAL NEWMAN
+West Palm Beach, FL
+0
+0
+HAMILTON
+Chandler, AZ
+0
+Like
+Comment
+Share
+SEASON RUNS LEADERBOARD | REGIONS
+1
+2
+3
+4
+5
+6
+7
+8
+A–Z
+RANK
+SCHOOL
+TOTAL RUNS
+1
+SantiagoCorona, CA
+4
+2
+Mira CostaManhattan Beach, CA
+4
+3
+Belen Jesuit PrepMiami, FL
+3
+4
+HeritageBrentwood, CA
+3
+5
+Henry B. PlantTampa, FL
+2
+6
+Gulliver PrepCoral Gables, FL
+2
+7
+Bishop HendrickenWarwick, RI
+1
+8
+South HillsWest Covina, CA
+1
+9
+Cardinal NewmanWest Palm Beach, FL
+1
+10
+Delbarton SchoolMorristown, NJ
+1
+11
+Bonita VistaChula Vista, CA
+1
+12
+Bishop GormanLas Vegas, NV
+1
+13
+HamiltonChandler, AZ
+0
+14
+Colleyville HeritageColleyville, TX
+0
+15
+Westminster ChristianMiami, FL
+0
+16
+The WoodlandsThe Woodlands, TX
+0
+page errors: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings. | Unexpected token 'return'
+
+=== test-2 https://mike-crozite-template-8eg40fqil-arms-reach-digital-agency.vercel.app/5004
+
+(section screenshot failed: locator.screenshot: Timeout 29961.281000000003ms exceeded.
+Call log:
+  - taking element screenshot
+  - waiting for fonts to load...
+  - fonts loaded
+  - attempting scroll into view action
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #1
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #2
+  -   waiting 20ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #3
+  -   waiting 100ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #4
+  -   waiting 100ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #5
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #6
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #7
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #8
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #9
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #10
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #11
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #12
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #13
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #14
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #15
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #16
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #17
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #18
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #19
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #20
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #21
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #22
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #23
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #24
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #25
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #26
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #27
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #28
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #29
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #30
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #31
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #32
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #33
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #34
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #35
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #36
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #37
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #38
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #39
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #40
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #41
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #42
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #43
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #44
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #45
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #46
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #47
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #48
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #49
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #50
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #51
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #52
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #53
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #54
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #55
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #56
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #57
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #58
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #59
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #60
+  -   waiting 500ms
+)
+page errors: Unexpected token 'return'
+
+=== test-3 https://mike-crozite-template-eixpazyj1-arms-reach-digital-agency.vercel.app/5004
+
+(section screenshot failed: locator.screenshot: Timeout 29915.312000000005ms exceeded.
+Call log:
+  - taking element screenshot
+  - waiting for fonts to load...
+  - fonts loaded
+  - attempting scroll into view action
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #1
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #2
+  -   waiting 20ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #3
+  -   waiting 100ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #4
+  -   waiting 100ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #5
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #6
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #7
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #8
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #9
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #10
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #11
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #12
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #13
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #14
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #15
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #16
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #17
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #18
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #19
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #20
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #21
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #22
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #23
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #24
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #25
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #26
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #27
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #28
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #29
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #30
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #31
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #32
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #33
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #34
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #35
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #36
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #37
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #38
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #39
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #40
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #41
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #42
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #43
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #44
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #45
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #46
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #47
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #48
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #49
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #50
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #51
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #52
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #53
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #54
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #55
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #56
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #57
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #58
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #59
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #60
+  -   waiting 500ms
+)
+page errors: Unexpected token 'return'
+
+=== test-4 https://mike-crozite-template-pj86dojio-arms-reach-digital-agency.vercel.app/5004
+
+(section screenshot failed: locator.screenshot: Timeout 29932.350999999995ms exceeded.
+Call log:
+  - taking element screenshot
+  - waiting for fonts to load...
+  - fonts loaded
+  - attempting scroll into view action
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #1
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #2
+  -   waiting 20ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #3
+  -   waiting 100ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #4
+  -   waiting 100ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #5
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #6
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #7
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #8
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #9
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #10
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #11
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #12
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #13
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #14
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #15
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #16
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #17
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #18
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #19
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #20
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #21
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #22
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #23
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #24
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #25
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #26
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #27
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #28
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #29
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #30
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #31
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #32
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #33
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #34
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #35
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #36
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #37
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #38
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #39
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #40
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #41
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #42
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #43
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #44
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #45
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #46
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #47
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #48
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #49
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #50
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #51
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #52
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #53
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #54
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #55
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #56
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #57
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #58
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #59
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #60
+  -   waiting 500ms
+)
+page errors: Unexpected token 'return'
+
+=== test-5 https://mike-crozite-template-klrvdqj27-arms-reach-digital-agency.vercel.app/5004
+
+(section screenshot failed: locator.screenshot: Timeout 29941.218999999983ms exceeded.
+Call log:
+  - taking element screenshot
+  - waiting for fonts to load...
+  - fonts loaded
+  - attempting scroll into view action
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #1
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #2
+  -   waiting 20ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #3
+  -   waiting 100ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #4
+  -   waiting 100ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #5
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #6
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #7
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #8
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #9
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #10
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #11
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #12
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #13
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #14
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #15
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #16
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #17
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #18
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #19
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #20
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #21
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #22
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #23
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #24
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #25
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #26
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #27
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #28
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #29
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #30
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #31
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #32
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #33
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #34
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #35
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #36
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #37
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #38
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #39
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #40
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #41
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #42
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #43
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #44
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #45
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #46
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #47
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #48
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #49
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #50
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #51
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #52
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #53
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #54
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #55
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #56
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #57
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #58
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #59
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #60
+  -   waiting 500ms
+)
+page errors: Unexpected token 'return'
+
+=== test-6 https://mike-crozite-template-b6f7o9ssr-arms-reach-digital-agency.vercel.app/5004
+
+(section screenshot failed: locator.screenshot: Timeout 29960.58799999999ms exceeded.
+Call log:
+  - taking element screenshot
+  - waiting for fonts to load...
+  - fonts loaded
+  - attempting scroll into view action
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #1
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #2
+  -   waiting 20ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #3
+  -   waiting 100ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #4
+  -   waiting 100ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #5
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #6
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #7
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #8
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #9
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #10
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #11
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #12
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #13
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #14
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #15
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #16
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #17
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #18
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #19
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #20
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #21
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #22
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #23
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #24
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #25
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #26
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #27
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #28
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #29
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #30
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #31
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #32
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #33
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #34
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #35
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #36
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #37
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #38
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #39
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #40
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #41
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #42
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #43
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #44
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #45
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #46
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #47
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #48
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #49
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #50
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #51
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #52
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #53
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #54
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #55
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #56
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #57
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #58
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #59
+  -   waiting 500ms
+  -   waiting for element to be stable
+  -   element is not visible
+  - retrying scroll into view action, attempt #60
+  -   waiting 500ms
+)
+page errors: Unexpected token 'return'
