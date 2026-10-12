@@ -1,5 +1,14 @@
 {
   "bases": [
-    "https://armsreach-yatstats-git-launch-c1f1a5-arms-reach-digital-agency.vercel.app/"
+    "https://yatstats.com/"
+  ],
+  "redirects": [
+    ["https://www.yatstats.com/", "https://yatstats.com/"],
+    ["http://yatstats.com/", "https://yatstats.com/"]
+  ],
+  "spot": [
+    "https://hamilton.az.yatstats.com/",
+    "https://santiago.ca.yatstats.com/",
+    "https://hamilton.az.yatstats.com/5004/player/180827/cody-bellinger"
   ]
 }

@@ -8,7 +8,7 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs';
 
-const { bases } = JSON.parse(fs.readFileSync(new URL('./yatstats-launch-check.json', import.meta.url)));
+const { bases, redirects = [], spot = [] } = JSON.parse(fs.readFileSync(new URL('./yatstats-launch-check.json', import.meta.url)));
 const ROUTES = ['', 'fans/', 'players/', 'programs/', 'partners/'];
 const VIEWPORTS = { desktop: { width: 1440, height: 900 }, mobile: { width: 390, height: 844, isMobile: true, hasTouch: true } };
 const results = [];
@@ -130,6 +130,21 @@ for (const base of bases) {
       await ctx.close();
     }
   }
+}
+// After cutover: www goes to the apex, and school sites still answer.
+if (redirects.length || spot.length) {
+  results.push('\n=== redirects and school sites');
+  const http = await browser.newContext();
+  for (const [from, to] of redirects) {
+    const r = await http.request.get(from, { maxRedirects: 0 }).catch((e) => null);
+    const loc = r?.headers().location || '';
+    (r && [301, 308].includes(r.status()) && loc.startsWith(to) ? ok : fail)(`${from} -> ${r?.status()} ${loc}`);
+  }
+  for (const url of spot) {
+    const r = await http.request.get(url, { maxRedirects: 5, timeout: 60000 }).catch(() => null);
+    (r && r.status() === 200 ? ok : fail)(`school site ${url} -> ${r?.status()} ${r ? r.url() : ''}`);
+  }
+  await http.close();
 }
 await browser.close();
 console.log(results.join('\n'));
