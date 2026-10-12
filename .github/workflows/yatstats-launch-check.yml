@@ -1,0 +1,19 @@
+# Real-browser launch check for the YAT?STATS homepage; runs on pushes to
+# this test branch (edit scripts/yatstats-launch-check.json to point it at a
+# preview). Read-only: it only loads pages.
+name: YAT?STATS launch check
+on:
+  push:
+    branches: [test/yatstats-launch-check]
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm i --no-save --no-package-lock playwright@1.47.2 && npx playwright install --with-deps chromium
+      - run: node scripts/yatstats-launch-check.mjs
