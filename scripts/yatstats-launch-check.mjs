@@ -8,7 +8,7 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs';
 
-const { bases, redirects = [], spot = [] } = JSON.parse(fs.readFileSync(new URL('./yatstats-launch-check.json', import.meta.url)));
+const { bases, redirects = [], spot = [], errorCheck = [] } = JSON.parse(fs.readFileSync(new URL('./yatstats-launch-check.json', import.meta.url)));
 const ROUTES = ['', 'fans/', 'players/', 'programs/', 'partners/'];
 const VIEWPORTS = { desktop: { width: 1440, height: 900 }, mobile: { width: 390, height: 844, isMobile: true, hasTouch: true } };
 const results = [];
@@ -145,6 +145,22 @@ if (redirects.length || spot.length) {
     (r && r.status() === 200 ? ok : fail)(`school site ${url} -> ${r?.status()} ${r ? r.url() : ''}`);
   }
   await http.close();
+}
+// School pages: load each and report any script error the page throws.
+if (errorCheck.length) {
+  results.push('\n=== script errors on school pages');
+  for (const url of errorCheck) {
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+    const page = await ctx.newPage();
+    const errs = [];
+    page.on('pageerror', (e) => errs.push(e.message.slice(0, 90)));
+    try {
+      await page.goto(url, { waitUntil: 'load', timeout: 60000 });
+      await page.waitForTimeout(6000);
+      (errs.length ? fail : ok)(`${url} ${errs.length ? 'errors: ' + errs.join(' | ') : 'no script errors'}`);
+    } catch (e) { fail(`${url} ${String(e.message).split('\n')[0]}`); }
+    await ctx.close();
+  }
 }
 await browser.close();
 console.log(results.join('\n'));

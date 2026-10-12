@@ -1,14 +1,8 @@
 {
-  "bases": [
-    "https://yatstats.com/"
-  ],
-  "redirects": [
-    ["https://www.yatstats.com/", "https://yatstats.com/"],
-    ["http://yatstats.com/", "https://yatstats.com/"]
-  ],
-  "spot": [
-    "https://hamilton.az.yatstats.com/",
-    "https://santiago.ca.yatstats.com/",
-    "https://hamilton.az.yatstats.com/5004/player/180827/cody-bellinger"
+  "bases": [],
+  "errorCheck": [
+    "https://mike-crozite-template-djs25cdbf-arms-reach-digital-agency.vercel.app/5004",
+    "https://mike-crozite-template-djs25cdbf-arms-reach-digital-agency.vercel.app/5004/player/180827/cody-bellinger",
+    "https://hamilton.az.yatstats.com/"
   ]
 }
