@@ -3,6 +3,8 @@
   "trailingSlash": true,
   "redirects": [
     { "source": "/sites/yatstats", "destination": "/", "permanent": true },
+    { "source": "/sites/yatstats/", "destination": "/", "permanent": true },
+    { "source": "/sites/yatstats/:path*/", "destination": "/:path*/", "permanent": true },
     { "source": "/sites/yatstats/:path*", "destination": "/:path*", "permanent": true }
   ]
 }
