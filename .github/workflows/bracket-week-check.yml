@@ -1,0 +1,27 @@
+# One-off look at the six test brackets in a real browser: screenshots and
+# the scoreboard text are committed back to this branch under results/.
+# Read-only on the sites: it only loads pages.
+name: Test bracket week check
+on:
+  push:
+    branches: [test/bracket-week-check]
+    paths: [scripts/**, .github/workflows/**]
+permissions:
+  contents: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm i --no-save --no-package-lock playwright@1.47.2 && npx playwright install --with-deps chromium
+      - run: TZ=America/Phoenix node scripts/bracket-week-check.mjs
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          git add results
+          git commit -m "results: test bracket week check" || exit 0
+          git push
