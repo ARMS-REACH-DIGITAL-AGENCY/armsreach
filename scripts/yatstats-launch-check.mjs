@@ -61,7 +61,13 @@ for (const base of bases) {
       const page = await ctx.newPage();
       const missing = []; const errors = [];
       page.on('response', (r) => { if (r.url().startsWith(origin) && r.status() >= 400) missing.push(`${r.status()} ${r.url().replace(origin, '')}`); });
-      page.on('pageerror', (e) => errors.push(e.message.slice(0, 120)));
+      // Where each error came from: this page, or the school site in the iframe.
+      page.on('pageerror', (e) => {
+        const where = (String(e.stack || '').match(/https?:\/\/[^\s)]+/) || ['inline script'])[0].replace(/:\d+:\d+$/, '');
+        errors.push(`${e.message.slice(0, 80)} @ ${where.slice(0, 90)}`);
+      });
+      const frameErrors = [];
+      page.on('console', (m) => { if (m.type() === 'error' && !m.location().url.startsWith(origin)) frameErrors.push(m.location().url.slice(0, 70)); });
       try {
         await page.goto(base + route, { waitUntil: 'domcontentloaded', timeout: 45000 });
         await page.waitForSelector('.tour-shell', { timeout: 15000 });
