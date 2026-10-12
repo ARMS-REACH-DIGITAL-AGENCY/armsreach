@@ -13,22 +13,29 @@ const ROUTES = ['', 'fans/', 'players/', 'programs/', 'partners/'];
 const VIEWPORTS = { desktop: { width: 1440, height: 900 }, mobile: { width: 390, height: 844, isMobile: true, hasTouch: true } };
 const results = [];
 const fail = (msg) => { results.push(`FAIL ${msg}`); };
+const note = (msg) => { results.push(`note ${msg}`); };
+// The school sites take tour commands only from these hosts (YatTourBridge
+// on Easter-NEWS); anywhere else the iframe still works for visitors, but
+// slides can't drive it.
+const TRUSTED_TOUR_HOST = /^(www\.)?yatstats\.com$|^armsreach-[a-z0-9]+-arms-reach-digital-agency\.vercel\.app$|^armsreach-git-[a-z0-9-]+-arms-reach-digital-agency\.vercel\.app$/;
 const ok = (msg) => { results.push(`ok   ${msg}`); };
 
 const browser = await chromium.launch();
 for (const base of bases) {
   const origin = new URL(base).origin;
-  results.push(`\n=== ${base}`);
+  const trusted = TRUSTED_TOUR_HOST.test(new URL(base).hostname);
+  results.push(`\n=== ${base} (tour commands ${trusted ? 'trusted' : 'NOT trusted on this host'})`);
+  const sameSite = (r) => r.url().startsWith(origin);
 
   // Plain HTTP: each route, its no-slash form, and the legacy /sites/yatstats/ path.
   const http = await browser.newContext();
   for (const route of ROUTES) {
     const r = await http.request.get(base + route, { maxRedirects: 5 });
-    (r.status() === 200 ? ok : fail)(`GET /${route} -> ${r.status()}`);
+    (r.status() === 200 && sameSite(r) ? ok : fail)(`GET /${route} -> ${r.status()} ${sameSite(r) ? '' : 'redirected off-site: ' + r.url().slice(0, 60)}`);
     if (route) {
       const bare = base + route.replace(/\/$/, '');
       const rb = await http.request.get(bare, { maxRedirects: 5 });
-      (rb.status() === 200 ? ok : fail)(`GET /${route.replace(/\/$/, '')} (no slash, refresh/deep link) -> ${rb.status()} ${rb.url().replace(origin, '')}`);
+      (rb.status() === 200 && sameSite(rb) ? ok : fail)(`GET /${route.replace(/\/$/, '')} (no slash, refresh/deep link) -> ${rb.status()} ${rb.url().replace(origin, '')}`);
     }
   }
   if (!base.includes('/sites/yatstats/')) {
@@ -75,7 +82,7 @@ for (const base of bases) {
         // Handshake: the school site answers the tour's hello.
         await page.waitForFunction(() => window.__fromSite.includes('YAT_TOUR_ACK'), null, { timeout: 40000 }).catch(() => {});
         const fromSite = await page.evaluate(() => window.__fromSite.slice());
-        (fromSite.includes('YAT_TOUR_ACK') ? ok : fail)(`${label} school site answered the tour (${[...new Set(fromSite)].join(', ') || 'nothing'})`);
+        (fromSite.includes('YAT_TOUR_ACK') ? ok : trusted ? fail : note)(`${label} school site answered the tour (${[...new Set(fromSite)].join(', ') || 'nothing'})`);
 
         // Slides: the next button sends tour actions into the live school site.
         const next = page.locator('#next');
@@ -84,7 +91,7 @@ for (const base of bases) {
           const site = page.frames().find((f) => /yatstats\.com/.test(new URL(f.url() || 'about:blank', 'https://x').hostname));
           const got = site ? await site.evaluate(() => window.__fromTour.slice()).catch(() => []) : [];
           const actions = got.filter((t) => t.startsWith('YAT_TOUR_ACTION'));
-          (actions.length ? ok : fail)(`${label} slide clicks reached the school site (${actions.join(', ') || 'none'})`);
+          (actions.length ? ok : fail)(`${label} slide clicks sent to the school site (${actions.join(', ') || 'none'})`);
         } else {
           fail(`${label} no #next slide button`);
         }
@@ -100,7 +107,7 @@ for (const base of bases) {
             const after = await page.evaluate(() => window.__fromSite.slice());
             const moved = hosts.some((h) => h !== 'hamilton.az.yatstats.com');
             (moved ? ok : fail)(`${label} cross-school jump inside the iframe -> ${hosts.join(', ') || 'no school frame'}`);
-            (after.length > before ? ok : fail)(`${label} tour still connected after the jump (${[...new Set(after.slice(before))].join(', ') || 'no messages'})`);
+            (after.length > before ? ok : trusted ? fail : note)(`${label} tour still connected after the jump (${[...new Set(after.slice(before))].join(', ') || 'no messages'})`);
           } else {
             fail(`${label} no Hamilton frame for the cross-school check`);
           }
