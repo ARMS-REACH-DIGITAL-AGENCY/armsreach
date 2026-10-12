@@ -1,0 +1,457 @@
+Run at Mon Oct 12 2026 04:30:40 GMT-0700 (Mountain Standard Time)
+
+=== test-1 https://mike-crozite-template-7ug66mq32-arms-reach-digital-agency.vercel.app/5004#sec-fantasy
+ROUND 1
+|
+GAME 1
+GAME 2
+GAME 3
+WEEK 2 | OCT 12 – OCT 18
+TOP 1
+1
+2
+3
+4
+5
+6
+7
+8
+9
+R
+DAILY
+STATS
+CARDINAL NEWMAN
+West Palm Beach, FL
+0
+0
+HAMILTON
+Chandler, AZ
+0
+Like
+Comment
+Share
+SEASON RUNS LEADERBOARD | REGIONS
+1
+2
+3
+4
+5
+6
+7
+8
+A–Z
+RANK
+SCHOOL
+TOTAL RUNS
+1
+SantiagoCorona, CA
+4
+2
+Mira CostaManhattan Beach, CA
+4
+3
+Belen Jesuit PrepMiami, FL
+3
+4
+HeritageBrentwood, CA
+3
+5
+Henry B. PlantTampa, FL
+2
+6
+Gulliver PrepCoral Gables, FL
+2
+7
+Bishop HendrickenWarwick, RI
+1
+8
+South HillsWest Covina, CA
+1
+9
+Cardinal NewmanWest Palm Beach, FL
+1
+10
+Delbarton SchoolMorristown, NJ
+1
+11
+Bonita VistaChula Vista, CA
+1
+12
+Bishop GormanLas Vegas, NV
+1
+13
+HamiltonChandler, AZ
+0
+14
+Colleyville HeritageColleyville, TX
+0
+15
+Westminster ChristianMiami, FL
+0
+16
+The WoodlandsThe Woodlands, TX
+0
+(no GAME 1 tab found)
+page errors: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings. | Unexpected token 'return'
+
+=== test-2 https://mike-crozite-template-8eg40fqil-arms-reach-digital-agency.vercel.app/5004#sec-fantasy
+No game for this school in this stage.
+This school isn't in test bracket 2. That bracket's 16 schools are in the leaderboard below.
+SEASON RUNS LEADERBOARD | REGIONS
+1
+2
+3
+4
+5
+6
+7
+8
+A–Z
+RANK
+SCHOOL
+TOTAL RUNS
+1
+MarinaHuntington Beach, CA
+5
+2
+St. FrancisMountain View, CA
+4
+3
+St. ClairSt. Clair, MI
+3
+4
+Cherry CreekGreenwood Village, CO
+3
+5
+Orange LutheranOrange, CA
+3
+6
+Saint John'sShrewsbury, MA
+3
+7
+KellerKeller, TX
+3
+8
+Madison CentralMadison, MS
+2
+9
+Oak RidgeEl Dorado Hills, CA
+1
+10
+GrossmontEl Cajon, CA
+1
+11
+FlorenceFlorence, AL
+1
+12
+Mount SpokaneMead, WA
+1
+13
+St. John's PrepDanvers, MA
+0
+14
+CentervilleCenterville, OH
+0
+15
+Oswego EastOswego, IL
+0
+16
+ParkviewLilburn, GA
+0
+(no GAME 1 tab found)
+page errors: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings. | Unexpected token 'return'
+
+=== test-3 https://mike-crozite-template-eixpazyj1-arms-reach-digital-agency.vercel.app/5004#sec-fantasy
+No game for this school in this stage.
+This school isn't in test bracket 3. That bracket's 16 schools are in the leaderboard below.
+SEASON RUNS LEADERBOARD | REGIONS
+1
+2
+3
+4
+5
+6
+7
+8
+A–Z
+RANK
+SCHOOL
+TOTAL RUNS
+1
+Grain ValleyGrain Valley, MO
+3
+2
+PacificaGarden Grove, CA
+3
+3
+PopeMarietta, GA
+3
+4
+KellerKeller, TX
+2
+5
+St. ClairSt. Clair, MI
+2
+6
+Harvard-WestlakeNorth Hollywood, CA
+2
+7
+La Jolla Country Day SchoolLa Jolla, CA
+1
+8
+JSerra CatholicSan Juan Capistrano, CA
+1
+9
+GrapevineGrapevine, TX
+1
+10
+Gilman SchoolBaltimore, MD
+1
+11
+St. Pius XAtlanta, GA
+1
+12
+Bishop HendrickenWarwick, RI
+0
+13
+DeSoto CentralSouthaven, MS
+0
+14
+Mission ViejoMission Viejo, CA
+0
+15
+Land O'LakesLand O'Lakes, FL
+0
+16
+Notre DameSherman Oaks, CA
+0
+(no GAME 1 tab found)
+page errors: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings. | Unexpected token 'return'
+
+=== test-4 https://mike-crozite-template-pj86dojio-arms-reach-digital-agency.vercel.app/5004#sec-fantasy
+No game for this school in this stage.
+This school isn't in test bracket 4. That bracket's 16 schools are in the leaderboard below.
+SEASON RUNS LEADERBOARD | REGIONS
+1
+2
+3
+4
+5
+6
+7
+8
+A–Z
+RANK
+SCHOOL
+TOTAL RUNS
+1
+Saint John'sShrewsbury, MA
+4
+2
+BarbeLake Charles, LA
+4
+3
+Madison CentralMadison, MS
+3
+4
+Orange LutheranOrange, CA
+2
+5
+Belen Jesuit PrepMiami, FL
+2
+6
+Gulliver PrepCoral Gables, FL
+2
+7
+Grain ValleyGrain Valley, MO
+2
+8
+Mission ViejoMission Viejo, CA
+1
+9
+Oak RidgeEl Dorado Hills, CA
+1
+10
+South HillsWest Covina, CA
+1
+11
+AgouraAgoura Hills, CA
+1
+12
+YucaipaYucaipa, CA
+1
+13
+St. Pius XAtlanta, GA
+1
+14
+St. Joseph by the SeaStaten Island, NY
+1
+15
+CoronaCorona, CA
+0
+16
+De La SalleConcord, CA
+0
+(no GAME 1 tab found)
+page errors: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings. | Unexpected token 'return'
+
+=== test-5 https://mike-crozite-template-klrvdqj27-arms-reach-digital-agency.vercel.app/5004#sec-fantasy
+No game for this school in this stage.
+This school isn't in test bracket 5. That bracket's 16 schools are in the leaderboard below.
+SEASON RUNS LEADERBOARD | REGIONS
+1
+2
+3
+4
+5
+6
+7
+8
+A–Z
+RANK
+SCHOOL
+TOTAL RUNS
+1
+MarinaHuntington Beach, CA
+6
+2
+Cherry CreekGreenwood Village, CO
+3
+3
+Cinco RanchKaty, TX
+3
+4
+SantiagoCorona, CA
+2
+5
+La Costa CanyonCarlsbad, CA
+2
+6
+Oak RidgeConroe, TX
+2
+7
+Henry B. PlantTampa, FL
+1
+8
+BrookwoodSnellville, GA
+1
+9
+Archbishop MittySan Jose, CA
+1
+10
+Jackson PrepFlowood, MS
+1
+11
+ParkviewLilburn, GA
+0
+12
+Mount SpokaneMead, WA
+0
+13
+Normal WestNormal, IL
+0
+14
+HartNewhall, CA
+0
+15
+FreedomSouth Riding, VA
+0
+16
+OwassoOwasso, OK
+0
+(no GAME 1 tab found)
+page errors: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings. | Unexpected token 'return'
+
+=== test-6 https://mike-crozite-template-b6f7o9ssr-arms-reach-digital-agency.vercel.app/5004#sec-fantasy
+ROUND 1
+|
+GAME 1
+GAME 2
+GAME 3
+WEEK 2 | OCT 12 – OCT 18
+TOP 1
+1
+2
+3
+4
+5
+6
+7
+8
+9
+R
+DAILY
+STATS
+MATER DEI
+Santa Ana, CA
+0
+0
+HAMILTON
+Chandler, AZ
+0
+Like
+Comment
+Share
+SEASON RUNS LEADERBOARD | REGIONS
+1
+2
+3
+4
+5
+6
+7
+8
+A–Z
+RANK
+SCHOOL
+TOTAL RUNS
+1
+Park HillKansas City, MO
+4
+2
+Cinco RanchKaty, TX
+3
+3
+Harvard-WestlakeNorth Hollywood, CA
+3
+4
+WestlakeWestlake Village, CA
+3
+5
+Bethel ParkBethel Park, PA
+3
+6
+Mira CostaManhattan Beach, CA
+3
+7
+La Costa CanyonCarlsbad, CA
+2
+8
+Mater DeiSanta Ana, CA
+2
+9
+Elk GroveElk Grove, CA
+2
+10
+La Jolla Country Day SchoolLa Jolla, CA
+1
+11
+HamiltonChandler, AZ
+0
+12
+Holly SpringsHolly Springs, NC
+0
+13
+DeSoto CentralSouthaven, MS
+0
+14
+Land O'LakesLand O'Lakes, FL
+0
+15
+Spruce CreekPort Orange, FL
+0
+16
+Archbishop MoellerCincinnati, OH
+0
+(no GAME 1 tab found)
+page errors: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings. | Unexpected token 'return'
