@@ -94,7 +94,7 @@ for (const base of bases) {
         const next = page.locator('#next');
         if (await next.count()) {
           for (let i = 0; i < 3; i++) { await next.click({ timeout: 5000 }).catch(() => {}); await page.waitForTimeout(1200); }
-          const site = page.frames().find((f) => /yatstats\.com/.test(new URL(f.url() || 'about:blank', 'https://x').hostname));
+          const site = page.frames().find((f) => f !== page.mainFrame() && /yatstats\.com/.test(new URL(f.url() || 'about:blank', 'https://x').hostname));
           const got = site ? await site.evaluate(() => window.__fromTour.slice()).catch(() => []) : [];
           const actions = got.filter((t) => t.startsWith('YAT_TOUR_ACTION'));
           (actions.length ? ok : fail)(`${label} slide clicks sent to the school site (${actions.join(', ') || 'none'})`);
@@ -109,7 +109,7 @@ for (const base of bases) {
           if (site) {
             await site.evaluate(() => { location.href = 'https://hamilton.az.yatstats.com/1729'; }).catch(() => {});
             await page.waitForTimeout(12000);
-            const hosts = page.frames().map((f) => { try { return new URL(f.url()).hostname; } catch (_) { return ''; } }).filter((h) => h.endsWith('yatstats.com'));
+            const hosts = page.frames().filter((f) => f !== page.mainFrame()).map((f) => { try { return new URL(f.url()).hostname; } catch (_) { return ''; } }).filter((h) => h.endsWith('yatstats.com'));
             const after = await page.evaluate(() => window.__fromSite.slice());
             const moved = hosts.some((h) => h !== 'hamilton.az.yatstats.com');
             (moved ? ok : fail)(`${label} cross-school jump inside the iframe -> ${hosts.join(', ') || 'no school frame'}`);
