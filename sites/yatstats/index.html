@@ -3,14 +3,54 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="YAT?STATS connects hometown baseball communities to the players, programs and businesses that keep the story alive.">
+<meta name="description" content="Tour the YAT?STATS online baseball communities: for high school coaches and boosters, active alumni players, community partners and sponsors, and families and fans.">
 <link rel="canonical" href="https://yatstats.com/">
-<meta name="theme-color" content="#050607">
-<title>YAT?STATS for Fans</title>
-<script defer src="./audience-site.js?v=9"></script>
-<script defer src="./layered-story-strip.js?v=6"></script>
-<script defer src="./tour-interaction-override.js?v=7"></script>
-<script defer src="./device-preview-override.js?v=6"></script>
+<meta name="theme-color" content="#000000">
+<title>Welcome to YAT?STATS</title>
+<!-- The yatstats.com splash: the visitor picks the guided tour that fits
+     them. Each icon opens that audience's tour (programs/, players/,
+     partners/, fans/). Links are relative so the same file works at
+     yatstats.com and on the agency preview (/sites/yatstats/). -->
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:#000;color:#fff}
+  body{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;
+       font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased}
+  .splash{width:100%;max-width:1100px;padding:48px 16px 56px;text-align:center}
+  .welcome{margin:0 0 14px;font-size:clamp(16px,2.6vw,24px);font-weight:500;letter-spacing:.02em}
+  .logo{display:block;width:min(86vw,560px);height:auto;margin:0 auto}
+  .tagline{margin:18px 0 0;font-size:clamp(15px,2.5vw,22px);font-weight:500;letter-spacing:.01em}
+  .fit{margin:clamp(56px,12vh,120px) 0 clamp(28px,5vh,44px);font-size:clamp(15px,2.4vw,22px);font-weight:500}
+  /* Phone: three across, the fourth centered below (the mockup).
+     Wide screens: all four in one row. */
+  .tours{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(6,1fr);
+         gap:clamp(28px,6vh,56px) 4px;max-width:980px}
+  .tours li{grid-column:span 2;display:flex;justify-content:center;min-width:0}
+  .tours li:nth-child(4){grid-column:3 / span 2}
+  .tour{display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 4px;color:#fff;
+        text-decoration:none;border-radius:10px;outline-offset:4px}
+  .tour img{width:clamp(76px,13vw,118px);height:clamp(76px,13vw,118px);object-fit:contain;
+            transition:transform .2s ease,filter .2s ease}
+  .tour span{font-size:clamp(10px,1.7vw,15px);line-height:1.35;font-weight:500;text-transform:uppercase}
+  .tour:hover img,.tour:focus-visible img{transform:scale(1.08);filter:brightness(1.25) drop-shadow(0 0 14px rgba(255,170,60,.55))}
+  .tour:hover span,.tour:focus-visible span{color:#ffc46b}
+  @media (min-width:900px){ .tours{grid-template-columns:repeat(4,1fr)} .tours li,.tours li:nth-child(4){grid-column:auto} }
+  @media (prefers-reduced-motion:reduce){ .tour img{transition:none} }
+</style>
 </head>
-<body data-audience="fans"></body>
+<body>
+<main class="splash">
+  <p class="welcome">WELCOME TO</p>
+  <h1 style="margin:0"><img class="logo" src="img/yatstats-wordmark-white.png" width="1400" height="243" alt="YAT?STATS"></h1>
+  <p class="tagline">TOUR OUR ONLINE BASEBALL COMMUNITIES</p>
+
+  <h2 class="fit">WHERE DO YOU FIT IN?</h2>
+  <ul class="tours">
+    <li><a class="tour" href="programs/"><img src="img/tour-coach.jpg" alt=""><span>High School Baseball<br>Head Coach/Booster</span></a></li>
+    <li><a class="tour" href="players/"><img src="img/tour-player.jpg" alt=""><span>College/Professional<br>Active Alumni Baseball Player</span></a></li>
+    <li><a class="tour" href="partners/"><img src="img/tour-partner.jpg" alt=""><span>Community Partner<br>Alumni Sponsor</span></a></li>
+    <li><a class="tour" href="fans/"><img src="img/tour-fan.jpg" alt=""><span>Family/Fan</span></a></li>
+  </ul>
+</main>
+</body>
 </html>
