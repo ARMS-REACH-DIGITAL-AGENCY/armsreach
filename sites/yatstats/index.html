@@ -22,32 +22,32 @@
   .logo{display:block;width:min(84vw,760px);height:auto;margin:0 auto}
   .tagline{margin:clamp(16px,3vh,28px) 0 0;font-size:clamp(14px,4vw,32px);font-weight:700;letter-spacing:0;white-space:nowrap}
   .fit{margin:clamp(56px,12vh,120px) 0 clamp(20px,4vh,36px);font-size:clamp(13px,2.6vw,20px);font-weight:500;color:#ddd}
-  /* The four tours sit on an LED board like the school sites' footer
-     ticker, running from one edge of the screen to the other: unlit amber
-     dots on black, the icons lit up on it. The icons' own black-and-dot
-     squares blend into the board (lighten). One row on every screen. */
-  .board{position:relative;width:100vw;margin-left:calc(50% - 50vw);padding:clamp(18px,3.5vh,30px) 8px clamp(14px,3vh,26px);
+  /* The four tour icons sit on an LED board like the school sites' footer
+     ticker, a strip running from one edge of the screen to the other:
+     unlit amber dots on black, the icons lit up on it (their own dark
+     squares blend in). The descriptions sit below the board in plain
+     type. The board is drawn behind the icons' row, so each icon and its
+     description stay one link. One row on every screen. */
+  .tours-area{--icon:clamp(46px,12vw,92px);--pad:clamp(14px,3vh,24px);position:relative}
+  .tours-area::before{content:"";position:absolute;top:0;left:calc(50% - 50vw);width:100vw;height:calc(var(--icon) + var(--pad) * 2);
          background-color:#000;background-image:radial-gradient(rgba(255,160,40,.075) 1px,transparent 1.5px);background-size:4px 4px;
-         border-top:1px solid #2a1c0b;border-bottom:1px solid #2a1c0b;
+         border-top:1px solid #2a1c0b;border-bottom:1px solid #2a1c0b;box-sizing:border-box;
          box-shadow:inset 0 10px 18px -10px rgba(255,170,60,.12),inset 0 -10px 18px -10px rgba(255,170,60,.12),0 0 24px rgba(255,150,40,.06)}
-  .board::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,rgba(255,255,255,.035),transparent 45%,rgba(0,0,0,.25))}
-  .tours{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;max-width:980px}
+  .tours{position:relative;list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;max-width:980px}
   .tours li{display:flex;justify-content:center;min-width:0}
-  .tour{display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 4px;color:#fff;
+  .tour{display:flex;flex-direction:column;align-items:center;gap:calc(var(--pad) + 12px);padding:var(--pad) 4px 6px;color:#fff;
         text-decoration:none;border-radius:10px;outline-offset:4px}
-  .tour img{width:clamp(46px,12vw,92px);height:clamp(46px,12vw,92px);object-fit:contain;mix-blend-mode:lighten;
+  .tour img{width:var(--icon);height:var(--icon);object-fit:contain;mix-blend-mode:lighten;
             transition:transform .2s ease,filter .2s ease}
-  .tour span{font-size:clamp(8.5px,2vw,13px);line-height:1.4;font-weight:700;color:#ffb238;text-transform:uppercase;
-             text-shadow:0 0 3px rgba(255,170,40,.75)}
+  .tour span{font-size:clamp(8.5px,2vw,13px);line-height:1.4;font-weight:500;color:#ddd;text-transform:uppercase}
   .tour .nw{white-space:nowrap}
   .tour:hover img,.tour:focus-visible img{transform:scale(1.08);filter:brightness(1.25) drop-shadow(0 0 14px rgba(255,170,60,.55))}
-  .tour:hover span,.tour:focus-visible span{color:#ffd28a}
-  /* Phones: all four still on one row; the labels get every pixel. */
+  .tour:hover span,.tour:focus-visible span{color:#ffc46b}
+  /* Phones: all four still on one row; the descriptions get every pixel. */
   @media (max-width:520px){
-    .board{padding-left:2px;padding-right:2px}
     .tours{gap:0}
-    .tour{padding:6px 0;gap:8px}
-    .tour span{font-size:8px;letter-spacing:-.02em;line-height:1.35}
+    .tour{padding-left:0;padding-right:0}
+    .tour span{font-size:8.5px;letter-spacing:-.01em;line-height:1.35}
   }
   @media (prefers-reduced-motion:reduce){ .tour img{transition:none} }
 </style>
@@ -59,7 +59,7 @@
   <p class="tagline">TOUR OUR ONLINE BASEBALL COMMUNITIES</p>
 
   <h2 class="fit">WHERE DO YOU FIT IN?</h2>
-  <div class="board">
+  <div class="tours-area">
   <ul class="tours">
     <li><a class="tour" href="programs/"><img src="img/tour-coach.jpg" alt=""><span>High School<br><span class="nw">Baseball Coach/</span><br><span class="nw">Booster Club</span></span></a></li>
     <li><a class="tour" href="players/"><img src="img/tour-player.jpg" alt=""><span>Pro/College<br>Active Alumni <span class="nw">Baseball Player</span></span></a></li>
