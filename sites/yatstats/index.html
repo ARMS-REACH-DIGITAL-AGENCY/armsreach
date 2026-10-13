@@ -3,69 +3,120 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Tour the YAT?STATS online baseball communities: for high school coaches and boosters, active alumni players, community partners and sponsors, and families and fans.">
+<meta name="description" content="Tracking yesterday's high school stars competing as college and pros today. Tour the YAT?STATS high school alumni baseball online communities: fans and friends, school representatives, players and contributing partners.">
 <link rel="canonical" href="https://yatstats.com/">
 <meta name="theme-color" content="#000000">
 <title>Welcome to YAT?STATS</title>
-<!-- The yatstats.com splash: the visitor picks the guided tour that fits
-     them. Each icon opens that audience's tour (programs/, players/,
-     partners/, fans/). Links are relative so the same file works at
-     yatstats.com and on the agency preview (/sites/yatstats/). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap">
+<!-- The yatstats.com splash. Top: the stadium lights, the taglines and the
+     stacked YAT?STATS logo (top right). Middle: a team celebrating, screened
+     back, with the slogan printed over it. Bottom: "How would you best
+     describe your role in the baseball world?", an LED ticker running edge
+     to edge that scrolls the four tours (each a link: fans/, programs/,
+     players/, partners/), and "Enter the only high school alumni baseball
+     online community platform". Links are relative so the same file works
+     at yatstats.com and on the agency preview (/sites/yatstats/). -->
 <style>
   *{box-sizing:border-box}
-  html,body{margin:0;min-height:100%;background:#000;color:#fff}
-  body{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;
-       font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased}
-  .splash{width:100%;max-width:1100px;padding:48px 12px 56px;text-align:center}
-  html,body{overflow-x:hidden}
-  .welcome{margin:0 0 clamp(14px,3vh,26px);font-size:clamp(19px,4.6vw,34px);font-weight:700;letter-spacing:.02em}
-  .logo{display:block;width:min(84vw,760px);height:auto;margin:0 auto}
-  .tagline{margin:clamp(16px,3vh,28px) 0 0;font-size:clamp(14px,4vw,32px);font-weight:700;letter-spacing:0;white-space:nowrap}
-  .fit{margin:clamp(56px,12vh,120px) 0 clamp(20px,4vh,36px);font-size:clamp(13px,2.6vw,20px);font-weight:500;color:#ddd}
-  /* The four tour icons sit on an LED board like the school sites' footer
-     ticker, a strip running from one edge of the screen to the other:
-     unlit amber dots on black, the icons lit up on it (their own dark
-     squares blend in). The descriptions sit below the board in plain
-     type. The board is drawn behind the icons' row, so each icon and its
-     description stay one link. One row on every screen. */
-  .tours-area{--icon:clamp(46px,12vw,92px);--pad:4px;position:relative}
-  .tours-area::before{content:"";position:absolute;top:0;left:calc(50% - 50vw);width:100vw;height:calc(var(--icon) + var(--pad) * 2);
-         background-color:#000;background-image:radial-gradient(rgba(255,160,40,.075) 1px,transparent 1.5px);background-size:4px 4px;
-         border-top:1px solid #2a1c0b;border-bottom:1px solid #2a1c0b;box-sizing:border-box;
-         box-shadow:inset 0 4px 8px -4px rgba(255,170,60,.14),inset 0 -4px 8px -4px rgba(255,170,60,.14),0 0 16px rgba(255,150,40,.06)}
-  .tours{position:relative;list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;max-width:980px}
-  .tours li{display:flex;justify-content:center;min-width:0}
-  .tour{display:flex;flex-direction:column;align-items:center;gap:calc(var(--pad) + 12px);padding:var(--pad) 4px 6px;color:#fff;
-        text-decoration:none;border-radius:10px;outline-offset:4px}
-  .tour img{width:var(--icon);height:var(--icon);object-fit:contain;mix-blend-mode:lighten;
-            transition:transform .2s ease,filter .2s ease}
-  .tour span{font-size:clamp(8.5px,2vw,13px);line-height:1.4;font-weight:500;color:#ddd;text-transform:uppercase}
-  .tour .nw{white-space:nowrap}
-  .tour:hover img,.tour:focus-visible img{transform:scale(1.04);filter:brightness(1.25) drop-shadow(0 0 14px rgba(255,170,60,.55))}
-  .tour:hover span,.tour:focus-visible span{color:#ffc46b}
-  /* Phones: all four still on one row; the descriptions get every pixel. */
-  @media (max-width:520px){
-    .tours{gap:0}
-    .tour{padding-left:0;padding-right:0}
-    .tour span{font-size:8.5px;letter-spacing:-.01em;line-height:1.35}
+  html,body{margin:0;min-height:100%;background:#000;color:#fff;overflow-x:hidden}
+  body{min-height:100vh;min-height:100dvh;font-family:Montserrat,Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased}
+  .splash{position:relative;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;padding:0 0 28px}
+  /* The stadium lights, fading to black below. */
+  .lights{position:absolute;left:50%;top:0;width:min(100%,1100px);height:clamp(170px,32vh,320px);transform:translateX(-50%);pointer-events:none;
+          -webkit-mask:linear-gradient(#000 40%,transparent),linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);-webkit-mask-composite:source-in;
+          mask:linear-gradient(#000 40%,transparent),linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-composite:intersect}
+  @media (max-width:760px){.lights{-webkit-mask:linear-gradient(#000 40%,transparent);mask:linear-gradient(#000 40%,transparent)}}
+  .lights img{display:block;width:100%;height:100%;object-fit:cover;object-position:center top}
+  .wrap{position:relative;width:100%;max-width:1040px;margin:0 auto;padding:0 clamp(14px,4vw,32px)}
+
+  /* Top right: the taglines over the logo. */
+  .brand{display:flex;flex-direction:column;align-items:flex-end;margin-left:auto;width:clamp(170px,40vw,340px);padding-top:clamp(70px,13vh,130px);text-align:right}
+  @media (min-width:760px){.brand{padding-top:clamp(140px,19vh,190px)}.splash .hero{min-height:clamp(240px,34vh,380px);margin-top:4px}}
+  .brand p{margin:0;font-weight:800;font-size:clamp(11px,2.9vw,18px);line-height:1.25;letter-spacing:.01em;text-transform:uppercase;text-shadow:0 2px 6px rgba(0,0,0,.85)}
+  .brand img{display:block;width:100%;height:auto;margin-top:clamp(4px,1vh,10px)}
+  .brand .connect{margin-top:clamp(4px,1vh,10px);font-size:clamp(8px,2.05vw,14px);color:#ffc46b;white-space:nowrap}
+
+  /* The team celebrating, screened back, with the slogan printed over it. */
+  .hero{position:relative;margin-top:clamp(10px,3vh,34px);min-height:clamp(240px,46vh,480px);display:flex;align-items:flex-start}
+  .hero-photo{position:absolute;inset:0;background:url(img/team-celebration.webp) center 35%/cover no-repeat;opacity:.78}
+  /* The photo melts into the black on every side: no box edges. */
+  .hero-photo::after{content:'';position:absolute;inset:-1px;
+              background:linear-gradient(#000,transparent 22%,transparent 72%,#000),
+                         linear-gradient(90deg,#000,transparent 14%,transparent 86%,#000),
+                         radial-gradient(ellipse at 55% 55%,transparent 45%,rgba(0,0,0,.55) 100%)}
+  .slogan{position:relative;margin:clamp(10px,3vh,36px) 0 0;max-width:min(88%,700px);font-weight:800;font-size:clamp(20px,5.3vw,48px);line-height:1.08;letter-spacing:-.01em;text-transform:uppercase;
+          text-shadow:0 2px 0 rgba(0,0,0,.6),0 4px 18px rgba(0,0,0,.95),0 0 40px rgba(0,0,0,.8)}
+
+  .ask,.enter{margin:0;text-align:center;font-weight:800;text-transform:uppercase;letter-spacing:.01em;font-size:clamp(9.5px,2.55vw,17px);line-height:1.3}
+  .ask{margin-top:clamp(14px,3vh,30px)}
+  .enter{font-weight:600}
+
+  /* The LED ticker: unlit amber dots on black, edge to edge, scrolling the
+     four tours (icon + title, each a link). It pauses under a finger or the
+     mouse, and holds still for anyone who prefers reduced motion. */
+  .ticker{position:relative;width:100vw;left:50%;transform:translateX(-50%);margin:clamp(8px,1.6vh,14px) 0;overflow:hidden;
+          background-color:#000;background-image:radial-gradient(rgba(255,160,40,.09) 1px,transparent 1.5px);background-size:4px 4px;
+          border-top:1px solid #2a1c0b;border-bottom:1px solid #2a1c0b;
+          box-shadow:inset 0 5px 10px -5px rgba(255,170,60,.16),inset 0 -5px 10px -5px rgba(255,170,60,.16),0 0 18px rgba(255,150,40,.07)}
+  .ticker-track{display:flex;width:max-content;animation:tick 26s linear infinite}
+  .ticker:hover .ticker-track,.ticker:focus-within .ticker-track{animation-play-state:paused}
+  .ticker-set{display:flex;align-items:center;flex:none}
+  .tour{display:flex;align-items:center;gap:clamp(8px,2vw,14px);padding:5px clamp(22px,6vw,56px);color:#ffb347;text-decoration:none;white-space:nowrap;
+        font:800 clamp(13px,3.4vw,20px)/1 Montserrat,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;
+        text-shadow:0 0 6px rgba(255,150,40,.75),0 0 14px rgba(255,140,30,.35)}
+  .tour img{width:clamp(40px,10vw,64px);height:clamp(40px,10vw,64px);object-fit:contain;mix-blend-mode:lighten}
+  .tour:hover,.tour:focus-visible{color:#ffd79a;outline:none}
+  .tour:hover img,.tour:focus-visible img{filter:brightness(1.25) drop-shadow(0 0 10px rgba(255,170,60,.55))}
+  @keyframes tick{to{transform:translateX(-50%)}}
+  @media (prefers-reduced-motion:reduce){
+    .ticker-track{animation:none;width:100%;justify-content:center;flex-wrap:wrap}
+    .ticker-set+.ticker-set{display:none}
+    .ticker-set{flex-wrap:wrap;justify-content:center}
   }
-  @media (prefers-reduced-motion:reduce){ .tour img{transition:none} }
 </style>
 </head>
 <body>
 <main class="splash">
-  <p class="welcome">WELCOME TO</p>
-  <h1 style="margin:0"><img class="logo" src="img/yatstats-wordmark-white.png" width="1400" height="243" alt="YAT?STATS"></h1>
-  <p class="tagline">TOUR OUR ONLINE BASEBALL COMMUNITIES</p>
+  <div class="lights" aria-hidden="true"><img src="img/stadium-lights.svg" alt=""></div>
 
-  <h2 class="fit">WHERE DO YOU FIT IN?</h2>
-  <div class="tours-area">
-  <ul class="tours">
-    <li><a class="tour" href="programs/"><img src="img/tour-coach.jpg" alt=""><span>High School<br><span class="nw">Baseball Coach/</span><br><span class="nw">Booster Club</span></span></a></li>
-    <li><a class="tour" href="players/"><img src="img/tour-player.jpg" alt=""><span>Pro/College<br>Active Alumni <span class="nw">Baseball Player</span></span></a></li>
-    <li><a class="tour" href="partners/"><img src="img/tour-partner.jpg" alt=""><span>Community Partner<br>Alumni Sponsor</span></a></li>
-    <li><a class="tour" href="fans/"><img src="img/tour-fan.jpg" alt=""><span>Family/Fan</span></a></li>
-  </ul>
+  <div class="wrap">
+    <header class="brand">
+      <p>Where They YAT?</p>
+      <p>Stories &amp; Stats!</p>
+      <h1 style="margin:0;width:100%"><img src="img/yatstats-logo-stacked.webp" width="900" height="419" alt="YAT?STATS"></h1>
+      <p class="connect">Connect · Contribute · Compete!</p>
+    </header>
+
+    <section class="hero">
+      <div class="hero-photo" aria-hidden="true"></div>
+      <p class="slogan">Tracking yesterday's<br>high school stars<br>competing as<br>college &amp; pros today!</p>
+    </section>
+
+    <p class="ask">How would you best describe your role in the baseball world?</p>
+  </div>
+
+  <nav class="ticker" aria-label="Tour our online baseball communities">
+    <div class="ticker-track">
+      <div class="ticker-set">
+        <a class="tour" href="fans/"><img src="img/tour-fan.jpg" alt="">Fans &amp; Friends</a>
+        <a class="tour" href="programs/"><img src="img/tour-coach.jpg" alt="">School Representative</a>
+        <a class="tour" href="players/"><img src="img/tour-player.jpg" alt="">Player</a>
+        <a class="tour" href="partners/"><img src="img/tour-partner.jpg" alt="">Contributing Partner</a>
+      </div>
+      <!-- The same four again, so the scroll loops without a gap. -->
+      <div class="ticker-set" aria-hidden="true">
+        <a class="tour" href="fans/" tabindex="-1"><img src="img/tour-fan.jpg" alt="">Fans &amp; Friends</a>
+        <a class="tour" href="programs/" tabindex="-1"><img src="img/tour-coach.jpg" alt="">School Representative</a>
+        <a class="tour" href="players/" tabindex="-1"><img src="img/tour-player.jpg" alt="">Player</a>
+        <a class="tour" href="partners/" tabindex="-1"><img src="img/tour-partner.jpg" alt="">Contributing Partner</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <p class="enter">Enter the only high school alumni baseball online community platform</p>
   </div>
 </main>
 </body>
