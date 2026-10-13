@@ -16,22 +16,22 @@
   html,body{margin:0;min-height:100%;background:#000;color:#fff}
   body{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;
        font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased}
-  .splash{width:100%;max-width:1100px;padding:48px 16px 56px;text-align:center}
-  .welcome{margin:0 0 14px;font-size:clamp(16px,2.6vw,24px);font-weight:500;letter-spacing:.02em}
-  .logo{display:block;width:min(86vw,560px);height:auto;margin:0 auto}
-  .tagline{margin:18px 0 0;font-size:clamp(15px,2.5vw,22px);font-weight:500;letter-spacing:.01em}
-  .fit{margin:clamp(56px,12vh,120px) 0 clamp(28px,5vh,44px);font-size:clamp(15px,2.4vw,22px);font-weight:500}
+  .splash{width:100%;max-width:1100px;padding:48px 12px 56px;text-align:center}
+  .welcome{margin:0 0 clamp(14px,3vh,26px);font-size:clamp(19px,4.6vw,34px);font-weight:700;letter-spacing:.02em}
+  .logo{display:block;width:min(84vw,760px);height:auto;margin:0 auto}
+  .tagline{margin:clamp(16px,3vh,28px) 0 0;font-size:clamp(14px,4vw,32px);font-weight:700;letter-spacing:0;white-space:nowrap}
+  .fit{margin:clamp(56px,12vh,120px) 0 clamp(20px,4vh,36px);font-size:clamp(13px,2.6vw,20px);font-weight:500;color:#ddd}
   /* Phone: three across, the fourth centered below (the mockup).
      Wide screens: all four in one row. */
   .tours{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(6,1fr);
-         gap:clamp(28px,6vh,56px) 4px;max-width:980px}
+         gap:clamp(26px,5vh,48px) 4px;max-width:760px}
   .tours li{grid-column:span 2;display:flex;justify-content:center;min-width:0}
   .tours li:nth-child(4){grid-column:3 / span 2}
-  .tour{display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 4px;color:#fff;
+  .tour{display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 4px;color:#fff;
         text-decoration:none;border-radius:10px;outline-offset:4px}
-  .tour img{width:clamp(76px,13vw,118px);height:clamp(76px,13vw,118px);object-fit:contain;
+  .tour img{width:clamp(42px,11vw,84px);height:clamp(42px,11vw,84px);object-fit:contain;
             transition:transform .2s ease,filter .2s ease}
-  .tour span{font-size:clamp(10px,1.7vw,15px);line-height:1.35;font-weight:500;text-transform:uppercase}
+  .tour span{font-size:clamp(8.5px,2.2vw,13px);line-height:1.4;font-weight:500;color:#ddd;text-transform:uppercase}
   .tour:hover img,.tour:focus-visible img{transform:scale(1.08);filter:brightness(1.25) drop-shadow(0 0 14px rgba(255,170,60,.55))}
   .tour:hover span,.tour:focus-visible span{color:#ffc46b}
   @media (min-width:900px){ .tours{grid-template-columns:repeat(4,1fr)} .tours li,.tours li:nth-child(4){grid-column:auto} }
