@@ -222,7 +222,9 @@
       position:absolute!important;
       z-index:7!important;
       right:14px!important;
-      top:13px!important;
+      /* Below the header: the logo sits in the top-right corner at every
+         width. (Phones keep their own spot, set further down.) */
+      top:calc(var(--hh, 46px) + 6px)!important;
       color:#72777c!important;
       font-size:8px!important;
     }
