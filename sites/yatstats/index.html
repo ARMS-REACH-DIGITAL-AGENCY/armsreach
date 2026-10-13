@@ -32,6 +32,7 @@
   .tour img{width:clamp(42px,11vw,84px);height:clamp(42px,11vw,84px);object-fit:contain;
             transition:transform .2s ease,filter .2s ease}
   .tour span{font-size:clamp(8.5px,2.2vw,13px);line-height:1.4;font-weight:500;color:#ddd;text-transform:uppercase}
+  .tour .nw{white-space:nowrap}
   .tour:hover img,.tour:focus-visible img{transform:scale(1.08);filter:brightness(1.25) drop-shadow(0 0 14px rgba(255,170,60,.55))}
   .tour:hover span,.tour:focus-visible span{color:#ffc46b}
   @media (min-width:900px){ .tours{grid-template-columns:repeat(4,1fr)} .tours li,.tours li:nth-child(4){grid-column:auto} }
@@ -47,7 +48,7 @@
   <h2 class="fit">WHERE DO YOU FIT IN?</h2>
   <ul class="tours">
     <li><a class="tour" href="programs/"><img src="img/tour-coach.jpg" alt=""><span>High School Baseball<br>Head Coach/Booster</span></a></li>
-    <li><a class="tour" href="players/"><img src="img/tour-player.jpg" alt=""><span>College/Professional<br>Active Alumni Baseball Player</span></a></li>
+    <li><a class="tour" href="players/"><img src="img/tour-player.jpg" alt=""><span>College/Professional<br>Active Alumni <span class="nw">Baseball Player</span></span></a></li>
     <li><a class="tour" href="partners/"><img src="img/tour-partner.jpg" alt=""><span>Community Partner<br>Alumni Sponsor</span></a></li>
     <li><a class="tour" href="fans/"><img src="img/tour-fan.jpg" alt=""><span>Family/Fan</span></a></li>
   </ul>
