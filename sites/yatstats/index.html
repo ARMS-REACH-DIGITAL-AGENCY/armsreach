@@ -6,10 +6,10 @@
 <meta name="description" content="Tracking yesterday's high school stars competing as college and pros today. Tour the YAT?STATS high school alumni baseball online communities: fans and friends, school representatives, players and contributing partners.">
 <link rel="canonical" href="https://yatstats.com/">
 <meta name="theme-color" content="#000000">
-<title>Welcome to YAT?STATS</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap">
+  <title>Welcome to YAT?STATS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Montserrat:wght@600;800&display=swap">
 <!-- The yatstats.com splash. Top: the stadium lights, the taglines and the
      stacked YAT?STATS logo (top right). Middle: a team celebrating, screened
      back, with the slogan printed over it. Bottom: "How would you best
@@ -64,12 +64,38 @@
   .ticker:hover .ticker-track,.ticker:focus-within .ticker-track{animation-play-state:paused}
   .ticker-set{display:flex;align-items:center;flex:none}
   .tour{display:flex;align-items:center;gap:clamp(8px,2vw,14px);padding:5px clamp(22px,6vw,56px);color:#ffb347;text-decoration:none;white-space:nowrap;
-        font:800 clamp(13px,3.4vw,20px)/1 Montserrat,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;
+        font:400 clamp(13px,3.4vw,20px)/1.1 "DotGothic16",monospace;letter-spacing:.02em;text-transform:uppercase;
         text-shadow:0 0 6px rgba(255,150,40,.75),0 0 14px rgba(255,140,30,.35)}
   .tour img{width:clamp(40px,10vw,64px);height:clamp(40px,10vw,64px);object-fit:contain;mix-blend-mode:lighten}
   .tour:hover,.tour:focus-visible{color:#ffd79a;outline:none}
   .tour:hover img,.tour:focus-visible img{filter:brightness(1.25) drop-shadow(0 0 10px rgba(255,170,60,.55))}
   @keyframes tick{to{transform:translateX(-50%)}}
+  @media (max-width:760px){
+    .splash{height:100vh;height:100svh;height:100dvh;min-height:0;padding:0 0 max(4px,env(safe-area-inset-bottom));overflow:hidden}
+    .intro{display:flex;flex:1 1 auto;flex-direction:column;justify-content:space-between;min-height:0}
+    .brand{flex:0 0 auto;width:clamp(154px,39vw,290px);padding-top:clamp(42px,8svh,70px)}
+    .brand p{font-size:clamp(9px,2.45vw,13px)}
+    .brand img{width:95%;margin-top:clamp(3px,.6svh,6px)}
+    .brand .connect{margin-top:clamp(3px,.6svh,6px);font-size:clamp(7px,1.8vw,10px)}
+    .hero{flex:1 1 auto;min-height:clamp(190px,34svh,300px);max-height:clamp(250px,36svh,320px);margin-top:clamp(5px,.8svh,9px)}
+    .slogan{max-width:94%;margin-top:clamp(8px,1.8svh,14px);font-size:clamp(18px,4.7vw,28px);line-height:1.04}
+    .ask{max-width:100%;margin:clamp(5px,.8svh,8px) auto 0;font-size:clamp(8px,2.6vw,10px);line-height:1.15;white-space:nowrap}
+    .ticker{flex:0 0 auto;margin:clamp(4px,.7svh,7px) 0}
+    .tour{gap:clamp(5px,1.3vw,8px);padding:4px clamp(10px,3vw,20px);font-size:clamp(9px,2.8vw,12px);letter-spacing:.01em}
+    .tour img{width:clamp(25px,7vw,32px);height:clamp(25px,7vw,32px)}
+    .footer-wrap{flex:0 0 auto}
+    .enter{font-size:clamp(7px,2vw,9px);line-height:1.15}
+  }
+  @media (max-width:760px) and (max-height:700px){
+    .brand{padding-top:clamp(36px,7svh,52px)}
+    .hero{min-height:clamp(168px,29svh,215px);max-height:clamp(200px,31svh,230px)}
+    .slogan{margin-top:clamp(6px,1.4svh,10px);font-size:clamp(16px,4.6vw,23px)}
+    .ask{margin-top:4px;font-size:clamp(7.5px,2.4vw,9px)}
+    .ticker{margin:3px 0}
+    .tour{padding:3px clamp(8px,2.6vw,14px);font-size:clamp(8px,2.4vw,10px)}
+    .tour img{width:clamp(23px,6.5vw,28px);height:clamp(23px,6.5vw,28px)}
+    .enter{font-size:clamp(7px,1.8vw,8px)}
+  }
   @media (prefers-reduced-motion:reduce){
     .ticker-track{animation:none;width:100%;justify-content:center;flex-wrap:wrap}
     .ticker-set+.ticker-set{display:none}
@@ -81,7 +107,7 @@
 <main class="splash">
   <div class="lights" aria-hidden="true"><img src="img/stadium-lights.svg" alt=""></div>
 
-  <div class="wrap">
+  <div class="wrap intro">
     <header class="brand">
       <p>Where They YAT?</p>
       <p>Stories &amp; Stats!</p>
@@ -94,7 +120,7 @@
       <p class="slogan">Tracking yesterday's<br>high school stars<br>competing as<br>college &amp; pros today!</p>
     </section>
 
-    <p class="ask">How would you best describe your role in the baseball world?</p>
+    <p class="ask">What is your role in the baseball world?</p>
   </div>
 
   <nav class="ticker" aria-label="Tour our online baseball communities">
@@ -115,7 +141,7 @@
     </div>
   </nav>
 
-  <div class="wrap">
+  <div class="wrap footer-wrap">
     <p class="enter">Enter the only high school alumni baseball online community platform</p>
   </div>
 </main>
