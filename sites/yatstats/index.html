@@ -100,7 +100,7 @@
     :root{--yat-message-h:calc(104px / 3);--yat-mascot-w:68px}
     .splash{height:100vh;height:100svh;height:100dvh;min-height:0;padding:0 0 max(4px,env(safe-area-inset-bottom));overflow:hidden}
     .intro{display:flex;flex:0 0 min(80svh,calc(114.5vw + 14px));height:min(80svh,calc(114.5vw + 14px));flex-direction:column;justify-content:space-between;min-height:0}
-    .brand{flex:0 0 auto;width:clamp(112px,36vw,290px);margin-left:auto;margin-right:clamp(28px,8vw,52px);padding-top:clamp(70px,28vw,113px);padding-bottom:calc(clamp(2px,.4svh,4px) + clamp(5.8px,1.82vw,9px));transform:translateY(clamp(14px,6vw,24px))}
+    .brand{position:relative;z-index:3;flex:0 0 auto;width:clamp(112px,36vw,290px);margin-left:auto;margin-right:clamp(28px,8vw,52px);padding-top:clamp(70px,28vw,113px);padding-bottom:calc(clamp(2px,.4svh,4px) + clamp(5.8px,1.82vw,9px));transform:translateY(clamp(30px,10vw,40px))}
     .brand>p:not(.connect){width:100%;text-align:left;transform:none}
     .brand img{width:100%;margin-top:0}
     .hero{isolation:isolate;flex:1 1 auto;min-height:clamp(168px,56vw,220px);max-height:clamp(190px,60vw,236px);margin-top:clamp(5px,.8svh,9px)}
@@ -113,7 +113,8 @@
     .community-tagline span{display:block}
     .slogan{position:relative;left:auto;top:auto;z-index:auto;transform:none;width:max-content;max-width:100%;margin:0;font-size:inherit;line-height:1.12;-webkit-text-stroke:0;text-shadow:0 1px 0 #000,0 2px 6px rgba(0,0,0,.95)}
     .metadata-copy{padding:1px 3px 1px 7px}
-    .ask{width:100%;font-size:clamp(7px,2.1vw,11px);line-height:1.1;white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+    .ask{width:100%;font-size:clamp(7px,2.1vw,11px);line-height:1.1;white-space:normal;display:block}
+    .ask-second-sentence{display:block}
     .ticker{flex-basis:var(--yat-dock-h);height:var(--yat-dock-h);margin:0}
     .tour{gap:clamp(10px,2.6vw,16px);padding:0 clamp(16px,4vw,24px);font-size:clamp(16px,5.2vw,22px);letter-spacing:.01em}
     .tour img{width:clamp(26px,7vw,34px);height:clamp(26px,7vw,34px)}
@@ -128,6 +129,7 @@
   }
   @media (max-width:300px){
     .intro{flex-basis:min(80svh,calc(120vw + 14px));height:min(80svh,calc(120vw + 14px))}
+    .brand{transform:translateY(clamp(14px,6vw,24px))}
   }
   @media (prefers-reduced-motion:reduce){
     .ticker-track{animation:none;width:100%;justify-content:center;flex-wrap:wrap}
@@ -160,21 +162,21 @@
 
 <footer class="sticky-dock">
   <div class="metadata-strip">
-    <div class="metadata-copy"><p class="ask">See what YAT?STATS is all about. Click on your role in the world of baseball.</p></div>
+    <div class="metadata-copy"><p class="ask"><span>See what YAT?STATS is all about.</span> <span class="ask-second-sentence">Click on your role in the world of baseball.</span></p></div>
   </div>
   <nav class="ticker" aria-label="Tour our online baseball communities">
     <div class="ticker-track">
       <div class="ticker-set">
         <a class="tour" href="fans/"><img src="img/tour-fan.jpg" alt="">Fans &amp; Friends</a>
-        <a class="tour" href="programs/"><img src="img/tour-coach.jpg" alt="">School Representative</a>
-        <a class="tour" href="players/"><img src="img/tour-player.jpg" alt="">Baseball Player</a>
+        <a class="tour" href="programs/"><img src="img/tour-coach.jpg" alt="">High School Baseball Coach</a>
+        <a class="tour" href="players/"><img src="img/tour-player.jpg" alt="">College/Pro Baseball Player</a>
         <a class="tour" href="partners/"><img src="img/tour-partner.jpg" alt="">Contributing Partner</a>
       </div>
       <!-- The same four again, so the scroll loops without a gap. -->
       <div class="ticker-set" aria-hidden="true">
         <a class="tour" href="fans/" tabindex="-1"><img src="img/tour-fan.jpg" alt="">Fans &amp; Friends</a>
-        <a class="tour" href="programs/" tabindex="-1"><img src="img/tour-coach.jpg" alt="">School Representative</a>
-        <a class="tour" href="players/" tabindex="-1"><img src="img/tour-player.jpg" alt="">Baseball Player</a>
+        <a class="tour" href="programs/" tabindex="-1"><img src="img/tour-coach.jpg" alt="">High School Baseball Coach</a>
+        <a class="tour" href="players/" tabindex="-1"><img src="img/tour-player.jpg" alt="">College/Pro Baseball Player</a>
         <a class="tour" href="partners/" tabindex="-1"><img src="img/tour-partner.jpg" alt="">Contributing Partner</a>
       </div>
     </div>
