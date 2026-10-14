@@ -85,7 +85,7 @@
     .hero-photo::after{background:linear-gradient(#000,transparent 22%,transparent 72%,#000),linear-gradient(90deg,#000,transparent 14%,transparent 94%,#000),radial-gradient(ellipse at 86% 22%,transparent 50%,rgba(0,0,0,.7) 100%)}
     .slogan-wide{display:none}
     .slogan-phone{display:inline}
-    .slogan{left:clamp(28px,10vw,50px);transform:translateY(-12.5svh);max-width:94%;margin-top:clamp(8px,1.8svh,14px);font-size:clamp(14px,4vw,19px);line-height:1.12;-webkit-text-stroke:.35px rgba(0,0,0,.95)}
+    .slogan{left:clamp(34px,12vw,54px);transform:translateY(-1.5svh);max-width:94%;margin-top:clamp(8px,1.8svh,14px);font-size:clamp(14px,4vw,19px);line-height:1.12;-webkit-text-stroke:.35px rgba(0,0,0,.95)}
     .ask{position:relative;z-index:2;max-width:100%;margin:clamp(5px,.8svh,8px) auto 0;font-size:clamp(9px,3vw,12px);line-height:1.15;white-space:nowrap;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.95)}
     .ticker{flex:0 0 auto;margin:clamp(14px,2svh,18px) 0 4px}
     .tour{gap:clamp(5px,1.3vw,8px);padding:4px clamp(10px,3vw,20px);font-size:clamp(9px,2.8vw,12px);letter-spacing:.01em}
@@ -96,12 +96,15 @@
   @media (max-width:760px) and (max-height:700px){
     .brand{padding-top:clamp(72px,16svh,110px)}
     .hero{min-height:clamp(168px,29svh,215px);max-height:clamp(200px,31svh,230px)}
-    .slogan{margin-top:clamp(6px,1.4svh,10px);font-size:clamp(13px,4vw,18px)}
+    .slogan{margin-top:clamp(6px,1.4svh,10px);font-size:clamp(13px,4vw,18px);transform:translateY(-4svh)}
     .ask{margin-top:4px;font-size:clamp(8px,2.8vw,10px)}
     .ticker{margin:clamp(10px,1.5svh,14px) 0 3px}
     .tour{padding:3px clamp(8px,2.6vw,14px);font-size:clamp(8px,2.4vw,10px)}
     .tour img{width:clamp(23px,6.5vw,28px);height:clamp(23px,6.5vw,28px)}
     .enter{font-size:clamp(7px,1.8vw,8px)}
+  }
+  @media (max-width:340px) and (max-height:700px){
+    .slogan{transform:translateY(-2svh)}
   }
   @media (prefers-reduced-motion:reduce){
     .ticker-track{animation:none;width:100%;justify-content:center;flex-wrap:wrap}
