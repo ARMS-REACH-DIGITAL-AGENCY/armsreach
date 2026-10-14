@@ -51,6 +51,7 @@
           text-shadow:0 2px 0 rgba(0,0,0,.6),0 4px 18px rgba(0,0,0,.95),0 0 40px rgba(0,0,0,.8)}
 
   .community-tagline{max-width:34ch;margin:.35em 0 0;color:rgba(255,255,255,.94);font:500 clamp(8px,.48em,20px)/1.3 Montserrat,Arial,sans-serif;text-shadow:0 2px 8px rgba(0,0,0,.9)}
+  .community-tagline span{display:block}
 
   /* The LED ticker: unlit amber dots on black, edge to edge, scrolling the
      four tours (icon + title, each a link). It pauses under a finger or the
@@ -91,7 +92,7 @@
     .headline-group{font-size:clamp(23px,3.4vw,30px)}
   }
   @media (min-width:761px){
-    .headline-group{margin-left:clamp(12px,2vw,28px);transform:translateY(-clamp(16px,3vh,28px))}
+    .headline-group{margin-left:clamp(12px,2vw,28px);transform:translateY(clamp(5px,.6vh,12px))}
     .hero-photo{bottom:-22vh}
     .hero-photo::after{background:linear-gradient(rgba(0,0,0,.10),transparent 14%,transparent 58%,#000 78%),linear-gradient(90deg,#000,transparent 14%,transparent 86%,#000),radial-gradient(ellipse at 82% 30%,transparent 40%,rgba(0,0,0,.36) 100%)}
   }
@@ -107,10 +108,9 @@
     .hero-photo{inset:0 0 calc(-1 * clamp(110px,25svh,200px));z-index:-1;opacity:1;background-image:linear-gradient(rgba(0,0,0,.68),rgba(0,0,0,.68)),url(img/team-celebration.webp);background-position:center,95% 35%;background-size:cover,cover;background-repeat:no-repeat}
     .hero-photo::before{content:'';position:absolute;inset:0;pointer-events:none;background:url(img/team-celebration.webp) 95% 35%/cover no-repeat;opacity:.85;filter:saturate(1.3) contrast(1.08) brightness(1.15);-webkit-mask-image:radial-gradient(ellipse 44% 56% at 72% 38%,#000 0%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 44% 56% at 72% 38%,#000 0%,#000 30%,transparent 100%);mix-blend-mode:normal}
     .hero-photo::after{background:linear-gradient(#000,transparent 22%,transparent 76%,rgba(0,0,0,.72)),linear-gradient(90deg,#000,transparent 14%,transparent 94%,#000),linear-gradient(90deg,rgba(0,0,0,.2) 0%,rgba(0,0,0,.1) 56%,transparent 82%),radial-gradient(ellipse at 86% 22%,transparent 53%,rgba(0,0,0,.55) 100%)}
-    .headline-group{position:fixed;left:5.5vw;top:calc(min(55svh,104vw) - 6.72em - 28px);z-index:2;width:max-content;max-width:84vw;margin:0;font-size:clamp(14px,4vw,19px);transform:none}
+    .headline-group{position:fixed;left:5.5vw;top:calc(min(55svh,104vw) - 6.72em - 28px);z-index:2;width:max-content;max-width:84vw;margin:0;font-size:clamp(14px,4vw,19px);transform:translateY(clamp(8px,3vw,12px))}
     .eyebrow{transform:translateY(-.22em);margin:0 0 .2em;font-size:clamp(7px,.4em,16px);line-height:1.1;letter-spacing:.02em;white-space:nowrap}
     .community-tagline{max-width:74vw;margin:.35em 0 0;font-size:clamp(8px,.48em,20px);line-height:1.25}
-    .community-tagline span{display:block}
     .slogan{position:relative;left:auto;top:auto;z-index:auto;transform:none;width:max-content;max-width:100%;margin:0;font-size:inherit;line-height:1.12;-webkit-text-stroke:0;text-shadow:0 1px 0 #000,0 2px 6px rgba(0,0,0,.95)}
     .metadata-copy{padding:1px 3px 1px 7px}
     .ask{width:100%;font-size:clamp(7px,2.1vw,11px);line-height:1.1;white-space:normal;display:block}
@@ -154,7 +154,7 @@
       <div class="headline-group">
         <p class="eyebrow">Connect. Contribute. Reminisce.</p>
       <p class="slogan" aria-label="Tracking yesterday's high school stars competing as college and professionals today!"><span aria-hidden="true">Tracking<br>yesterday's<br>high school<br>stars competing<br>as college and<br>professionals today!</span></p>
-        <p class="community-tagline"><span>Experience the World's</span> <span>Only Online High School</span> <span>BASEBALL ALUMNI Community.</span></p>
+        <p class="community-tagline"><span>Experience the World's</span><span>Only High School Baseball</span><span>Online Alumni Community</span></p>
       </div>
     </section>
   </div>
