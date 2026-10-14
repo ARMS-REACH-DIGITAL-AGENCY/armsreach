@@ -66,11 +66,12 @@
           background-color:#000;background-image:radial-gradient(rgba(255,160,40,.09) 1px,transparent 1.5px);background-size:4px 4px;
           border-top:1px solid #2a1c0b;border-bottom:1px solid #2a1c0b;
           box-shadow:inset 0 5px 10px -5px rgba(255,170,60,.16),inset 0 -5px 10px -5px rgba(255,170,60,.16),0 0 18px rgba(255,150,40,.07)}
-  .ticker-track{display:flex;height:100%;width:max-content;animation:tick 26s linear infinite}
+  .ticker::before{content:"";position:absolute;z-index:2;top:0;bottom:0;left:0;width:calc(var(--yat-mascot-w) + 7px);pointer-events:none;background:linear-gradient(90deg,#000 0%,rgba(0,0,0,.94) 42%,rgba(0,0,0,.62) 70%,transparent 100%)}
+  .ticker-track{position:relative;z-index:1;display:flex;height:100%;width:max-content;animation:tick 26s linear infinite}
   .ticker:hover .ticker-track,.ticker:focus-within .ticker-track{animation-play-state:paused}
   .ticker-set{display:flex;align-items:center;height:100%;flex:none}
-  .tour{display:flex;align-items:center;gap:clamp(8px,2vw,14px);padding:5px clamp(22px,6vw,56px);color:#ffb347;text-decoration:none;white-space:nowrap;
-        height:100%;font:700 clamp(11px,1.45vw,16px)/1 "Doto",monospace;letter-spacing:.02em;text-transform:uppercase;
+  .tour{display:flex;align-items:center;gap:clamp(16px,4vw,28px);padding:5px clamp(30px,7vw,70px);color:#ffb347;text-decoration:none;white-space:nowrap;
+        height:100%;font:700 clamp(16px,2.9vw,32px)/1 "Doto",monospace;letter-spacing:.02em;text-transform:uppercase;
         text-shadow:0 0 6px rgba(255,150,40,.75),0 0 14px rgba(255,140,30,.35)}
   .tour img{width:clamp(34px,3.4vw,44px);height:clamp(34px,3.4vw,44px);object-fit:contain;mix-blend-mode:lighten}
   .tour:hover,.tour:focus-visible{color:#ffd79a;outline:none}
@@ -98,7 +99,7 @@
     :root{--yat-message-h:calc(104px / 3);--yat-mascot-w:68px}
     .splash{height:100vh;height:100svh;height:100dvh;min-height:0;padding:0 0 max(4px,env(safe-area-inset-bottom));overflow:hidden}
     .intro{display:flex;flex:0 0 min(80svh,calc(114.5vw + 14px));height:min(80svh,calc(114.5vw + 14px));flex-direction:column;justify-content:space-between;min-height:0}
-    .brand{flex:0 0 auto;width:clamp(112px,36vw,290px);margin-left:auto;margin-right:clamp(5px,1.4vw,18px);padding-top:clamp(70px,28vw,113px);padding-bottom:calc(clamp(2px,.4svh,4px) + clamp(5.8px,1.82vw,9px))}
+    .brand{flex:0 0 auto;width:clamp(112px,36vw,290px);margin-left:auto;margin-right:clamp(28px,8vw,52px);padding-top:clamp(70px,28vw,113px);padding-bottom:calc(clamp(2px,.4svh,4px) + clamp(5.8px,1.82vw,9px));transform:translateY(clamp(10px,4vw,18px))}
     .brand>p:not(.connect){width:100%;text-align:left;transform:none}
     .brand img{width:100%;margin-top:0}
     .hero{isolation:isolate;flex:1 1 auto;min-height:clamp(168px,56vw,220px);max-height:clamp(190px,60vw,236px);margin-top:clamp(5px,.8svh,9px)}
@@ -113,7 +114,7 @@
     .metadata-copy{padding:1px 3px 1px 7px}
     .ask{font-size:clamp(7px,2.1vw,11px)}
     .ticker{flex-basis:var(--yat-dock-h);height:var(--yat-dock-h);margin:0}
-    .tour{gap:clamp(5px,1.3vw,8px);padding:0 clamp(10px,3vw,20px);font-size:clamp(8px,2.6vw,11px);letter-spacing:.01em}
+    .tour{gap:clamp(10px,2.6vw,16px);padding:0 clamp(16px,4vw,24px);font-size:clamp(16px,5.2vw,22px);letter-spacing:.01em}
     .tour img{width:clamp(26px,7vw,34px);height:clamp(26px,7vw,34px)}
   }
   @media (max-width:760px) and (max-height:700px){
@@ -121,7 +122,7 @@
     .hero{min-height:clamp(168px,29svh,215px);max-height:clamp(200px,31svh,230px)}
     .headline-group{font-size:clamp(13px,4vw,18px);top:calc(min(55svh,104vw) - 6.72em - 28px)}
     .community-tagline{margin-top:.35em;font-size:clamp(8px,.48em,20px)}
-    .tour{padding:0 clamp(8px,2.6vw,14px);font-size:clamp(8px,2.4vw,10px)}
+    .tour{padding:0 clamp(14px,3.8vw,22px);font-size:clamp(16px,4.8vw,20px)}
     .tour img{width:clamp(23px,6.5vw,28px);height:clamp(23px,6.5vw,28px)}
   }
   @media (max-width:300px){
@@ -165,14 +166,14 @@
       <div class="ticker-set">
         <a class="tour" href="fans/"><img src="img/tour-fan.jpg" alt="">Fans &amp; Friends</a>
         <a class="tour" href="programs/"><img src="img/tour-coach.jpg" alt="">School Representative</a>
-        <a class="tour" href="players/"><img src="img/tour-player.jpg" alt="">Player</a>
+        <a class="tour" href="players/"><img src="img/tour-player.jpg" alt="">Baseball Player</a>
         <a class="tour" href="partners/"><img src="img/tour-partner.jpg" alt="">Contributing Partner</a>
       </div>
       <!-- The same four again, so the scroll loops without a gap. -->
       <div class="ticker-set" aria-hidden="true">
         <a class="tour" href="fans/" tabindex="-1"><img src="img/tour-fan.jpg" alt="">Fans &amp; Friends</a>
         <a class="tour" href="programs/" tabindex="-1"><img src="img/tour-coach.jpg" alt="">School Representative</a>
-        <a class="tour" href="players/" tabindex="-1"><img src="img/tour-player.jpg" alt="">Player</a>
+        <a class="tour" href="players/" tabindex="-1"><img src="img/tour-player.jpg" alt="">Baseball Player</a>
         <a class="tour" href="partners/" tabindex="-1"><img src="img/tour-partner.jpg" alt="">Contributing Partner</a>
       </div>
     </div>
