@@ -35,6 +35,7 @@
   .brand{display:flex;flex-direction:column;align-items:flex-start;margin-left:auto;width:clamp(170px,40vw,340px);padding-top:clamp(70px,13vh,130px);text-align:left}
   @media (min-width:760px){.brand{padding-top:clamp(140px,19vh,190px)}.splash .hero{min-height:clamp(240px,34vh,380px);margin-top:4px}}
   .brand p{margin:0;font-weight:800;font-size:clamp(11px,2.9vw,18px);line-height:1.25;letter-spacing:.01em;text-transform:uppercase;text-shadow:0 2px 6px rgba(0,0,0,.85)}
+  .brand>p:not(.connect){width:80%;text-align:right}
   .brand img{display:block;width:100%;height:auto;margin-top:clamp(4px,1vh,10px)}
   .brand h1{margin:0;width:100%}
   .brand .connect{margin-top:clamp(4px,1vh,10px);font-size:clamp(8px,2.05vw,14px);color:#ffc46b;white-space:nowrap}
@@ -76,11 +77,11 @@
     .intro{display:flex;flex:1 1 auto;flex-direction:column;justify-content:space-between;min-height:0}
     .brand{flex:0 0 auto;width:clamp(154px,39vw,290px);padding-top:clamp(42px,8svh,70px)}
     .brand p{font-size:clamp(9px,2.45vw,13px)}
-    .brand img{width:95%;margin-top:clamp(3px,.6svh,6px)}
+    .brand img{width:95%;margin-top:1px}
     .brand .connect{margin-top:clamp(3px,.6svh,6px);font-size:clamp(7px,1.8vw,10px)}
     .hero{isolation:isolate;flex:1 1 auto;min-height:clamp(190px,34svh,300px);max-height:clamp(250px,36svh,320px);margin-top:clamp(5px,.8svh,9px)}
     .hero-photo{inset:0 0 calc(-1 * clamp(78px,17svh,145px));z-index:-1}
-    .slogan{max-width:94%;margin-top:clamp(8px,1.8svh,14px);font-size:clamp(18px,4.7vw,28px);line-height:1.04}
+    .slogan{left:clamp(6px,1.6vw,10px);transform:translateY(-11svh);max-width:94%;margin-top:clamp(8px,1.8svh,14px);font-size:clamp(15px,4vw,22px);line-height:1.04}
     .ask{position:relative;z-index:2;max-width:100%;margin:clamp(5px,.8svh,8px) auto 0;font-size:clamp(8px,2.6vw,10px);line-height:1.15;white-space:nowrap;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.95)}
     .ticker{flex:0 0 auto;margin:clamp(4px,.7svh,7px) 0}
     .tour{gap:clamp(5px,1.3vw,8px);padding:4px clamp(10px,3vw,20px);font-size:clamp(9px,2.8vw,12px);letter-spacing:.01em}
@@ -91,7 +92,7 @@
   @media (max-width:760px) and (max-height:700px){
     .brand{padding-top:clamp(36px,7svh,52px)}
     .hero{min-height:clamp(168px,29svh,215px);max-height:clamp(200px,31svh,230px)}
-    .slogan{margin-top:clamp(6px,1.4svh,10px);font-size:clamp(16px,4.6vw,23px)}
+    .slogan{margin-top:clamp(6px,1.4svh,10px);font-size:clamp(14px,4vw,20px)}
     .ask{margin-top:4px;font-size:clamp(7.5px,2.4vw,9px)}
     .ticker{margin:3px 0}
     .tour{padding:3px clamp(8px,2.6vw,14px);font-size:clamp(8px,2.4vw,10px)}
