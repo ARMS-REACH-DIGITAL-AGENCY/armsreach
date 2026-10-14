@@ -73,18 +73,19 @@
   @keyframes tick{to{transform:translateX(-50%)}}
   @media (max-width:760px){
     .splash{height:100vh;height:100svh;height:100dvh;min-height:0;padding:0 0 max(4px,env(safe-area-inset-bottom));overflow:hidden}
-    .intro{display:flex;flex:1 1 auto;flex-direction:column;justify-content:space-between;min-height:0}
+    .intro{display:flex;flex:0 0 80svh;height:80svh;flex-direction:column;justify-content:space-between;min-height:0}
     .brand{flex:0 0 auto;width:clamp(112px,36vw,290px);margin-right:clamp(38px,12vw,120px);padding-top:clamp(72px,16svh,135px)}
     .brand p{font-size:clamp(7px,2.1vw,11px)}
+    .brand>p:not(.connect){transform:translateX(clamp(-45px,-9vw,-28px))}
     .brand img{width:100%;margin-top:1px}
     .brand .connect{margin-top:clamp(2px,.4svh,4px);font-size:clamp(6px,1.6vw,9px)}
     .hero{isolation:isolate;flex:1 1 auto;min-height:clamp(190px,34svh,300px);max-height:clamp(250px,36svh,320px);margin-top:clamp(5px,.8svh,9px)}
-    .hero-photo{inset:calc(-1 * clamp(60px,12svh,95px)) 0 calc(-1 * clamp(78px,17svh,145px));z-index:-1;opacity:.72;background-position:55% 35%}
+    .hero-photo{inset:calc(-1 * clamp(60px,12svh,95px)) 0 calc(-1 * clamp(78px,17svh,145px));z-index:-1;opacity:.15;background-position:55% 35%}
     .hero-photo::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 86% 17%,rgba(255,255,255,.44),rgba(255,255,255,.12) 22%,transparent 44%);mix-blend-mode:screen}
     .hero-photo::after{background:linear-gradient(#000,transparent 22%,transparent 72%,#000),linear-gradient(90deg,#000,transparent 14%,transparent 94%,#000),radial-gradient(ellipse at 86% 22%,transparent 50%,rgba(0,0,0,.7) 100%)}
     .slogan-wide{display:none}
     .slogan-phone{display:inline}
-    .slogan{left:clamp(28px,10vw,50px);transform:translateY(-14.5svh);max-width:94%;margin-top:clamp(8px,1.8svh,14px);font-size:clamp(14px,4vw,19px);line-height:1.12;-webkit-text-stroke:.35px rgba(0,0,0,.95)}
+    .slogan{left:clamp(28px,10vw,50px);transform:translateY(-12.5svh);max-width:94%;margin-top:clamp(8px,1.8svh,14px);font-size:clamp(14px,4vw,19px);line-height:1.12;-webkit-text-stroke:.35px rgba(0,0,0,.95)}
     .ask{position:relative;z-index:2;max-width:100%;margin:clamp(5px,.8svh,8px) auto 0;font-size:clamp(9px,3vw,12px);line-height:1.15;white-space:nowrap;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.95)}
     .ticker{flex:0 0 auto;margin:clamp(14px,2svh,18px) 0 4px}
     .tour{gap:clamp(5px,1.3vw,8px);padding:4px clamp(10px,3vw,20px);font-size:clamp(9px,2.8vw,12px);letter-spacing:.01em}
