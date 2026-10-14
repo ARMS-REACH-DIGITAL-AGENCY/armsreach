@@ -29,9 +29,9 @@
   .wrap{position:relative;width:100%;max-width:1040px;margin:0 auto;padding:0 clamp(14px,4vw,32px)}
 
   /* Brand copy stays anchored to the wordmark; desktop content occupies the left side. */
-  .brand{display:flex;flex-direction:column;align-items:flex-start;margin-left:auto;margin-right:0;width:clamp(170px,40vw,340px);padding-top:clamp(70px,13vh,130px);text-align:left}
+  .brand{container-type:inline-size;display:flex;flex-direction:column;align-items:flex-start;margin-left:auto;margin-right:0;width:clamp(170px,40vw,340px);padding-top:clamp(70px,13vh,130px);text-align:left}
   @media (min-width:760px){.brand{padding-top:clamp(96px,12vh,144px)}.splash .hero{min-height:clamp(240px,34vh,380px);margin-top:4px}}
-  .brand p{margin:0;font-weight:800;font-size:clamp(11px,2.9vw,18px);line-height:1.25;letter-spacing:.01em;text-transform:uppercase;text-shadow:0 2px 6px rgba(0,0,0,.85)}
+  .brand p{margin:0;font-weight:800;font-size:clamp(7px,5.3cqi,18px);line-height:1.25;letter-spacing:.01em;text-transform:uppercase;text-shadow:0 2px 6px rgba(0,0,0,.85)}
   .brand>p:not(.connect){width:100%;text-align:left}
   .brand img{display:block;width:100%;height:auto;margin-top:clamp(4px,1vh,10px)}
   .brand h1{margin:0;width:100%}
@@ -45,13 +45,13 @@
               background:linear-gradient(rgba(0,0,0,.10),transparent 14%,transparent 82%,#000),
                          linear-gradient(90deg,#000,transparent 14%,transparent 86%,#000),
                          radial-gradient(ellipse at 82% 30%,transparent 40%,rgba(0,0,0,.36) 100%)}
-  .headline-group{position:relative;z-index:1;width:min(72%,760px);margin-top:clamp(4px,.5vh,8px)}
-  .eyebrow{transform:translateY(-4px);margin:0 0 8px;color:#ffc46b;font-weight:800;font-size:clamp(10px,.95vw,13px);line-height:1.1;letter-spacing:.04em;text-transform:uppercase;text-shadow:0 2px 6px rgba(0,0,0,.85)}
-  .slogan{position:relative;width:100%;margin:0;max-width:100%;font-weight:800;font-size:clamp(20px,5.3vw,48px);line-height:1.08;letter-spacing:-.01em;text-transform:uppercase;
+  .headline-group{position:relative;z-index:1;width:min(72%,760px);margin-top:clamp(4px,.5vh,8px);font-size:clamp(20px,3.1vw,40px)}
+  .eyebrow{transform:translateY(-.22em);margin:0 0 .2em;color:#ffc46b;font-weight:800;font-size:clamp(7px,.4em,16px);line-height:1.1;letter-spacing:.04em;text-transform:uppercase;text-shadow:0 2px 6px rgba(0,0,0,.85)}
+  .slogan{position:relative;width:100%;margin:0;max-width:100%;font-weight:800;font-size:inherit;line-height:1.08;letter-spacing:-.01em;text-transform:uppercase;
           text-shadow:0 2px 0 rgba(0,0,0,.6),0 4px 18px rgba(0,0,0,.95),0 0 40px rgba(0,0,0,.8)}
   .slogan-phone{display:none}
 
-  .community-tagline{max-width:34ch;margin:10px 0 0;color:rgba(255,255,255,.94);font:500 clamp(10px,.95vw,13px)/1.3 Montserrat,Arial,sans-serif;text-shadow:0 2px 8px rgba(0,0,0,.9)}
+  .community-tagline{max-width:34ch;margin:.35em 0 0;color:rgba(255,255,255,.94);font:500 clamp(8px,.48em,20px)/1.3 Montserrat,Arial,sans-serif;text-shadow:0 2px 8px rgba(0,0,0,.9)}
 
   /* The LED ticker: unlit amber dots on black, edge to edge, scrolling the
      four tours (icon + title, each a link). It pauses under a finger or the
@@ -79,19 +79,16 @@
   @keyframes tick{to{transform:translateX(-50%)}}
   @media (min-width:761px) and (max-width:900px){
     .brand{width:clamp(220px,32vw,290px);padding-top:clamp(72px,11.5vh,100px)}
-    .brand p{font-size:clamp(10px,2vw,15px)}
     .brand img{margin-top:clamp(3px,.8vh,7px)}
     .splash .hero{min-height:clamp(240px,38vh,300px);margin-top:4px}
     .headline-group{width:min(72%,560px);margin-top:clamp(4px,.5vh,8px)}
-    .eyebrow{font-size:clamp(9px,1.3vw,12px);margin-bottom:7px;transform:translateY(-3px)}
-    .slogan{font-size:clamp(26px,4vw,36px)}
+    .headline-group{font-size:clamp(25px,3.8vw,34px)}
+    .eyebrow{margin-bottom:.2em;transform:translateY(-.22em)}
   }
   @media (min-width:761px) and (max-width:900px) and (max-height:680px){
     .brand{width:clamp(200px,30vw,270px);padding-top:clamp(52px,10vh,76px)}
-    .brand p{font-size:clamp(9px,1.6vw,12px)}
     .splash .hero{min-height:clamp(205px,35vh,240px)}
-    .eyebrow{font-size:clamp(9px,1.4vw,12px);margin-bottom:4px}
-    .slogan{font-size:clamp(24px,3.6vw,32px)}
+    .headline-group{font-size:clamp(23px,3.4vw,30px)}
   }
   @media (min-width:761px){
     .hero-photo{bottom:-22vh}
@@ -102,17 +99,16 @@
     :root{--yat-message-h:calc(104px / 3);--yat-mascot-w:68px}
     .splash{height:100vh;height:100svh;height:100dvh;min-height:0;padding:0 0 max(4px,env(safe-area-inset-bottom));overflow:hidden}
     .intro{display:flex;flex:0 0 min(80svh,calc(114.5vw + 14px));height:min(80svh,calc(114.5vw + 14px));flex-direction:column;justify-content:space-between;min-height:0}
-    .brand{flex:0 0 auto;width:clamp(112px,36vw,290px);margin-left:auto;margin-right:clamp(20px,6vw,64px);padding-top:clamp(64px,26vw,105px);padding-bottom:calc(clamp(2px,.4svh,4px) + clamp(5.8px,1.82vw,9px))}
-    .brand p{font-size:clamp(7px,2.1vw,11px)}
+    .brand{flex:0 0 auto;width:clamp(112px,36vw,290px);margin-left:auto;margin-right:clamp(20px,6vw,64px);padding-top:clamp(70px,28vw,113px);padding-bottom:calc(clamp(2px,.4svh,4px) + clamp(5.8px,1.82vw,9px))}
     .brand>p:not(.connect){width:100%;text-align:left;transform:none}
     .brand img{width:100%;margin-top:1px}
     .hero{isolation:isolate;flex:1 1 auto;min-height:clamp(168px,56vw,220px);max-height:clamp(190px,60vw,236px);margin-top:clamp(5px,.8svh,9px)}
     .hero-photo{inset:0 0 calc(-1 * clamp(110px,25svh,200px));z-index:-1;opacity:1;background-image:linear-gradient(rgba(0,0,0,.68),rgba(0,0,0,.68)),url(img/team-celebration.webp);background-position:center,95% 35%;background-size:cover,cover;background-repeat:no-repeat}
     .hero-photo::before{content:'';position:absolute;inset:0;pointer-events:none;background:url(img/team-celebration.webp) 95% 35%/cover no-repeat;opacity:.85;filter:saturate(1.3) contrast(1.08) brightness(1.15);-webkit-mask-image:radial-gradient(ellipse 44% 56% at 72% 38%,#000 0%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 44% 56% at 72% 38%,#000 0%,#000 30%,transparent 100%);mix-blend-mode:normal}
     .hero-photo::after{background:linear-gradient(#000,transparent 22%,transparent 76%,rgba(0,0,0,.72)),linear-gradient(90deg,#000,transparent 14%,transparent 94%,#000),linear-gradient(90deg,rgba(0,0,0,.2) 0%,rgba(0,0,0,.1) 56%,transparent 82%),radial-gradient(ellipse at 86% 22%,transparent 53%,rgba(0,0,0,.55) 100%)}
-    .headline-group{position:fixed;left:16vw;top:calc(min(55svh,104vw) - 6.72em - 18px);z-index:2;width:max-content;max-width:84vw;margin:0;font-size:clamp(14px,4vw,19px)}
-    .eyebrow{transform:translateY(-3px);margin:0 0 8px;font-size:clamp(7px,1.8vw,9px);line-height:1.1;letter-spacing:.02em;white-space:nowrap}
-    .community-tagline{max-width:74vw;margin:8px 0 0;font-size:clamp(8px,2.2vw,10px);line-height:1.25}
+    .headline-group{position:fixed;left:16vw;top:calc(min(55svh,104vw) - 6.72em - 28px);z-index:2;width:max-content;max-width:84vw;margin:0;font-size:clamp(14px,4vw,19px)}
+    .eyebrow{transform:translateY(-.22em);margin:0 0 .2em;font-size:clamp(7px,.4em,16px);line-height:1.1;letter-spacing:.02em;white-space:nowrap}
+    .community-tagline{max-width:74vw;margin:.35em 0 0;font-size:clamp(8px,.48em,20px);line-height:1.25}
     .community-tagline span{display:block}
     .slogan-wide{display:none}
     .slogan-phone{display:inline}
@@ -126,8 +122,8 @@
   @media (max-width:760px) and (max-height:700px){
     .brand{padding-top:clamp(64px,14svh,98px)}
     .hero{min-height:clamp(168px,29svh,215px);max-height:clamp(200px,31svh,230px)}
-    .headline-group{font-size:clamp(13px,4vw,18px);top:calc(min(55svh,104vw) - 6.72em - 18px)}
-    .community-tagline{margin-top:6px;font-size:clamp(8px,2vw,9px)}
+    .headline-group{font-size:clamp(13px,4vw,18px);top:calc(min(55svh,104vw) - 6.72em - 28px)}
+    .community-tagline{margin-top:.35em;font-size:clamp(8px,.48em,20px)}
     .tour{padding:0 clamp(8px,2.6vw,14px);font-size:clamp(8px,2.4vw,10px)}
     .tour img{width:clamp(23px,6.5vw,28px);height:clamp(23px,6.5vw,28px)}
   }
