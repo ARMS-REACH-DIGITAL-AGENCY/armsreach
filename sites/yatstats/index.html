@@ -9,7 +9,7 @@
   <title>Welcome to YAT?STATS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Montserrat:wght@400;600;800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Doto:wght@700;900&family=Montserrat:wght@400;600;800&display=swap">
 <!-- The yatstats.com splash. Top: the stadium lights, the taglines and the
      stacked YAT?STATS logo. Middle: a team celebrating, screened back, with
      the slogan printed over it. Bottom: the role question, an LED ticker
@@ -47,31 +47,34 @@
                          linear-gradient(90deg,#000,transparent 14%,transparent 86%,#000),
                          radial-gradient(ellipse at 82% 30%,transparent 40%,rgba(0,0,0,.36) 100%)}
   .headline-group{position:relative;z-index:1;width:min(72%,760px);margin-top:clamp(4px,.5vh,8px)}
-  .eyebrow{margin:0 0 clamp(4px,.5vh,8px);color:#ffc46b;font-weight:800;font-size:clamp(11px,1.25vw,16px);line-height:1.1;letter-spacing:.04em;text-transform:uppercase;text-shadow:0 2px 6px rgba(0,0,0,.85)}
+  .eyebrow{transform:translateY(-4px);margin:0 0 8px;color:#ffc46b;font-weight:800;font-size:clamp(10px,.95vw,13px);line-height:1.1;letter-spacing:.04em;text-transform:uppercase;text-shadow:0 2px 6px rgba(0,0,0,.85)}
   .slogan{position:relative;width:100%;margin:0;max-width:100%;font-weight:800;font-size:clamp(20px,5.3vw,48px);line-height:1.08;letter-spacing:-.01em;text-transform:uppercase;
           text-shadow:0 2px 0 rgba(0,0,0,.6),0 4px 18px rgba(0,0,0,.95),0 0 40px rgba(0,0,0,.8)}
   .slogan-phone{display:none}
 
-  .ask,.enter{margin:0;text-align:center;font-weight:800;text-transform:uppercase;letter-spacing:.01em;font-size:clamp(9.5px,2.55vw,17px);line-height:1.3}
-  .ask{margin-top:clamp(14px,3vh,30px)}
-  .enter{font-weight:600}
+  .community-tagline{max-width:34ch;margin:10px 0 0;color:rgba(255,255,255,.94);font:500 clamp(10px,.95vw,13px)/1.3 Montserrat,Arial,sans-serif;text-shadow:0 2px 8px rgba(0,0,0,.9)}
 
   /* The LED ticker: unlit amber dots on black, edge to edge, scrolling the
      four tours (icon + title, each a link). It pauses under a finger or the
      mouse, and holds still for anyone who prefers reduced motion. */
-  .sticky-dock{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;flex-direction:column;padding-bottom:max(10px,env(safe-area-inset-bottom));background:#000}
-  .ticker{position:relative;width:100%;margin:0;overflow:hidden;
+  :root{--yat-message-h:32px;--yat-dock-h:66px;--yat-mascot-w:clamp(64px,10vw,110px)}
+  .sticky-dock{position:fixed;left:0;right:0;bottom:0;z-index:20;height:calc(var(--yat-message-h) + var(--yat-dock-h) + env(safe-area-inset-bottom));display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom);background:#070707}
+  .metadata-strip{position:relative;z-index:1;flex:0 0 var(--yat-message-h);height:var(--yat-message-h);display:flex;align-items:center;background:#0c0c0c;border-top:1px solid rgba(255,255,255,.08)}
+  .metadata-copy{flex:1;min-width:0;height:100%;margin-left:var(--yat-mascot-w);padding:0 8px;display:flex;align-items:center;justify-content:center}
+  .ask{margin:0;color:#f2f2f2;text-align:center;font:700 clamp(9px,1.1vw,13px)/1.12 Arial,sans-serif;letter-spacing:-.015em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .metadata-mascot{position:absolute;z-index:4;left:3px;bottom:env(safe-area-inset-bottom);width:var(--yat-mascot-w);height:calc(var(--yat-message-h) + var(--yat-dock-h));display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+  .metadata-mascot img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:bottom}
+  .ticker{position:relative;z-index:1;flex:0 0 var(--yat-dock-h);height:var(--yat-dock-h);width:100%;margin:0;overflow:hidden;
           background-color:#000;background-image:radial-gradient(rgba(255,160,40,.09) 1px,transparent 1.5px);background-size:4px 4px;
           border-top:1px solid #2a1c0b;border-bottom:1px solid #2a1c0b;
           box-shadow:inset 0 5px 10px -5px rgba(255,170,60,.16),inset 0 -5px 10px -5px rgba(255,170,60,.16),0 0 18px rgba(255,150,40,.07)}
-  .sticky-dock .footer-wrap{flex:0 0 auto;margin:0 auto;padding:clamp(4px,.7vh,8px) clamp(14px,4vw,32px) 0}
-  .ticker-track{display:flex;width:max-content;animation:tick 26s linear infinite}
+  .ticker-track{display:flex;height:100%;width:max-content;animation:tick 26s linear infinite}
   .ticker:hover .ticker-track,.ticker:focus-within .ticker-track{animation-play-state:paused}
-  .ticker-set{display:flex;align-items:center;flex:none}
+  .ticker-set{display:flex;align-items:center;height:100%;flex:none}
   .tour{display:flex;align-items:center;gap:clamp(8px,2vw,14px);padding:5px clamp(22px,6vw,56px);color:#ffb347;text-decoration:none;white-space:nowrap;
-        font:400 clamp(13px,3.4vw,20px)/1.1 "DotGothic16",monospace;letter-spacing:.02em;text-transform:uppercase;
+        height:100%;font:700 clamp(11px,1.45vw,16px)/1 "Doto",monospace;letter-spacing:.02em;text-transform:uppercase;
         text-shadow:0 0 6px rgba(255,150,40,.75),0 0 14px rgba(255,140,30,.35)}
-  .tour img{width:clamp(40px,10vw,64px);height:clamp(40px,10vw,64px);object-fit:contain;mix-blend-mode:lighten}
+  .tour img{width:clamp(34px,3.4vw,44px);height:clamp(34px,3.4vw,44px);object-fit:contain;mix-blend-mode:lighten}
   .tour:hover,.tour:focus-visible{color:#ffd79a;outline:none}
   .tour:hover img,.tour:focus-visible img{filter:brightness(1.25) drop-shadow(0 0 10px rgba(255,170,60,.55))}
   @keyframes tick{to{transform:translateX(-50%)}}
@@ -81,7 +84,7 @@
     .brand img{margin-top:clamp(3px,.8vh,7px)}
     .splash .hero{min-height:clamp(240px,38vh,300px);margin-top:4px}
     .headline-group{width:min(72%,560px);margin-top:clamp(4px,.5vh,8px)}
-    .eyebrow{font-size:clamp(10px,1.5vw,13px);margin-bottom:clamp(4px,.5vh,7px)}
+    .eyebrow{font-size:clamp(9px,1.3vw,12px);margin-bottom:7px;transform:translateY(-3px)}
     .slogan{font-size:clamp(26px,4vw,36px)}
     .ask{margin-top:clamp(10px,2vh,18px);font-size:clamp(10px,1.6vw,13px)}
   }
@@ -99,6 +102,7 @@
   }
   @media (min-width:901px) and (max-width:1100px) and (max-height:820px){.brand{padding-top:clamp(88px,12vh,110px)}}
   @media (max-width:760px){
+    :root{--yat-message-h:calc(104px / 3);--yat-mascot-w:68px}
     .splash{height:100vh;height:100svh;height:100dvh;min-height:0;padding:0 0 max(4px,env(safe-area-inset-bottom));overflow:hidden}
     .intro{display:flex;flex:0 0 min(80svh,calc(114.5vw + 14px));height:min(80svh,calc(114.5vw + 14px));flex-direction:column;justify-content:space-between;min-height:0}
     .brand{flex:0 0 auto;width:clamp(112px,36vw,290px);margin-left:auto;margin-right:clamp(38px,12vw,120px);padding-top:clamp(72px,30vw,118px);padding-bottom:calc(clamp(2px,.4svh,4px) + clamp(5.8px,1.82vw,9px))}
@@ -110,26 +114,25 @@
     .hero-photo::before{content:'';position:absolute;inset:0;pointer-events:none;background:url(img/team-celebration.webp) 55% 35%/cover no-repeat;opacity:.85;filter:saturate(1.3) contrast(1.08) brightness(1.15);-webkit-mask-image:radial-gradient(ellipse 36% 56% at 88% 38%,#000 0%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 36% 56% at 88% 38%,#000 0%,#000 30%,transparent 100%);mix-blend-mode:normal}
     .hero-photo::after{background:linear-gradient(#000,transparent 22%,transparent 72%,#000),linear-gradient(90deg,#000,transparent 14%,transparent 94%,#000),linear-gradient(90deg,rgba(0,0,0,.26) 0%,rgba(0,0,0,.14) 56%,transparent 82%),radial-gradient(ellipse at 86% 22%,transparent 50%,rgba(0,0,0,.7) 100%)}
     .headline-group{position:fixed;left:16vw;top:calc(min(55svh,104vw) - 6.72em - 12px);z-index:2;width:max-content;max-width:84vw;margin:0;font-size:clamp(14px,4vw,19px)}
-    .eyebrow{margin:0 0 3px;font-size:clamp(7.5px,2.1vw,10px);line-height:1.1;letter-spacing:.02em;white-space:nowrap}
+    .eyebrow{transform:translateY(-3px);margin:0 0 8px;font-size:clamp(7px,1.8vw,9px);line-height:1.1;letter-spacing:.02em;white-space:nowrap}
+    .community-tagline{max-width:74vw;margin:8px 0 0;font-size:clamp(8px,2.2vw,10px);line-height:1.25}
+    .community-tagline span{display:block}
     .slogan-wide{display:none}
     .slogan-phone{display:inline}
     .slogan{position:relative;left:auto;top:auto;z-index:auto;transform:none;width:max-content;max-width:100%;margin:0;font-size:inherit;line-height:1.12;-webkit-text-stroke:0;text-shadow:0 1px 0 #000,0 2px 6px rgba(0,0,0,.95)}
-    .ask{position:relative;z-index:2;max-width:100%;margin:clamp(5px,.8svh,8px) auto 0;font-size:clamp(9px,2.7vw,12px);font-weight:400;line-height:1.15;letter-spacing:.015em;white-space:nowrap;color:#ffc46b;text-shadow:0 1px 4px rgba(0,0,0,.9)}
-    .ticker{flex:0 0 auto;margin:0}
-    .tour{gap:clamp(5px,1.3vw,8px);padding:4px clamp(10px,3vw,20px);font-size:clamp(9px,2.8vw,12px);letter-spacing:.01em}
-    .tour img{width:clamp(25px,7vw,32px);height:clamp(25px,7vw,32px)}
-    .footer-wrap{flex:0 0 auto}
-    .enter{font-size:clamp(7px,2.2vw,9.5px);line-height:1.15}
+    .metadata-copy{padding:1px 3px}
+    .ask{font-size:clamp(8px,2vw,10px)}
+    .ticker{flex-basis:var(--yat-dock-h);height:var(--yat-dock-h);margin:0}
+    .tour{gap:clamp(5px,1.3vw,8px);padding:0 clamp(10px,3vw,20px);font-size:clamp(8px,2.6vw,11px);letter-spacing:.01em}
+    .tour img{width:clamp(26px,7vw,34px);height:clamp(26px,7vw,34px)}
   }
   @media (max-width:760px) and (max-height:700px){
     .brand{padding-top:clamp(72px,16svh,110px)}
     .hero{min-height:clamp(168px,29svh,215px);max-height:clamp(200px,31svh,230px)}
     .headline-group{font-size:clamp(13px,4vw,18px);top:calc(min(55svh,104vw) - 6.72em - 12px)}
-    .ask{margin-top:4px;font-size:clamp(8px,2.8vw,10px)}
-    .ticker{margin:0}
-    .tour{padding:3px clamp(8px,2.6vw,14px);font-size:clamp(8px,2.4vw,10px)}
+    .community-tagline{margin-top:6px;font-size:clamp(8px,2vw,9px)}
+    .tour{padding:0 clamp(8px,2.6vw,14px);font-size:clamp(8px,2.4vw,10px)}
     .tour img{width:clamp(23px,6.5vw,28px);height:clamp(23px,6.5vw,28px)}
-    .enter{font-size:clamp(7px,1.8vw,8px)}
   }
   @media (max-width:300px){
     .intro{flex-basis:min(80svh,calc(120vw + 14px));height:min(80svh,calc(120vw + 14px))}
@@ -157,14 +160,16 @@
       <div class="headline-group">
         <p class="eyebrow">Connect. Contribute. Reminisce.</p>
         <p class="slogan" aria-label="Tracking yesterday's high school stars competing as college and professionals today!"><span class="slogan-wide" aria-hidden="true">Tracking yesterday's<br>high school stars<br>competing as<br>college and professionals today!</span><span class="slogan-phone" aria-hidden="true">Tracking<br>yesterday's<br>high school<br>stars competing<br>as college and<br>professionals today!</span></p>
+        <p class="community-tagline"><span>Experience the World's</span> <span>Only Online High School</span> <span>BASEBALL ALUMNI Community.</span></p>
       </div>
     </section>
-
-    <p class="ask">What is your role in the world of baseball?</p>
   </div>
 </main>
 
 <footer class="sticky-dock">
+  <div class="metadata-strip">
+    <div class="metadata-copy"><p class="ask">What is your role in the world of baseball?</p></div>
+  </div>
   <nav class="ticker" aria-label="Tour our online baseball communities">
     <div class="ticker-track">
       <div class="ticker-set">
@@ -183,8 +188,8 @@
     </div>
   </nav>
 
-  <div class="wrap footer-wrap">
-    <p class="enter">Enter the only high school alumni baseball online community</p>
+  <div class="metadata-mascot" aria-hidden="true">
+    <img src="https://yatstats-assets.s3.us-west-2.amazonaws.com/yatstats/YaTi.png" alt="">
   </div>
 </footer>
 </body>
