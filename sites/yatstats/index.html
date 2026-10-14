@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Tracking yesterday's high school stars competing as college and pros today. Tour the YAT?STATS high school alumni baseball online communities: fans and friends, school representatives, players and contributing partners.">
+<meta name="description" content="Tracking yesterday's high school stars competing as college and professionals today. Tour the YAT?STATS high school alumni baseball online communities: fans and friends, school representatives, players and contributing partners.">
 <link rel="canonical" href="https://yatstats.com/">
 <meta name="theme-color" content="#000000">
   <title>Welcome to YAT?STATS</title>
@@ -11,12 +11,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Montserrat:wght@600;800&display=swap">
 <!-- The yatstats.com splash. Top: the stadium lights, the taglines and the
-     stacked YAT?STATS logo (top right). Middle: a team celebrating, screened
-     back, with the slogan printed over it. Bottom: "How would you best
-     describe your role in the baseball world?", an LED ticker running edge
-     to edge that scrolls the four tours (each a link: fans/, programs/,
-     players/, partners/), and "Enter the only high school alumni baseball
-     online community platform". Links are relative so the same file works
+     stacked YAT?STATS logo. Middle: a team celebrating, screened back, with
+     the slogan printed over it. Bottom: the role question, an LED ticker
+     running edge to edge across the four tours (fans/, programs/, players/,
+     partners/), and the community tagline. Links are relative so the same file works
      at yatstats.com and on the agency preview (/sites/yatstats/). -->
 <style>
   *{box-sizing:border-box}
@@ -50,6 +48,7 @@
                          radial-gradient(ellipse at 55% 55%,transparent 45%,rgba(0,0,0,.55) 100%)}
   .slogan{position:relative;margin:clamp(10px,3vh,36px) 0 0;max-width:min(88%,700px);font-weight:800;font-size:clamp(20px,5.3vw,48px);line-height:1.08;letter-spacing:-.01em;text-transform:uppercase;
           text-shadow:0 2px 0 rgba(0,0,0,.6),0 4px 18px rgba(0,0,0,.95),0 0 40px rgba(0,0,0,.8)}
+  .slogan-phone{display:none}
 
   .ask,.enter{margin:0;text-align:center;font-weight:800;text-transform:uppercase;letter-spacing:.01em;font-size:clamp(9.5px,2.55vw,17px);line-height:1.3}
   .ask{margin-top:clamp(14px,3vh,30px)}
@@ -75,26 +74,30 @@
   @media (max-width:760px){
     .splash{height:100vh;height:100svh;height:100dvh;min-height:0;padding:0 0 max(4px,env(safe-area-inset-bottom));overflow:hidden}
     .intro{display:flex;flex:1 1 auto;flex-direction:column;justify-content:space-between;min-height:0}
-    .brand{flex:0 0 auto;width:clamp(154px,39vw,290px);padding-top:clamp(42px,8svh,70px)}
-    .brand p{font-size:clamp(9px,2.45vw,13px)}
-    .brand img{width:95%;margin-top:1px}
-    .brand .connect{margin-top:clamp(3px,.6svh,6px);font-size:clamp(7px,1.8vw,10px)}
+    .brand{flex:0 0 auto;width:clamp(112px,36vw,290px);margin-right:clamp(38px,12vw,120px);padding-top:clamp(72px,16svh,135px)}
+    .brand p{font-size:clamp(7px,2.1vw,11px)}
+    .brand img{width:100%;margin-top:1px}
+    .brand .connect{margin-top:clamp(2px,.4svh,4px);font-size:clamp(6px,1.6vw,9px)}
     .hero{isolation:isolate;flex:1 1 auto;min-height:clamp(190px,34svh,300px);max-height:clamp(250px,36svh,320px);margin-top:clamp(5px,.8svh,9px)}
-    .hero-photo{inset:0 0 calc(-1 * clamp(78px,17svh,145px));z-index:-1}
-    .slogan{left:clamp(6px,1.6vw,10px);transform:translateY(-11svh);max-width:94%;margin-top:clamp(8px,1.8svh,14px);font-size:clamp(15px,4vw,22px);line-height:1.04}
-    .ask{position:relative;z-index:2;max-width:100%;margin:clamp(5px,.8svh,8px) auto 0;font-size:clamp(8px,2.6vw,10px);line-height:1.15;white-space:nowrap;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.95)}
-    .ticker{flex:0 0 auto;margin:clamp(4px,.7svh,7px) 0}
+    .hero-photo{inset:calc(-1 * clamp(60px,12svh,95px)) 0 calc(-1 * clamp(78px,17svh,145px));z-index:-1;opacity:.72;background-position:55% 35%}
+    .hero-photo::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 86% 17%,rgba(255,255,255,.44),rgba(255,255,255,.12) 22%,transparent 44%);mix-blend-mode:screen}
+    .hero-photo::after{background:linear-gradient(#000,transparent 22%,transparent 72%,#000),linear-gradient(90deg,#000,transparent 14%,transparent 94%,#000),radial-gradient(ellipse at 86% 22%,transparent 50%,rgba(0,0,0,.7) 100%)}
+    .slogan-wide{display:none}
+    .slogan-phone{display:inline}
+    .slogan{left:clamp(28px,10vw,50px);transform:translateY(-14.5svh);max-width:94%;margin-top:clamp(8px,1.8svh,14px);font-size:clamp(14px,4vw,19px);line-height:1.12;-webkit-text-stroke:.35px rgba(0,0,0,.95)}
+    .ask{position:relative;z-index:2;max-width:100%;margin:clamp(5px,.8svh,8px) auto 0;font-size:clamp(9px,3vw,12px);line-height:1.15;white-space:nowrap;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.95)}
+    .ticker{flex:0 0 auto;margin:clamp(14px,2svh,18px) 0 4px}
     .tour{gap:clamp(5px,1.3vw,8px);padding:4px clamp(10px,3vw,20px);font-size:clamp(9px,2.8vw,12px);letter-spacing:.01em}
     .tour img{width:clamp(25px,7vw,32px);height:clamp(25px,7vw,32px)}
     .footer-wrap{flex:0 0 auto}
-    .enter{font-size:clamp(7px,2vw,9px);line-height:1.15}
+    .enter{font-size:clamp(7px,2.2vw,9.5px);line-height:1.15}
   }
   @media (max-width:760px) and (max-height:700px){
-    .brand{padding-top:clamp(36px,7svh,52px)}
+    .brand{padding-top:clamp(72px,16svh,110px)}
     .hero{min-height:clamp(168px,29svh,215px);max-height:clamp(200px,31svh,230px)}
-    .slogan{margin-top:clamp(6px,1.4svh,10px);font-size:clamp(14px,4vw,20px)}
-    .ask{margin-top:4px;font-size:clamp(7.5px,2.4vw,9px)}
-    .ticker{margin:3px 0}
+    .slogan{margin-top:clamp(6px,1.4svh,10px);font-size:clamp(13px,4vw,18px)}
+    .ask{margin-top:4px;font-size:clamp(8px,2.8vw,10px)}
+    .ticker{margin:clamp(10px,1.5svh,14px) 0 3px}
     .tour{padding:3px clamp(8px,2.6vw,14px);font-size:clamp(8px,2.4vw,10px)}
     .tour img{width:clamp(23px,6.5vw,28px);height:clamp(23px,6.5vw,28px)}
     .enter{font-size:clamp(7px,1.8vw,8px)}
@@ -113,17 +116,17 @@
   <div class="wrap intro">
     <header class="brand">
       <p>Where They YAT?</p>
-      <p>Stories &amp; Stats!</p>
+      <p>Stories and Stats!</p>
       <h1 style="margin:0;width:100%"><img src="img/yatstats-logo-stacked.webp" width="900" height="419" alt="YAT?STATS"></h1>
-      <p class="connect">Connect · Contribute · Compete!</p>
+      <p class="connect">Connect. Contribute. Reminisce.</p>
     </header>
 
     <section class="hero">
       <div class="hero-photo" aria-hidden="true"></div>
-      <p class="slogan">Tracking yesterday's<br>high school stars<br>competing as<br>college &amp; pros today!</p>
+      <p class="slogan" aria-label="Tracking yesterday's high school stars competing as college and professionals today!"><span class="slogan-wide" aria-hidden="true">Tracking yesterday's<br>high school stars<br>competing as<br>college and professionals today!</span><span class="slogan-phone" aria-hidden="true">Tracking<br>yesterday's<br>high school<br>stars competing<br>as college and<br>professionals today!</span></p>
     </section>
 
-    <p class="ask">What is your role in the baseball world?</p>
+    <p class="ask">What is your role in the world of baseball?</p>
   </div>
 
   <nav class="ticker" aria-label="Tour our online baseball communities">
@@ -145,7 +148,7 @@
   </nav>
 
   <div class="wrap footer-wrap">
-    <p class="enter">Enter the only high school alumni baseball online community platform</p>
+    <p class="enter">Enter the only high school alumni baseball online community</p>
   </div>
 </main>
 </body>
