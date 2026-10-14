@@ -29,24 +29,26 @@
   .lights img{display:block;width:100%;height:100%;object-fit:cover;object-position:center top}
   .wrap{position:relative;width:100%;max-width:1040px;margin:0 auto;padding:0 clamp(14px,4vw,32px)}
 
-  /* Top right: the taglines over the logo. */
-  .brand{display:flex;flex-direction:column;align-items:flex-start;margin-left:auto;width:clamp(170px,40vw,340px);padding-top:clamp(70px,13vh,130px);text-align:left}
-  @media (min-width:760px){.brand{padding-top:clamp(140px,19vh,190px)}.splash .hero{min-height:clamp(240px,34vh,380px);margin-top:4px}}
+  /* Brand copy stays anchored to the wordmark; desktop content occupies the left side. */
+  .brand{display:flex;flex-direction:column;align-items:flex-start;margin-left:0;margin-right:auto;width:clamp(170px,40vw,340px);padding-top:clamp(70px,13vh,130px);text-align:left}
+  @media (min-width:760px){.brand{padding-top:clamp(108px,14vh,160px)}.splash .hero{min-height:clamp(240px,34vh,380px);margin-top:4px}}
   .brand p{margin:0;font-weight:800;font-size:clamp(11px,2.9vw,18px);line-height:1.25;letter-spacing:.01em;text-transform:uppercase;text-shadow:0 2px 6px rgba(0,0,0,.85)}
-  .brand>p:not(.connect){width:80%;text-align:right}
+  .brand>p:not(.connect){width:100%;text-align:center}
   .brand img{display:block;width:100%;height:auto;margin-top:clamp(4px,1vh,10px)}
   .brand h1{margin:0;width:100%}
-  .brand .connect{margin-top:clamp(4px,1vh,10px);font-size:clamp(8px,2.05vw,14px);color:#ffc46b;white-space:nowrap}
 
   /* The team celebrating, screened back, with the slogan printed over it. */
   .hero{position:relative;margin-top:clamp(10px,3vh,34px);min-height:clamp(240px,46vh,480px);display:flex;align-items:flex-start}
-  .hero-photo{position:absolute;inset:0;background:url(img/team-celebration.webp) center 35%/cover no-repeat;opacity:.78}
+  .hero-photo{position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,.48),rgba(0,0,0,.48)),url(img/team-celebration.webp);background-position:center,center top;background-size:cover,cover;background-repeat:no-repeat;opacity:1}
+  .hero-photo::before{content:'';position:absolute;inset:0;pointer-events:none;background:url(img/team-celebration.webp) center top/cover no-repeat;opacity:.65;filter:saturate(1.2) contrast(1.05) brightness(1.1);-webkit-mask-image:radial-gradient(ellipse 28% 58% at 86% 30%,#000 0%,#000 32%,transparent 100%);mask-image:radial-gradient(ellipse 28% 58% at 86% 30%,#000 0%,#000 32%,transparent 100%);mix-blend-mode:normal}
   /* The photo melts into the black on every side: no box edges. */
   .hero-photo::after{content:'';position:absolute;inset:-1px;
-              background:linear-gradient(#000,transparent 22%,transparent 72%,#000),
+              background:linear-gradient(rgba(0,0,0,.15),transparent 12%,transparent 72%,#000),
                          linear-gradient(90deg,#000,transparent 14%,transparent 86%,#000),
-                         radial-gradient(ellipse at 55% 55%,transparent 45%,rgba(0,0,0,.55) 100%)}
-  .slogan{position:relative;margin:clamp(10px,3vh,36px) 0 0;max-width:min(88%,700px);font-weight:800;font-size:clamp(20px,5.3vw,48px);line-height:1.08;letter-spacing:-.01em;text-transform:uppercase;
+                         radial-gradient(ellipse at 82% 30%,transparent 40%,rgba(0,0,0,.5) 100%)}
+  .headline-group{position:relative;z-index:1;width:min(72%,760px);margin-top:clamp(4px,.5vh,8px)}
+  .eyebrow{margin:0 0 clamp(4px,.5vh,8px);color:#ffc46b;font-weight:800;font-size:clamp(11px,1.25vw,16px);line-height:1.1;letter-spacing:.04em;text-transform:uppercase;text-shadow:0 2px 6px rgba(0,0,0,.85)}
+  .slogan{position:relative;width:100%;margin:0;max-width:100%;font-weight:800;font-size:clamp(20px,5.3vw,48px);line-height:1.08;letter-spacing:-.01em;text-transform:uppercase;
           text-shadow:0 2px 0 rgba(0,0,0,.6),0 4px 18px rgba(0,0,0,.95),0 0 40px rgba(0,0,0,.8)}
   .slogan-phone{display:none}
 
@@ -57,10 +59,12 @@
   /* The LED ticker: unlit amber dots on black, edge to edge, scrolling the
      four tours (icon + title, each a link). It pauses under a finger or the
      mouse, and holds still for anyone who prefers reduced motion. */
-  .ticker{position:relative;width:100vw;left:50%;transform:translateX(-50%);margin:clamp(8px,1.6vh,14px) 0;overflow:hidden;
+  .sticky-dock{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;flex-direction:column;padding-bottom:max(10px,env(safe-area-inset-bottom));background:#000}
+  .ticker{position:relative;width:100%;margin:0;overflow:hidden;
           background-color:#000;background-image:radial-gradient(rgba(255,160,40,.09) 1px,transparent 1.5px);background-size:4px 4px;
           border-top:1px solid #2a1c0b;border-bottom:1px solid #2a1c0b;
           box-shadow:inset 0 5px 10px -5px rgba(255,170,60,.16),inset 0 -5px 10px -5px rgba(255,170,60,.16),0 0 18px rgba(255,150,40,.07)}
+  .sticky-dock .footer-wrap{flex:0 0 auto;margin:0 auto;padding:clamp(4px,.7vh,8px) clamp(14px,4vw,32px) 0}
   .ticker-track{display:flex;width:max-content;animation:tick 26s linear infinite}
   .ticker:hover .ticker-track,.ticker:focus-within .ticker-track{animation-play-state:paused}
   .ticker-set{display:flex;align-items:center;flex:none}
@@ -71,24 +75,43 @@
   .tour:hover,.tour:focus-visible{color:#ffd79a;outline:none}
   .tour:hover img,.tour:focus-visible img{filter:brightness(1.25) drop-shadow(0 0 10px rgba(255,170,60,.55))}
   @keyframes tick{to{transform:translateX(-50%)}}
+  @media (min-width:761px) and (max-width:900px){
+    .brand{width:clamp(220px,32vw,290px);padding-top:clamp(80px,13vh,112px)}
+    .brand p{font-size:clamp(10px,2vw,15px)}
+    .brand img{margin-top:clamp(3px,.8vh,7px)}
+    .splash .hero{min-height:clamp(240px,38vh,300px);margin-top:4px}
+    .headline-group{width:min(72%,560px);margin-top:clamp(4px,.5vh,8px)}
+    .eyebrow{font-size:clamp(10px,1.5vw,13px);margin-bottom:clamp(4px,.5vh,7px)}
+    .slogan{font-size:clamp(26px,4vw,36px)}
+    .ask{margin-top:clamp(10px,2vh,18px);font-size:clamp(10px,1.6vw,13px)}
+  }
+  @media (min-width:761px) and (max-width:900px) and (max-height:680px){
+    .brand{width:clamp(200px,30vw,270px);padding-top:clamp(56px,12vh,82px)}
+    .brand p{font-size:clamp(9px,1.6vw,12px)}
+    .splash .hero{min-height:clamp(205px,35vh,240px)}
+    .eyebrow{font-size:clamp(9px,1.4vw,12px);margin-bottom:4px}
+    .slogan{font-size:clamp(24px,3.6vw,32px)}
+    .ask{margin-top:8px;font-size:clamp(9px,1.5vw,12px)}
+  }
+  @media (min-width:901px) and (max-width:1100px) and (max-height:820px){.brand{padding-top:clamp(88px,12vh,110px)}}
   @media (max-width:760px){
     .splash{height:100vh;height:100svh;height:100dvh;min-height:0;padding:0 0 max(4px,env(safe-area-inset-bottom));overflow:hidden}
     .intro{display:flex;flex:0 0 min(80svh,calc(114.5vw + 14px));height:min(80svh,calc(114.5vw + 14px));flex-direction:column;justify-content:space-between;min-height:0}
-    .brand{flex:0 0 auto;width:clamp(112px,36vw,290px);margin-right:clamp(38px,12vw,120px);padding-top:clamp(72px,30vw,118px)}
+    .brand{flex:0 0 auto;width:clamp(112px,36vw,290px);margin-left:auto;margin-right:clamp(38px,12vw,120px);padding-top:clamp(72px,30vw,118px);padding-bottom:calc(clamp(2px,.4svh,4px) + clamp(5.8px,1.82vw,9px))}
     .brand p{font-size:clamp(7px,2.1vw,11px)}
-    .brand>p:not(.connect){transform:translateX(clamp(-45px,-9vw,-28px))}
+    .brand>p:not(.connect){width:80%;text-align:right;transform:translateX(clamp(-45px,-9vw,-28px))}
     .brand img{width:100%;margin-top:1px}
-    .brand .connect{display:flex;align-items:center;justify-content:space-between;width:98%;margin:clamp(2px,.4svh,4px) auto 0;font-size:clamp(5.8px,1.82vw,9px);line-height:1;letter-spacing:0;white-space:nowrap}
-    .brand .connect span{flex:0 0 auto}
     .hero{isolation:isolate;flex:1 1 auto;min-height:clamp(168px,56vw,220px);max-height:clamp(190px,60vw,236px);margin-top:clamp(5px,.8svh,9px)}
     .hero-photo{inset:0 0 calc(-1 * clamp(78px,17svh,145px));z-index:-1;opacity:1;background-image:linear-gradient(rgba(0,0,0,.68),rgba(0,0,0,.68)),url(img/team-celebration.webp);background-position:center,55% 35%;background-size:cover,cover;background-repeat:no-repeat}
     .hero-photo::before{content:'';position:absolute;inset:0;pointer-events:none;background:url(img/team-celebration.webp) 55% 35%/cover no-repeat;opacity:.85;filter:saturate(1.3) contrast(1.08) brightness(1.15);-webkit-mask-image:radial-gradient(ellipse 36% 56% at 88% 38%,#000 0%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 36% 56% at 88% 38%,#000 0%,#000 30%,transparent 100%);mix-blend-mode:normal}
     .hero-photo::after{background:linear-gradient(#000,transparent 22%,transparent 72%,#000),linear-gradient(90deg,#000,transparent 14%,transparent 94%,#000),linear-gradient(90deg,rgba(0,0,0,.26) 0%,rgba(0,0,0,.14) 56%,transparent 82%),radial-gradient(ellipse at 86% 22%,transparent 50%,rgba(0,0,0,.7) 100%)}
+    .headline-group{position:fixed;left:16vw;top:calc(min(55svh,104vw) - 6.72em - 12px);z-index:2;width:max-content;max-width:84vw;margin:0;font-size:clamp(14px,4vw,19px)}
+    .eyebrow{margin:0 0 3px;font-size:clamp(7.5px,2.1vw,10px);line-height:1.1;letter-spacing:.02em;white-space:nowrap}
     .slogan-wide{display:none}
     .slogan-phone{display:inline}
-    .slogan{position:fixed;left:16vw;top:calc(min(55svh,104vw) - 6.72em);z-index:2;transform:none;max-width:94%;margin:0;font-size:clamp(14px,4vw,19px);line-height:1.12;-webkit-text-stroke:0;text-shadow:0 1px 0 #000,0 2px 6px rgba(0,0,0,.95)}
+    .slogan{position:relative;left:auto;top:auto;z-index:auto;transform:none;width:max-content;max-width:100%;margin:0;font-size:inherit;line-height:1.12;-webkit-text-stroke:0;text-shadow:0 1px 0 #000,0 2px 6px rgba(0,0,0,.95)}
     .ask{position:relative;z-index:2;max-width:100%;margin:clamp(5px,.8svh,8px) auto 0;font-size:clamp(9px,2.7vw,12px);font-weight:400;line-height:1.15;letter-spacing:.015em;white-space:nowrap;color:#ffc46b;text-shadow:0 1px 4px rgba(0,0,0,.9)}
-    .ticker{flex:0 0 auto;margin:calc(clamp(14px,2svh,18px) + clamp(40px,12vw,52px)) 0 4px}
+    .ticker{flex:0 0 auto;margin:0}
     .tour{gap:clamp(5px,1.3vw,8px);padding:4px clamp(10px,3vw,20px);font-size:clamp(9px,2.8vw,12px);letter-spacing:.01em}
     .tour img{width:clamp(25px,7vw,32px);height:clamp(25px,7vw,32px)}
     .footer-wrap{flex:0 0 auto}
@@ -97,9 +120,9 @@
   @media (max-width:760px) and (max-height:700px){
     .brand{padding-top:clamp(72px,16svh,110px)}
     .hero{min-height:clamp(168px,29svh,215px);max-height:clamp(200px,31svh,230px)}
-    .slogan{font-size:clamp(13px,4vw,18px);top:calc(min(55svh,104vw) - 6.72em)}
+    .headline-group{font-size:clamp(13px,4vw,18px);top:calc(min(55svh,104vw) - 6.72em - 12px)}
     .ask{margin-top:4px;font-size:clamp(8px,2.8vw,10px)}
-    .ticker{margin:calc(clamp(10px,1.5svh,14px) + clamp(40px,12vw,52px)) 0 3px}
+    .ticker{margin:0}
     .tour{padding:3px clamp(8px,2.6vw,14px);font-size:clamp(8px,2.4vw,10px)}
     .tour img{width:clamp(23px,6.5vw,28px);height:clamp(23px,6.5vw,28px)}
     .enter{font-size:clamp(7px,1.8vw,8px)}
@@ -123,17 +146,21 @@
       <p>Where They YAT?</p>
       <p>Stories and Stats!</p>
       <h1 style="margin:0;width:100%"><img src="img/yatstats-logo-stacked.webp" width="900" height="419" alt="YAT?STATS"></h1>
-      <p class="connect"><span>Connect.</span> <span>Contribute.</span> <span>Reminisce.</span></p>
     </header>
 
     <section class="hero">
       <div class="hero-photo" aria-hidden="true"></div>
-      <p class="slogan" aria-label="Tracking yesterday's high school stars competing as college and professionals today!"><span class="slogan-wide" aria-hidden="true">Tracking yesterday's<br>high school stars<br>competing as<br>college and professionals today!</span><span class="slogan-phone" aria-hidden="true">Tracking<br>yesterday's<br>high school<br>stars competing<br>as college and<br>professionals today!</span></p>
+      <div class="headline-group">
+        <p class="eyebrow">Connect. Contribute. Reminisce.</p>
+        <p class="slogan" aria-label="Tracking yesterday's high school stars competing as college and professionals today!"><span class="slogan-wide" aria-hidden="true">Tracking yesterday's<br>high school stars<br>competing as<br>college and professionals today!</span><span class="slogan-phone" aria-hidden="true">Tracking<br>yesterday's<br>high school<br>stars competing<br>as college and<br>professionals today!</span></p>
+      </div>
     </section>
 
     <p class="ask">What is your role in the world of baseball?</p>
   </div>
+</main>
 
+<footer class="sticky-dock">
   <nav class="ticker" aria-label="Tour our online baseball communities">
     <div class="ticker-track">
       <div class="ticker-set">
@@ -155,6 +182,6 @@
   <div class="wrap footer-wrap">
     <p class="enter">Enter the only high school alumni baseball online community</p>
   </div>
-</main>
+</footer>
 </body>
 </html>
