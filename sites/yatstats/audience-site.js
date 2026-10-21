@@ -133,8 +133,9 @@
     ]
   };
 
-  const key = pages[document.body.dataset.audience] ? document.body.dataset.audience : 'fans';
-  const page = pages[key];
+  const legalKey = document.body.dataset.legal || '';
+  const key = pages[document.body.dataset.audience] ? document.body.dataset.audience : (legalKey ? '' : 'fans');
+  const page = pages[key] || pages.fans;
   const devices = {desktop:{label:'Desktop',w:1500,h:720},tablet:{label:'Tablet',w:1024,h:768},mobile:{label:'Mobile',w:390,h:844}};
   const reduced = matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
 
@@ -150,17 +151,58 @@
   @media(max-width:900px){.app{height:auto;min-height:100dvh}.head{justify-content:flex-start}.menu{display:block;order:0}.logo{order:2;margin-left:auto}.nav{display:flex;position:fixed;z-index:80;left:0;top:0;bottom:0;width:min(82vw,340px);padding:66px 20px 28px;background:#070809;border-right:1px solid var(--line);box-shadow:22px 0 52px rgba(0,0,0,.52);flex-direction:column;gap:0;transform:translateX(-105%);transition:transform .22s ease;overflow-y:auto}.nav.open{transform:translateX(0)}.nav-group{display:block;border-bottom:1px solid var(--line);padding:6px 0 10px}.nav-main{display:block;padding:12px 4px 6px;font-size:15px;opacity:1}.nav-main.active:after{display:none}.nav-faq{display:block;padding:3px 4px 10px;color:#9da3aa;text-decoration:none;font:400 13px/1.35 Oswald,sans-serif;letter-spacing:0}.nav-faq:hover{color:#fff}.nav-close{display:block;position:absolute;right:16px;top:14px;border:0;background:none;color:#fff;font:400 28px/1 Oswald,sans-serif;cursor:pointer}.nav-backdrop{display:none;position:fixed;z-index:70;inset:0;background:rgba(0,0,0,.58)}.nav-backdrop.open{display:block}main{width:100%;padding:0}.story{height:286px;flex-basis:286px;border-radius:0}.slide{grid-template-columns:38% 62%}.copy{padding:20px 22px 34px}.title{font-size:28px}.bodycopy{font-size:10.5px}.progress{left:calc(38% + 20px)}.live{height:calc(100dvh - 286px);min-height:470px;border-radius:0}.devices .open{display:none}}
   @media(max-width:620px){:root{--hh:42px}.faq-section{padding:34px 14px 56px}.faq-inner h2{font-size:34px}.faq-intro{font-size:14px}.faq-item summary{padding:17px 34px 17px 0;font-size:15px}.faq-answer{padding:0 22px 21px 0;font-size:17px;line-height:1.6}.head{width:calc(100% - 18px)}.logo img{height:17px;width:auto;max-width:230px}.story{height:310px;flex-basis:310px}.slide{grid-template-columns:1fr}.visual{height:126px;border-right:0;border-bottom:1px solid var(--line)}.copy{justify-content:flex-start;padding:16px 16px 38px}.title{font-size:25px}.bodycopy{font-size:10px}.step{top:142px;right:13px}.progress{left:16px;right:86px}.person{width:38%;height:110%}.person.yati{width:34%}.live{height:calc(100dvh - 310px);min-height:420px}.address{font-size:8px}.devices button{padding:0 6px;font-size:8px}.foot span:last-child{display:none}}
   `;
+  style.textContent += `
+  .site-footer{position:relative;z-index:1;background:#080a0b;border-top:1px solid var(--line);color:var(--muted);padding:28px 18px 34px}
+  .site-footer-inner{max-width:1100px;margin:auto;display:grid;grid-template-columns:auto 1fr;gap:20px 38px;align-items:center}
+  .site-footer-brand img{display:block;width:138px;height:auto;max-height:48px;object-fit:contain;filter:invert(1)}
+  .site-footer-nav{display:flex;align-items:center;justify-content:flex-end;gap:11px 21px;flex-wrap:wrap}
+  .site-footer-nav a,.site-footer-bottom a{font:600 12px/1.4 var(--ui);text-decoration:none;color:#cbd0d4}
+  .site-footer-nav a:hover,.site-footer-bottom a:hover{color:#fff;text-decoration:underline}
+  .site-footer-bottom{grid-column:1/-1;padding-top:15px;border-top:1px solid var(--line);display:flex;gap:16px;justify-content:space-between;font:500 11px/1.4 var(--ui)}
+  .legal-body .app{height:auto;min-height:100dvh;display:flex;flex-direction:column}
+  .legal-body header{position:sticky;top:0;height:var(--hh);min-height:var(--hh);flex-shrink:0;background:rgba(4,5,6,.97);border-bottom:1px solid var(--line)}
+  .legal-body .legal-main{display:block;flex:1 0 auto;width:min(100%,1020px);min-height:auto;margin:0 auto;padding:42px clamp(16px,4vw,48px) 76px}
+  .legal-body #legal-document{max-width:870px;margin:0 auto;padding:0;font:400 15px/1.8 var(--ui);color:#dce0e3}
+  .legal-body .legal-doc h1{font:700 clamp(36px,5vw,62px)/1.1 Oswald,sans-serif;letter-spacing:.015em;text-transform:uppercase;color:#fff;margin:0 0 7px}
+  .legal-body .legal-doc h2{font:700 clamp(23px,2.4vw,29px)/1.22 Oswald,sans-serif;letter-spacing:.004em;color:#fff;margin:0 0 15px}
+  .legal-body .legal-doc .legal-eyebrow{font:700 11px/1 var(--ui);text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin:0 0 14px}
+  .legal-body .legal-doc .legal-date{font:600 12px/1.4 var(--ui);color:#b1b8bd;margin:0 0 26px}
+  .legal-body .legal-doc p{margin:0 0 14px}
+  .legal-body .legal-doc section{padding:27px 0 23px;border-top:1px solid var(--line);margin-top:21px}
+  .legal-body .legal-doc a{color:#85bcee;text-decoration:underline;text-underline-offset:3px}
+  .legal-body .legal-doc strong{font-weight:700;color:#f3f3f3}
+  .legal-body .legal-doc .legal-emphasis{display:block;background:rgba(200,169,110,.055);border:1px solid rgba(200,169,110,.28);border-radius:10px;padding:22px;margin:24px 0}
+  @media(max-width:760px){.site-footer-inner{display:block}.site-footer-brand img{margin-bottom:18px}.site-footer-nav{justify-content:flex-start;gap:11px 17px}.site-footer-bottom{margin-top:18px}.legal-body .legal-main{padding:28px 19px 62px}.legal-body #legal-document{font-size:14px;line-height:1.78}}
+`;
   document.head.appendChild(style);
+
+  // One actual navigation/logo/footer template for both tour and legal pages.
+  const sharedHeader = `<header><div class="head"><a class="logo" href="${SITE_BASE}"><img src="${LOGO}" alt="YAT?STATS"></a><button class="menu" id="menu">☰</button><nav class="nav" id="nav"><button class="nav-close" id="navClose" aria-label="Close navigation">×</button>${Object.entries(pages).map(([k,p])=>`<div class="nav-group"><a href="${SITE_BASE}${k}/" class="nav-main ${k===key?'active':''}">${p.nav}</a><a href="${SITE_BASE}${k}/#faq" class="nav-faq">${p.nav} FAQs</a></div>`).join('')}</nav><div class="nav-backdrop" id="navBackdrop"></div></div></header>`;
+  const sharedFooter = `<footer class="site-footer" role="contentinfo"><div class="site-footer-inner"><a class="site-footer-brand" href="${SITE_BASE}"><img src="${LOGO}" alt="YAT?STATS home"></a><nav class="site-footer-nav" aria-label="Footer"><a href="${SITE_BASE}fans/">Fans</a><a href="${SITE_BASE}programs/">Programs</a><a href="${SITE_BASE}players/">Players</a><a href="${SITE_BASE}partners/">Partners</a><a href="${SITE_BASE}privacy-policy/">Privacy Policy</a><a href="${SITE_BASE}terms-and-conditions/">Terms &amp; Conditions</a></nav><div class="site-footer-bottom"><span>© 2026 YAT?STATS</span><a href="mailto:info@yatstats.com">info@yatstats.com</a></div></div></footer>`;
+  function bindSiteNavigation(){
+    const nav=document.getElementById('nav'),menu=document.getElementById('menu'),navClose=document.getElementById('navClose'),navBackdrop=document.getElementById('navBackdrop');
+    const setNav=(open)=>{nav.classList.toggle('open',open);navBackdrop?.classList.toggle('open',open);document.body.style.overflow=open?'hidden':''};
+    menu.onclick=()=>setNav(!nav.classList.contains('open'));
+    if(navClose)navClose.onclick=()=>setNav(false);
+    if(navBackdrop)navBackdrop.onclick=()=>setNav(false);
+    nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setNav(false)));
+  }
+
+  if(legalKey === 'privacy' || legalKey === 'terms'){
+    // Legal text stays in the HTML response so carrier verifiers and
+    // visitors without JavaScript can read it. Add the same site wrapper here.
+    const legalArticle = document.getElementById('legal-document')?.outerHTML;
+    if(!legalArticle) return;
+    document.body.classList.add('legal-body');
+    document.body.innerHTML = `<div class="legal-shell"><div class="app">${sharedHeader}<main class="legal-main" id="main">${legalArticle}</main>${sharedFooter}</div></div>`;
+    bindSiteNavigation();
+    return;
+  }
   document.title = page.title;
 
-  document.body.innerHTML = `<div class="tour-shell"><div class="app"><header><div class="head"><a class="logo" href="${SITE_BASE}"><img src="${LOGO}" alt="YAT?STATS"></a><button class="menu" id="menu">☰</button><nav class="nav" id="nav"><button class="nav-close" id="navClose" aria-label="Close navigation">×</button>${Object.entries(pages).map(([k,p])=>`<div class="nav-group"><a href="${SITE_BASE}${k}/" class="nav-main ${k===key?'active':''}">${p.nav}</a><a href="${SITE_BASE}${k}/#faq" class="nav-faq">${p.nav} FAQs</a></div>`).join('')}</nav><div class="nav-backdrop" id="navBackdrop"></div></div></header><main><section class="story"><div class="track" id="track">${page.stops.map((s,i)=>`<article class="slide ${s.type==='iceberg'?'slide-iceberg':''}"><div class="visual"><img class="bg" src="${BG}" alt="">${s.type==='iceberg'?`<div class="iceberg-visual" aria-hidden="true"><span class="iceberg-waterline"></span><span class="iceberg-tip"><b>YAT?STATS</b><small>COMMUNITY HUB</small></span><span class="iceberg-depth"><b>ARMS</b><small>RELATIONSHIPS · OUTREACH · FOLLOW-UP · MEASUREMENT</small></span></div>`:`<img class="person ${s.type==='yati'?'yati':''}" src="${s.type==='yati'?YATI:CODY_CUTOUT}" alt="">`}<span class="cap">${s.label}</span></div><div class="copy"><span class="kick">${s.kicker}</span><h1 class="title">${s.title}</h1><p class="bodycopy">${s.copy}</p><span class="step"><b>${String(i+1).padStart(2,'0')}</b> / ${String(page.stops.length).padStart(2,'0')}</span></div></article>`).join('')}</div><div class="progress">${page.stops.map((s,i)=>`<button data-i="${i}" class="${i===0?'active':''}"></button>`).join('')}</div><div class="arrows"><button id="prev">‹</button><button id="next">›</button></div></section><section class="live"><div class="bar"><div class="address"><span class="dots"><i></i><i></i><i></i></span><strong>LIVE YAT?STATS</strong><span id="url">hamilton.az.yatstats.com</span></div><div class="devices"><button data-device="desktop" class="active">Desktop</button><button data-device="tablet">Tablet</button><button data-device="mobile">Mobile</button><a class="open" id="open" href="${PLATFORM}" target="_blank">Open full site ↗</a></div></div><div class="wrap" id="wrap"><div class="stage" id="stage"><div class="loader" id="loader">Loading live Hamilton community</div><iframe class="frame" id="frame" src="${PLATFORM}"></iframe><div class="callout" id="callout"><div class="dot"></div><div class="label" id="label"></div></div></div></div><div class="foot"><span><strong>LIVE PLATFORM:</strong> interact with the real Hamilton subdomain.</span><span>Switch Desktop · Tablet · Mobile to test the responsive experience.</span></div></section></main></div></div><section class="faq-section" id="faq"><div class="faq-inner"><div class="faq-kicker">${page.nav}</div><h2>Frequently Asked Questions</h2><p class="faq-intro">Answers for ${page.nav.toLowerCase()} using YAT?STATS.</p><div class="faq-list">${faqs[key].map(([q,a])=>`<details class="faq-item"><summary>${q}</summary><div class="faq-answer">${a}</div></details>`).join('')}</div><div class="faq-contact"><strong>Still have a question?</strong> Email <a href="mailto:info@yatstats.com">info@yatstats.com</a>.</div></div></section>`;
+  document.body.innerHTML = `<div class="tour-shell"><div class="app">${sharedHeader}<main><section class="story"><div class="track" id="track">${page.stops.map((s,i)=>`<article class="slide ${s.type==='iceberg'?'slide-iceberg':''}"><div class="visual"><img class="bg" src="${BG}" alt="">${s.type==='iceberg'?`<div class="iceberg-visual" aria-hidden="true"><span class="iceberg-waterline"></span><span class="iceberg-tip"><b>YAT?STATS</b><small>COMMUNITY HUB</small></span><span class="iceberg-depth"><b>ARMS</b><small>RELATIONSHIPS · OUTREACH · FOLLOW-UP · MEASUREMENT</small></span></div>`:`<img class="person ${s.type==='yati'?'yati':''}" src="${s.type==='yati'?YATI:CODY_CUTOUT}" alt="">`}<span class="cap">${s.label}</span></div><div class="copy"><span class="kick">${s.kicker}</span><h1 class="title">${s.title}</h1><p class="bodycopy">${s.copy}</p><span class="step"><b>${String(i+1).padStart(2,'0')}</b> / ${String(page.stops.length).padStart(2,'0')}</span></div></article>`).join('')}</div><div class="progress">${page.stops.map((s,i)=>`<button data-i="${i}" class="${i===0?'active':''}"></button>`).join('')}</div><div class="arrows"><button id="prev">‹</button><button id="next">›</button></div></section><section class="live"><div class="bar"><div class="address"><span class="dots"><i></i><i></i><i></i></span><strong>LIVE YAT?STATS</strong><span id="url">hamilton.az.yatstats.com</span></div><div class="devices"><button data-device="desktop" class="active">Desktop</button><button data-device="tablet">Tablet</button><button data-device="mobile">Mobile</button><a class="open" id="open" href="${PLATFORM}" target="_blank">Open full site ↗</a></div></div><div class="wrap" id="wrap"><div class="stage" id="stage"><div class="loader" id="loader">Loading live Hamilton community</div><iframe class="frame" id="frame" src="${PLATFORM}"></iframe><div class="callout" id="callout"><div class="dot"></div><div class="label" id="label"></div></div></div></div><div class="foot"><span><strong>LIVE PLATFORM:</strong> interact with the real Hamilton subdomain.</span><span>Switch Desktop · Tablet · Mobile to test the responsive experience.</span></div></section></main></div></div><section class="faq-section" id="faq"><div class="faq-inner"><div class="faq-kicker">${page.nav}</div><h2>Frequently Asked Questions</h2><p class="faq-intro">Answers for ${page.nav.toLowerCase()} using YAT?STATS.</p><div class="faq-list">${faqs[key].map(([q,a])=>`<details class="faq-item"><summary>${q}</summary><div class="faq-answer">${a}</div></details>`).join('')}</div><div class="faq-contact"><strong>Still have a question?</strong> Email <a href="mailto:info@yatstats.com">info@yatstats.com</a>.</div></div></section>${sharedFooter}`;
 
-  const nav=document.getElementById('nav'),menu=document.getElementById('menu'),navClose=document.getElementById('navClose'),navBackdrop=document.getElementById('navBackdrop');
-  const setNav=(open)=>{nav.classList.toggle('open',open);navBackdrop?.classList.toggle('open',open);document.body.style.overflow=open?'hidden':''};
-  menu.onclick=()=>setNav(!nav.classList.contains('open'));
-  if(navClose)navClose.onclick=()=>setNav(false);
-  if(navBackdrop)navBackdrop.onclick=()=>setNav(false);
-  nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setNav(false)));
+  bindSiteNavigation();
   const track=document.getElementById('track'),slides=[...track.children],dots=[...document.querySelectorAll('.progress button')],frame=document.getElementById('frame'),loader=document.getElementById('loader'),url=document.getElementById('url'),open=document.getElementById('open'),callout=document.getElementById('callout'),label=document.getElementById('label'),wrap=document.getElementById('wrap'),stage=document.getElementById('stage');
   let active=0,device='desktop',last='',timer;
   // device-preview-override.js, always loaded right after this script, takes
