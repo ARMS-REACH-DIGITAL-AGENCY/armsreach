@@ -251,10 +251,19 @@
     for (const el of elements) {
       if (el.shadowRoot) scanShadow(el.shadowRoot);
     }
+    function looksLikeLauncher(button) {
+      const label = ((button.getAttribute('aria-label') || '') + ' ' +
+        (button.getAttribute('title') || '')).toLowerCase();
+      const caption = (button.textContent || '').trim();
+      return /chat|message|help|open/.test(label) ||
+        (caption.length <= 4 && !!button.querySelector('svg,img'));
+    }
     const possibleLaunchers = elements.filter(function (el) {
       if (!isLauncherSize(el)) return false;
-      return el.matches('button,[role="button"]') ||
-        !!el.querySelector('button,[role="button"]');
+      const buttons = el.matches('button,[role="button"]') ?
+        [el] : Array.from(el.querySelectorAll('button,[role="button"]'));
+      // Do not move ordinary form inputs or submit buttons in the A2P panel.
+      return buttons.some(looksLikeLauncher);
     });
     // Move the outermost matching launcher, not a button inside the chat form.
     for (const el of possibleLaunchers) {
