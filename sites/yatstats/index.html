@@ -218,6 +218,78 @@
   </nav>
 </aside>
 
+<!-- YAT?STATS homepage-only offset for the official HighLevel floating launcher.
+     The generated A2P widget, its source script, and consent UI remain untouched.
+     When vendor markup cannot be safely recognized, this adjustment does nothing. -->
+<script id="yat-chat-launcher-offset">
+(function () {
+  'use strict';
+  const OFFSET_RIGHT = 25; // from the widget's native bottom-left position
+  const OFFSET_UP = 30;
+  const observedRoots = new WeakSet();
+  const movedElements = new WeakSet();
+  let scheduled = false;
+
+  function isLauncherSize(el) {
+    const css = getComputedStyle(el);
+    if (css.display === 'none' || css.visibility === 'hidden') return false;
+    if (css.position !== 'fixed' && css.position !== 'absolute') return false;
+    const box = el.getBoundingClientRect();
+    const fromBottom = innerHeight - box.bottom;
+    return box.width >= 32 && box.width <= 160 &&
+      box.height >= 32 && box.height <= 160 &&
+      box.left >= -2 && box.left <= 140 &&
+      fromBottom >= -2 && fromBottom <= 150;
+  }
+
+  function scanShadow(root) {
+    if (!observedRoots.has(root)) {
+      observedRoots.add(root);
+      new MutationObserver(schedule).observe(root, { childList: true, subtree: true });
+    }
+    const elements = Array.from(root.querySelectorAll('*'));
+    for (const el of elements) {
+      if (el.shadowRoot) scanShadow(el.shadowRoot);
+    }
+    const possibleLaunchers = elements.filter(function (el) {
+      if (!isLauncherSize(el)) return false;
+      return el.matches('button,[role="button"]') ||
+        !!el.querySelector('button,[role="button"]');
+    });
+    // Move the outermost matching launcher, not a button inside the chat form.
+    for (const el of possibleLaunchers) {
+      if (movedElements.has(el)) continue;
+      if (possibleLaunchers.some(function (parent) {
+        return parent !== el && parent.contains(el);
+      })) continue;
+      movedElements.add(el);
+      el.style.setProperty('translate', OFFSET_RIGHT + 'px -' + OFFSET_UP + 'px', 'important');
+    }
+  }
+
+  function scan() {
+    scheduled = false;
+    document.querySelectorAll('chat-widget').forEach(function (host) {
+      if (host.shadowRoot) scanShadow(host.shadowRoot);
+    });
+  }
+
+  function schedule() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(scan);
+  }
+
+  new MutationObserver(schedule).observe(document.documentElement, {
+    childList: true, subtree: true
+  });
+  window.addEventListener('resize', schedule);
+  [0, 300, 1000, 2500, 5000].forEach(function (delay) {
+    setTimeout(schedule, delay);
+  });
+})();
+</script>
+
 <!-- Official HighLevel-generated A2P Compliance Chat Widget (Mixed).
      This is the exact carrier-review opt-in widget from YAT?STATS Trust Center.
      Keep its generated source and ID intact; do not replace it with YaTi. -->
