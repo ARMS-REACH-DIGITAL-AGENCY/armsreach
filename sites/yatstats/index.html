@@ -152,7 +152,7 @@
   .yat-business-contact a{overflow-wrap:anywhere}
   .yat-business-disclosure nav{display:flex;flex-wrap:wrap;gap:6px 18px}
   .yat-business-disclosure a{color:#e0c793;text-decoration:underline;text-underline-offset:3px}
-  @media(max-width:760px){.yat-business-disclosure{font-size:11px;line-height:1.65;padding-bottom:calc(var(--yat-message-h) + var(--yat-dock-h) + env(safe-area-inset-bottom) + 120px)}}
+  @media(max-width:760px){.yat-business-disclosure{font-size:11px;line-height:1.65}}
 </style>
 </head>
 <body>
@@ -218,95 +218,5 @@
   </nav>
 </aside>
 
-<!-- YAT?STATS homepage-only offset for the official HighLevel floating launcher.
-     The generated A2P widget, its source script, and consent UI remain untouched.
-     When vendor markup cannot be safely recognized, this adjustment does nothing. -->
-<script id="yat-chat-launcher-offset">
-(function () {
-  'use strict';
-  const OFFSET_RIGHT = 25; // from the widget's native bottom-left position
-  const OFFSET_UP = 70;
-  const observedRoots = new WeakSet();
-  const movedElements = new WeakSet();
-  let scheduled = false;
-
-  function isLauncherSize(el) {
-    const css = getComputedStyle(el);
-    if (css.display === 'none' || css.visibility === 'hidden') return false;
-    if (css.position !== 'fixed' && css.position !== 'absolute') return false;
-    const box = el.getBoundingClientRect();
-    const fromBottom = innerHeight - box.bottom;
-    return box.width >= 32 && box.width <= 160 &&
-      box.height >= 32 && box.height <= 160 &&
-      box.left >= -2 && box.left <= 140 &&
-      fromBottom >= -2 && fromBottom <= 150;
-  }
-
-  function scanShadow(root) {
-    if (!observedRoots.has(root)) {
-      observedRoots.add(root);
-      new MutationObserver(schedule).observe(root, { childList: true, subtree: true });
-    }
-    const elements = Array.from(root.querySelectorAll('*'));
-    for (const el of elements) {
-      if (el.shadowRoot) scanShadow(el.shadowRoot);
-    }
-    function looksLikeLauncher(button) {
-      const label = ((button.getAttribute('aria-label') || '') + ' ' +
-        (button.getAttribute('title') || '')).toLowerCase();
-      const caption = (button.textContent || '').trim();
-      return /chat|message|help|open/.test(label) ||
-        (caption.length <= 4 && !!button.querySelector('svg,img'));
-    }
-    const possibleLaunchers = elements.filter(function (el) {
-      if (!isLauncherSize(el)) return false;
-      const buttons = el.matches('button,[role="button"]') ?
-        [el] : Array.from(el.querySelectorAll('button,[role="button"]'));
-      // Do not move ordinary form inputs or submit buttons in the A2P panel.
-      return buttons.some(looksLikeLauncher);
-    });
-    // Move the outermost matching launcher, not a button inside the chat form.
-    for (const el of possibleLaunchers) {
-      if (movedElements.has(el)) continue;
-      if (possibleLaunchers.some(function (parent) {
-        return parent !== el && parent.contains(el);
-      })) continue;
-      movedElements.add(el);
-      el.style.setProperty('translate', OFFSET_RIGHT + 'px -' + OFFSET_UP + 'px', 'important');
-    }
-  }
-
-  function scan() {
-    scheduled = false;
-    document.querySelectorAll('chat-widget').forEach(function (host) {
-      if (host.shadowRoot) scanShadow(host.shadowRoot);
-    });
-  }
-
-  function schedule() {
-    if (scheduled) return;
-    scheduled = true;
-    requestAnimationFrame(scan);
-  }
-
-  new MutationObserver(schedule).observe(document.documentElement, {
-    childList: true, subtree: true
-  });
-  window.addEventListener('resize', schedule);
-  [0, 300, 1000, 2500, 5000].forEach(function (delay) {
-    setTimeout(schedule, delay);
-  });
-})();
-</script>
-
-<!-- Official HighLevel-generated A2P Compliance Chat Widget (Mixed).
-     This is the exact carrier-review opt-in widget from YAT?STATS Trust Center.
-     Keep its generated source and ID intact; do not replace it with YaTi. -->
-<script
-  src="https://widgets.leadconnectorhq.com/loader.js"
-  data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js"
-  data-widget-id="6ad916e94e3a6a8f95250565"
-  data-source="WEB_USER"
-></script>
 </body>
 </html>
