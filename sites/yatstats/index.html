@@ -152,7 +152,7 @@
   .yat-business-contact a{overflow-wrap:anywhere}
   .yat-business-disclosure nav{display:flex;flex-wrap:wrap;gap:6px 18px}
   .yat-business-disclosure a{color:#e0c793;text-decoration:underline;text-underline-offset:3px}
-  @media(max-width:760px){.yat-business-disclosure{font-size:11px;line-height:1.65}}
+  @media(max-width:760px){.yat-business-disclosure{font-size:11px;line-height:1.65;padding-bottom:calc(var(--yat-message-h) + var(--yat-dock-h) + env(safe-area-inset-bottom) + 120px)}}
 </style>
 </head>
 <body>
@@ -225,7 +225,7 @@
 (function () {
   'use strict';
   const OFFSET_RIGHT = 25; // from the widget's native bottom-left position
-  const OFFSET_UP = 85;
+  const OFFSET_UP = 55;
   const observedRoots = new WeakSet();
   const movedElements = new WeakSet();
   let scheduled = false;
