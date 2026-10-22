@@ -65,14 +65,14 @@
   .metadata-mascot{position:absolute;z-index:4;left:3px;bottom:env(safe-area-inset-bottom);width:var(--yat-mascot-w);height:calc(var(--yat-message-h) + var(--yat-dock-h));display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
   .metadata-mascot img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:bottom}
   /* Reuse the existing YaTi and dock callout as an additional, accessible chat opener. */
-  .ask-yati{display:block;width:100%;padding:0;border:0;background:transparent;cursor:pointer;font:inherit;letter-spacing:inherit;color:inherit;text-align:left;text-transform:inherit}
+  .ask-yati{display:block;width:100%;padding:0;border:0;background:transparent;cursor:pointer;text-align:left}
   .ask-yati .ask-yati-name{color:#ffc46b}
   .ask-yati:hover .ask-yati-name,.ask-yati:focus-visible .ask-yati-name{text-decoration:underline;text-underline-offset:3px}
   .ask-yati:focus-visible,.yati-mascot-button:focus-visible{outline:2px solid #ffc46b;outline-offset:3px;border-radius:4px}
   .metadata-mascot{pointer-events:auto}
   .yati-mascot-button{display:flex;align-items:flex-end;justify-content:center;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer}
   .yati-mascot-button:hover img,.yati-mascot-button:focus-visible img{filter:drop-shadow(0 0 7px rgba(255,196,107,.5))}
-  .yati-chat-fallback{position:absolute;left:calc(var(--yat-mascot-w) + 8px);right:8px;bottom:calc(var(--yat-dock-h) + 4px);padding:4px 7px;border:1px solid #ffc46b;background:#111;color:#ffc46b;font-size:10px;font-weight:700;line-height:1.25}
+  .yati-chat-fallback{position:fixed;z-index:40;left:calc(var(--yat-mascot-w) + 8px);right:8px;bottom:calc(var(--yat-message-h) + var(--yat-dock-h) + env(safe-area-inset-bottom) + 4px);padding:4px 7px;border:1px solid #ffc46b;background:#111;color:#ffc46b;font-size:10px;font-weight:700;line-height:1.25}
   .yati-chat-fallback[hidden]{display:none}
   .ticker{position:relative;z-index:1;flex:0 0 var(--yat-dock-h);height:var(--yat-dock-h);width:100%;margin:0;overflow:hidden;
           background-color:#000;background-image:radial-gradient(rgba(255,160,40,.09) 1px,transparent 1.5px);background-size:4px 4px;
