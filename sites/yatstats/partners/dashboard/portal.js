@@ -2,14 +2,20 @@ const API = '/api/partners';
 const FIREBASE_VERSION = '12.10.0';
 const TIME_ZONE = Intl.DateTimeFormat().resolvedOptions().timeZone || 'your local time zone';
 const MAX_UPLOAD_BYTES = 3 * 1024 * 1024;
+const SPONSOR_ASSET_KINDS = ['logo', 'ad', 'card_front', 'card_banner', 'card_full'];
+const CARD_BACK_TEMPLATES = [
+  ['banner_text', 'Banner + message', 'A sponsor banner above one message in the FunZone.'],
+  ['share_promotion', 'Community sharing', 'A prepared promotion inviting fans to share the school community.'],
+  ['full_image', 'Full-size image', 'One image fills the back’s banner and message area.'],
+];
 const $ = (selector, parent = document) => parent.querySelector(selector);
 const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector)];
 const esc = (value = '') => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const state = {
   auth: null, authTools: null, firebaseUser: null, data: null, authEpoch: 0, dashboardRequestId: 0,
-  section: 'overview', deskTab: 'notes', sponsorId: '', creativeId: '', noteId: '', placementId: '', membershipId: '', newBrand: false,
-  schools: new Map(), searchTimers: new WeakMap(), searchControllers: new WeakMap(), dirty: false,
-  preview: { context: {}, format: 'html', device: 'desktop', html: '', text: '', schoolId: '', cadence: 'weekly', requestId: 0 },
+  section: 'overview', deskTab: 'notes', sponsorId: '', creativeId: '', cardId: '', noteId: '', placementId: '', cardPlacementId: '', membershipId: '', newBrand: false,
+  schools: new Map(), searchTimers: new WeakMap(), searchControllers: new WeakMap(), cardDrafts: new WeakMap(), dirty: false,
+  preview: { kind: 'edition', context: {}, format: 'html', device: 'desktop', html: '', text: '', card: null, origin: '', url: '', schoolId: '', cadence: 'weekly', requestId: 0 },
 };
 
 function safeUrl(value) {
@@ -20,8 +26,9 @@ function list(key) { return Array.isArray(state.data?.[key]) ? state.data[key] :
 function isPublisher() { return Boolean(state.data?.user?.publisher); }
 function sponsor() { return list('sponsors').find(item => String(item.id) === state.sponsorId); }
 function activeCreative() { return list('creatives').find(item => String(item.id) === state.creativeId && String(item.sponsorId) === state.sponsorId); }
+function activeCard() { return list('cards').find(item => String(item.id) === state.cardId && String(item.sponsorId) === state.sponsorId); }
 function activeNote() { return list('notes').find(item => String(item.id) === state.noteId); }
-function activePlacement() { return list('placements').find(item => String(item.id) === state.placementId); }
+function activePlacement(cards = false) { return list(cards ? 'cardPlacements' : 'placements').find(item => String(item.id) === (cards ? state.cardPlacementId : state.placementId)); }
 function dateLabel(value, includeTime = false) {
   if (!value) return '—';
   const d = new Date(value);
@@ -102,11 +109,11 @@ function skeleton() {
   return '<div role="status" aria-label="Loading dashboard"><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-line"></div><div class="stats-grid"><div class="skeleton skeleton-card"></div><div class="skeleton skeleton-card"></div><div class="skeleton skeleton-card"></div></div><div class="panel"><div class="skeleton"></div><div class="skeleton skeleton-line"></div><div class="skeleton"></div></div></div>';
 }
 function rememberSchools() {
-  for (const item of list('placements')) if (item.hsid) state.schools.set(String(item.hsid), { hsid: String(item.hsid), name: item.schoolName || `School ${item.hsid}`, location: '' });
+  for (const item of [...list('placements'), ...list('cardPlacements')]) if (item.hsid) state.schools.set(String(item.hsid), { hsid: String(item.hsid), name: item.schoolName || `School ${item.hsid}`, location: '' });
 }
 function clearWorkspace() {
-  state.data = null; state.sponsorId = ''; state.creativeId = ''; state.noteId = ''; state.placementId = ''; state.membershipId = ''; state.newBrand = false;
-  state.schools.clear(); state.preview.context = {}; state.preview.html = ''; state.preview.text = ''; state.preview.schoolId = ''; state.preview.requestId++;
+  state.data = null; state.sponsorId = ''; state.creativeId = ''; state.cardId = ''; state.noteId = ''; state.placementId = ''; state.cardPlacementId = ''; state.membershipId = ''; state.newBrand = false;
+  state.schools.clear(); closePreview(); state.preview.schoolId = '';
   $('#brand-select').innerHTML = '<option value="">No sponsor brand assigned</option>'; $('#brand-select').disabled = true;
   $('#sponsor-search-box').hidden = true; $('#sponsor-search').value = ''; $('#sponsor-search-results').innerHTML = ''; $('#workspace-nav').innerHTML = '';
   $('#account-email').textContent = ''; $('#account-role').textContent = ''; $('.topbar-title').textContent = 'Partner Dashboard';
@@ -139,7 +146,7 @@ function empty(title, body, action = '') { return `<div class="empty-state"><p>$
 function button(label, action, extra = '', primary = false) { return `<button type="button" class="button${primary ? ' button-primary' : ''}" data-action="${esc(action)}" ${extra}>${esc(label)}</button>`; }
 function field(prefix, name, label, value = '', options = {}) {
   const id = `${prefix}-${name}`;
-  const attrs = `${options.required ? ' required' : ''}${options.max ? ` maxlength="${options.max}"` : ''}${options.min !== undefined ? ` min="${esc(options.min)}"` : ''}${options.step ? ` step="${esc(options.step)}"` : ''}${options.placeholder ? ` placeholder="${esc(options.placeholder)}"` : ''}`;
+  const attrs = `${options.required ? ' required' : ''}${options.readonly ? ' readonly' : ''}${options.max ? ` maxlength="${options.max}"` : ''}${options.min !== undefined ? ` min="${esc(options.min)}"` : ''}${options.step ? ` step="${esc(options.step)}"` : ''}${options.placeholder ? ` placeholder="${esc(options.placeholder)}"` : ''}`;
   const control = options.textarea ? `<textarea id="${esc(id)}" name="${esc(name)}" rows="${options.rows || 4}"${attrs}>${esc(value)}</textarea>` : `<input id="${esc(id)}" name="${esc(name)}" type="${options.type || 'text'}" value="${esc(value)}"${attrs}>`;
   return `<div class="field${options.wide ? ' span-2' : ''}"><label for="${esc(id)}">${esc(label)}${options.optional ? ' <span class="muted">(optional)</span>' : ''}</label>${control}${options.help ? `<p class="help">${esc(options.help)}</p>` : ''}</div>`;
 }
@@ -173,7 +180,7 @@ function assetPicker(prefix, kind, imageUrl = '', options = {}) {
   const name = options.name || 'imageUrl';
   const assetField = options.assetField || 'assetId';
   const image = safeUrl(imageUrl);
-  return `<div class="field${options.wide ? ' span-2' : ''}"><label for="${prefix}-file">${esc(options.label || 'Advertisement image')} <span class="muted">(optional)</span></label><div class="asset-picker" data-asset-picker><input type="hidden" name="${esc(name)}" value="${esc(imageUrl)}"><input type="hidden" name="${esc(assetField)}" value="${esc(options.assetId || '')}"><div class="asset-preview">${image ? `<img src="${esc(image)}" alt="Current uploaded artwork"><button type="button" class="button button-small" data-action="remove-asset">Remove image</button>` : ''}</div><input id="${prefix}-file" type="file" accept="image/png,image/jpeg,image/webp" data-upload-kind="${esc(kind)}" data-url-field="${esc(name)}" data-asset-field="${esc(assetField)}"><p class="help">PNG, JPG or WebP · up to 3 MB.${options.help ? ` ${esc(options.help)}` : ''}</p><p class="asset-status" role="status" aria-live="polite"></p></div></div>`;
+  return `<div class="field${options.wide ? ' span-2' : ''}"><label for="${prefix}-file">${esc(options.label || 'Advertisement image')}${options.required ? '' : ' <span class="muted">(optional)</span>'}</label><div class="asset-picker" data-asset-picker><input type="hidden" name="${esc(name)}" value="${esc(imageUrl)}"><input type="hidden" name="${esc(assetField)}" value="${esc(options.assetId || '')}"><div class="asset-preview">${image ? `<img src="${esc(image)}" alt="Current uploaded artwork"><button type="button" class="button button-small" data-action="remove-asset">Remove image</button>` : ''}</div><input id="${prefix}-file" type="file" accept="image/png,image/jpeg,image/webp" data-upload-kind="${esc(kind)}" data-url-field="${esc(name)}" data-asset-field="${esc(assetField)}"><p class="help">PNG, JPG or WebP · up to 3 MB.${options.help ? ` ${esc(options.help)}` : ''}</p><p class="asset-status" role="status" aria-live="polite"></p></div></div>`;
 }
 function renderWorkspace() {
   $('#account-email').textContent = state.data.user?.email || state.firebaseUser?.email || 'Signed-in account';
@@ -184,34 +191,36 @@ function renderWorkspace() {
   select.disabled = !list('sponsors').length;
   $('#sponsor-search-box').hidden = !isPublisher();
   $('#sponsor-search-status').textContent = isPublisher() && state.data.hasMoreSponsors ? 'Recent brands are listed above. Search to find any sponsor.' : '';
-  const nav = [['overview', 'Overview', '◫'], ['ads', 'Ad studio', '▤'], ['brand', 'Brand profile', '◇'], ['orders', 'Orders & billing', '▧']];
-  if (isPublisher()) nav.push(['publisher', 'Publisher’s Desk', '✦'], ['placements', 'Placements', '⊞'], ['access', 'Account access', '⌘']);
+  const nav = [['overview', 'Overview', '◫'], ['cards', 'Sponsor cards', '▣'], ['ads', 'Tribune ad studio', '▤'], ['brand', 'Brand profile', '◇'], ['orders', 'Orders & billing', '▧']];
+  if (isPublisher()) nav.push(['publisher', 'Publisher’s Desk', '✦'], ['placements', 'Tribune placements', '⊞'], ['cardPlacements', 'Title card placements', '⊞'], ['access', 'Account access', '⌘']);
   if (!nav.some(([key]) => key === state.section)) state.section = 'overview';
   $('#workspace-nav').innerHTML = nav.map(([key, label, mark]) => `<button class="nav-button" type="button" data-section="${key}"${state.section === key ? ' aria-current="page"' : ''}><span class="nav-mark" aria-hidden="true">${mark}</span>${label}</button>`).join('');
   renderPage();
 }
 function renderPage() {
-  const views = { overview: renderOverview, ads: renderAds, brand: renderBrand, publisher: renderPublisher, placements: renderPlacements, access: renderAccess, orders: renderOrders };
+  const views = { overview: renderOverview, cards: renderCards, ads: renderAds, brand: renderBrand, publisher: renderPublisher, placements: renderPlacements, cardPlacements: () => renderPlacements(true), access: renderAccess, orders: renderOrders };
   $('#page-content').innerHTML = (views[state.section] || renderOverview)();
   $('#page-content').setAttribute('aria-busy', 'false');
   const creativeForm = $('#creative-form');
   if (creativeForm) { syncCreativeTiming(creativeForm); syncCreativeImage(creativeForm); }
+  const cardForm = $('#card-form');
+  if (cardForm) { syncCardTemplate(cardForm); syncVarsityYears(cardForm); }
   state.dirty = false;
-  document.title = `${({ overview: 'Overview', ads: 'Ad Studio', brand: 'Brand Profile', publisher: 'Publisher’s Desk', placements: 'Placements', access: 'Account Access', orders: 'Orders & Billing' })[state.section] || 'Partner Dashboard'} | YAT?STATS`;
+  document.title = `${({ overview: 'Overview', cards: 'Sponsor Cards', ads: 'Tribune Ad Studio', brand: 'Brand Profile', publisher: 'Publisher’s Desk', placements: 'Tribune Placements', cardPlacements: 'Title Card Placements', access: 'Account Access', orders: 'Orders & Billing' })[state.section] || 'Partner Dashboard'} | YAT?STATS`;
 }
-function scopedPlacements() { return list('placements').filter(p => !state.sponsorId || String(p.sponsorId) === state.sponsorId); }
+function scopedPlacements(cards = false) { return list(cards ? 'cardPlacements' : 'placements').filter(p => !state.sponsorId || String(p.sponsorId) === state.sponsorId); }
 function renderOverview() {
   const brand = sponsor();
   const placements = scopedPlacements();
   const creatives = list('creatives').filter(c => !state.sponsorId || String(c.sponsorId) === state.sponsorId);
   return pageHeading('Your partner workspace', brand ? `${brand.name}, in the community.` : 'Your hometown publishing workspace.', 'Manage the messages that connect local businesses with alumni, families and fans.', `${button('Preview an edition', 'preview-edition')}${isPublisher() ? button('Publisher’s Desk', 'go-publisher', '', true) : button('Open ad studio', 'go-ads', '', true)}`) +
     (!brand && !isPublisher() ? empty('Your account is ready for a sponsor connection.', 'A publisher needs to assign your account to a sponsor brand before you can edit its advertisements.') : '') +
-    `<div class="stats-grid"><div class="stat-card"><span>School placements</span><strong>${placements.length}</strong><small>${placements.filter(p => p.status === 'active').length} marked active</small></div><div class="stat-card"><span>Published ad versions</span><strong>${creatives.filter(c => c.status === 'published').length}</strong><small>Kept with their dates and school audience</small></div><div class="stat-card"><span>Drafts & review</span><strong>${creatives.filter(c => ['draft', 'pending'].includes(c.status)).length}</strong><small>Continue editing or review the next message</small></div></div>
-    <div class="two-columns"><section class="panel"><div class="panel-heading"><div><p class="eyebrow">Your school connections</p><h2>Where your support shows up</h2><p>Placements and dates are assigned by your publisher.</p></div></div>${placementTable(placements, false)}</section><section class="panel"><div class="panel-heading"><div><p class="eyebrow">A little hometown love</p><h2>Keep your message current.</h2><p>A new version preserves the advertisement that fans received before it.</p></div></div><div class="link-row"><div><strong>Create your next advertisement</strong><p>Update an offer, image or call to action.</p></div>${button('Open', 'go-ads', '', false)}</div><div class="link-row"><div><strong>Check your brand details</strong><p>Name, logo and destination website.</p></div>${button('Edit', 'go-brand')}</div><div class="section-note">Stories and stats bring fans back. Your support helps keep their hometown connection alive.</div></section></div>`;
+    `<div class="stats-grid"><div class="stat-card"><span>Tribune placements</span><strong>${placements.length}</strong><small>${placements.filter(p => p.status === 'active').length} marked active</small></div><div class="stat-card"><span>Published ad versions</span><strong>${creatives.filter(c => c.status === 'published').length}</strong><small>Kept with their dates and school audience</small></div><div class="stat-card"><span>Drafts & review</span><strong>${creatives.filter(c => ['draft', 'pending'].includes(c.status)).length}</strong><small>Continue editing or review the next message</small></div></div>
+    <div class="two-columns"><section class="panel"><div class="panel-heading"><div><p class="eyebrow">Your school connections</p><h2>Where your support shows up</h2><p>Placements and dates are assigned by your publisher.</p></div></div>${placementTable(placements, false)}</section><section class="panel"><div class="panel-heading"><div><p class="eyebrow">A little hometown love</p><h2>Keep your message current.</h2><p>A new version preserves the advertisement that fans received before it.</p></div></div><div class="link-row"><div><strong>Create your next Tribune advertisement</strong><p>Update an offer, image or call to action.</p></div>${button('Open', 'go-ads', '', false)}</div><div class="link-row"><div><strong>Update your sponsor card</strong><p>Front, back and message versions for title placements.</p></div>${button('Open', 'go-cards')}</div><div class="link-row"><div><strong>Check your brand details</strong><p>Name, logo and destination website.</p></div>${button('Edit', 'go-brand')}</div><div class="section-note">Stories and stats bring fans back. Your support helps keep their hometown connection alive.</div></section></div>`;
 }
-function placementTable(items, editable) {
-  if (!items.length) return empty('No placements to show yet.', 'Your publisher can connect a sponsor to the appropriate school editions.');
-  return `<div class="data-scroll"><table class="data-table"><thead><tr><th scope="col">School</th><th scope="col">Status</th><th scope="col">Dates</th>${editable ? '<th scope="col">Manage</th>' : ''}</tr></thead><tbody>${items.map(item => `<tr><td><strong>${esc(item.schoolName || schoolName(item.hsid))}</strong>${editable ? `<small>${esc(list('sponsors').find(s => String(s.id) === String(item.sponsorId))?.name || 'Sponsor')}</small>` : ''}<small>${item.requiresApproval ? 'Advertisement review required' : 'Sponsor may submit updates directly'}</small></td><td>${statusBadge(item.status)}</td><td>${esc(periodLabel(item))}</td>${editable ? `<td><button type="button" class="button button-small" data-edit-placement="${esc(item.id)}">Edit</button></td>` : ''}</tr>`).join('')}</tbody></table></div>`;
+function placementTable(items, editable, cards = false) {
+  if (!items.length) return empty('No placements to show yet.', cards ? 'A publisher can assign an entitled title sponsorship to this sponsor’s school card.' : 'Your publisher can connect a sponsor to the appropriate school editions.');
+  return `<div class="data-scroll"><table class="data-table"><thead><tr><th scope="col">School</th><th scope="col">Status</th><th scope="col">Dates</th>${editable ? '<th scope="col">Manage</th>' : ''}</tr></thead><tbody>${items.map(item => `<tr><td><strong>${esc(item.schoolName || schoolName(item.hsid))}</strong>${editable ? `<small>${esc(list('sponsors').find(s => String(s.id) === String(item.sponsorId))?.name || 'Sponsor')}</small>` : ''}<small>${item.requiresApproval ? `${cards ? 'Card' : 'Advertisement'} review required` : 'Sponsor may submit updates directly'}</small></td><td>${statusBadge(item.status)}</td><td>${esc(periodLabel(item))}</td>${editable ? `<td><button type="button" class="button button-small" data-edit-${cards ? 'card-placement' : 'placement'}="${esc(item.id)}">Edit</button></td>` : ''}</tr>`).join('')}</tbody></table></div>`;
 }
 function renderAds() {
   const brand = sponsor();
@@ -228,12 +237,80 @@ function renderAds() {
     <fieldset><legend>When this version is available</legend>${dates('creative', item, { scheduled: true })}<label class="check-line"><input type="checkbox" name="evergreen"${item.evergreen ? ' checked' : ''}>Evergreen: keep this version available without an end date.</label><div style="margin-top:17px">${cadenceField('creative', item.cadence)}</div></fieldset>${creativeAudience(item)}
     <div class="form-actions"><button class="button" type="submit" data-save-action="save">Save draft</button><button class="button" type="submit" data-save-action="preview">Save & preview</button><button class="button button-primary" type="submit" data-save-action="submit">${review ? 'Submit for review' : 'Submit to placements'}</button>${isPublisher() ? '<button class="button button-dark" type="submit" data-save-action="publish">Publish version</button>' : ''}${item.id && item.status !== 'archived' ? '<button class="button button-danger" type="submit" data-save-action="archive" formnovalidate>Archive</button>' : ''}</div><p class="help">Saving or previewing does not send an email. Availability follows the dates, placement scope and approval status.</p></form></section></div>`;
 }
+function sharePromotionDefaults() {
+  const value = state.data?.cardDefaults?.sharePromotion;
+  return value && typeof value === 'object' ? { headline: String(value.headline || ''), body: String(value.body || ''), ctaLabel: String(value.ctaLabel || ''), ctaUrl: String(value.ctaUrl || '') } : { headline: '', body: '', ctaLabel: '', ctaUrl: '' };
+}
+function cardYears(item = {}) {
+  const current = new Date().getFullYear() + 1;
+  return [...new Set([...Array.from({ length: Math.min(115, current - 1899) }, (_, i) => String(current - i)), item.gradClass, ...(item.varsityYears || [])].filter(year => /^(19|20|21)[0-9]{2}$/.test(String(year))))].map(String).sort((a, b) => Number(b) - Number(a));
+}
+function varsityYearPicker(item) {
+  const selected = new Set((item.varsityYears || []).map(String));
+  return `<div class="field"><span class="field-label" id="card-varsity-label">Years on high school varsity</span><details class="year-picker"><summary aria-labelledby="card-varsity-label card-varsity-summary"><span id="card-varsity-summary">${selected.size ? esc([...selected].sort().join(', ')) : 'Choose varsity years'}</span></summary><div class="year-options">${cardYears(item).map(year => `<label class="check-line" data-varsity-year="${year}"><input type="checkbox" name="varsityYears" value="${year}"${selected.has(year) ? ' checked' : ''}>${year}</label>`).join('')}</div></details><p class="help">Select up to eight years. These are the same personal history fields used on the contribution form.</p></div>`;
+}
+function cardAudience(item = {}) {
+  const allowed = [...new Map(scopedPlacements(true).filter(p => p.status !== 'cancelled').map(p => [String(p.hsid), p])).values()];
+  const selected = new Set((item.schoolIds || []).map(String));
+  const all = !selected.size;
+  return `<fieldset><legend>Title sponsorship audience</legend><label class="radio-line"><input type="radio" name="audienceMode" value="all"${all ? ' checked' : ''}>All eligible title-card placements for this sponsor</label><label class="radio-line"><input type="radio" name="audienceMode" value="selected"${!all ? ' checked' : ''}>Selected entitled schools</label><div class="check-list" data-selected-schools${all ? ' hidden' : ''}>${allowed.length ? allowed.map(p => `<label class="check-line"><input type="checkbox" name="schoolId" value="${esc(p.hsid)}"${selected.has(String(p.hsid)) ? ' checked' : ''}>${esc(p.schoolName || schoolName(p.hsid))}</label>`).join('') : '<p class="help">A publisher must assign a title-card placement before this card can be submitted or published for a school.</p>'}</div><p class="help">Title-card placements determine eligibility for the school gallery. Tribune advertisements have their own placements.</p></fieldset>`;
+}
+function renderCards() {
+  const brand = sponsor();
+  const heading = pageHeading('Sponsor dashboard / Sponsor cards', 'Your place in the hometown lineup.', 'Create the front and back of your title sponsor card. Save a new version whenever your message changes.', button('New card version', 'new-card', '', true));
+  if (!brand) return heading + empty('Choose a sponsor brand first.', isPublisher() ? 'Create a brand in Brand Profile, then assign its title-card placements.' : 'Your publisher can connect your account to the correct sponsor brand.');
+  const item = activeCard() || {};
+  const template = CARD_BACK_TEMPLATES.some(([key]) => key === item.backTemplate) ? item.backTemplate : 'banner_text';
+  const defaults = template === 'share_promotion' ? sharePromotionDefaults() : {};
+  const message = { headline: item.headline || defaults.headline || '', body: item.body || defaults.body || '', ctaLabel: item.ctaLabel || defaults.ctaLabel || '', ctaUrl: item.ctaUrl || defaults.ctaUrl || '' };
+  const versions = list('cards').filter(c => String(c.sponsorId) === state.sponsorId).sort((a, b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
+  const placements = scopedPlacements(true);
+  const requiresReview = placements.some(p => p.status !== 'cancelled' && p.requiresApproval);
+  const statuses = Array.isArray(state.data?.cardDefaults?.statusOptions) ? state.data.cardDefaults.statusOptions.map(String) : [];
+  if (item.statusLabel && !statuses.includes(item.statusLabel)) statuses.unshift(item.statusLabel);
+  return heading + `<div class="editor-columns"><aside class="panel"><div class="panel-heading"><div><h2>Card versions</h2><p>${esc(brand.name)}</p></div></div><div class="version-list">${versions.length ? versions.map(v => `<button type="button" class="version-item${String(v.id) === state.cardId ? ' is-selected' : ''}" data-edit-card="${esc(v.id)}"><span class="version-status">${statusBadge(v.status)}<span>Rev. ${esc(v.revision)}</span></span><strong>${esc(v.headline || [v.firstName, v.lastName].filter(Boolean).join(' ') || 'Sponsor card')}</strong><small>${esc(CARD_BACK_TEMPLATES.find(([key]) => key === v.backTemplate)?.[1] || 'Sponsor card')}</small><small>${esc(periodLabel(v))}</small></button>`).join('') : empty('Start your first card.', 'Saved drafts and published versions appear here.')}</div><div class="card-placement-note"><strong>${placements.length} title-card placement${placements.length === 1 ? '' : 's'}</strong><p>Only an entitled title sponsor can appear with a two-sided sponsor card.</p>${isPublisher() ? button('Manage title placements', 'go-cardPlacements') : ''}</div></aside>
+    <section class="panel"><div class="panel-heading"><div><p class="eyebrow">${item.id ? `Sponsor card · Revision ${esc(item.revision)}` : 'New sponsor card'}</p><h2>${item.id ? 'Update your card' : 'Make it your own.'}</h2><p>The preview uses the same stacked card frame as the school gallery.</p></div>${statusBadge(item.status || 'draft')}</div>${['published', 'archived'].includes(item.status) ? '<p class="notice">Saving changes creates a new version and preserves this earlier card.</p>' : ''}<form id="card-form"><input type="hidden" name="id" value="${esc(item.id || '')}"><input type="hidden" name="revision" value="${esc(item.revision ?? '')}"><p class="form-error" role="alert" hidden></p>
+    <fieldset class="card-editor-section"><legend><span class="section-number">01</span>Front of the card</legend><p class="help">Use the familiar contribution fields for the person represented on this sponsor card.</p><div class="form-grid">${field('card', 'firstName', 'First name', item.firstName, { max: 80 })}${field('card', 'lastName', 'Last name', item.lastName, { max: 80 })}${selectField('card', 'gradClass', 'Graduation class', item.gradClass || '', [['', 'Choose a year'], ...cardYears(item).map(year => [year, year])])}${selectField('card', 'statusLabel', 'Status', item.statusLabel || '', [['', 'Choose status'], ...statuses.map(status => [status, status])])}</div>${varsityYearPicker(item)}<div class="form-grid">${field('card', 'currentTeam', 'Current or most recent team', item.currentTeam, { max: 160, optional: true })}${field('card', 'organization', 'Organization', item.organization ?? brand.name, { max: 160, optional: true })}</div>${field('card', 'level', 'Level', 'SPONSOR', { readonly: true, help: 'Sponsor cards always use SPONSOR. This level is enforced when the card is saved.' })}${assetPicker('card-front', 'card_front', item.frontImageUrl, { name: 'frontImageUrl', assetField: 'frontAssetId', label: 'Front image', required: true, help: 'Required before publication. Choose a portrait that works in the existing 5:7 card frame.' })}${field('card', 'frontImageAlt', 'Describe the front image', item.frontImageAlt, { max: 240, help: 'Required with the image before publication.' })}</fieldset>
+    <fieldset class="card-editor-section"><legend><span class="section-number">02</span>Back of the card</legend><div class="template-options">${CARD_BACK_TEMPLATES.map(([key, title, description]) => `<label class="template-choice"><input type="radio" name="backTemplate" value="${key}"${template === key ? ' checked' : ''}><span><strong>${esc(title)}</strong><small>${esc(description)}</small></span></label>`).join('')}</div>
+    <div data-card-template="banner_text">${assetPicker('card-banner', 'card_banner', item.bannerImageUrl, { name: 'bannerImageUrl', assetField: 'bannerAssetId', label: 'Top banner image', help: 'The banner contains sponsor artwork only. Personal card details stay on the front.' })}${field('card', 'bannerImageAlt', 'Describe the banner', item.bannerImageAlt, { max: 240, help: 'Required when a banner is uploaded.' })}</div>
+    <div class="notice" data-card-template="share_promotion"><p>The prepared community promotion comes from the shared card template. You can edit its wording below.</p>${button('Restore prepared message', 'card-share-defaults')}<p class="help">With no link destination, this promotion uses the selected school’s Community Hub.</p></div>
+    <div data-card-template="full_image">${assetPicker('card-full', 'card_full', item.fullImageUrl, { name: 'fullImageUrl', assetField: 'fullAssetId', label: 'Full-size back image', required: true, help: 'Required before publication. This replaces the top banner and FunZone message area.' })}${field('card', 'fullImageAlt', 'Describe the full-size image', item.fullImageAlt, { max: 240, help: 'Include the essential offer or message so readers can understand the image without seeing it.' })}</div>
+    <div data-card-message>${field('card', 'headline', 'Message headline', message.headline, { max: 120 })}${field('card', 'body', 'FunZone message', message.body, { textarea: true, rows: 5, max: 1800, help: 'One message. Preview the card to check its fit and readability.' })}</div><div class="form-grid">${field('card', 'ctaLabel', 'Button text', message.ctaLabel, { max: 60, optional: true })}${field('card', 'ctaUrl', 'Button destination', message.ctaUrl, { type: 'url', optional: true, placeholder: 'https://', help: 'Use an HTTPS address. The community-sharing template can use the school’s hub automatically.' })}</div></fieldset>
+    <fieldset><legend>Version availability</legend>${dates('card', item)}<p class="help">You can update the message daily. Saved versions, placement dates and approval status control which version is eligible.</p></fieldset>${cardAudience(item)}<div class="form-actions"><button class="button" type="submit" data-save-action="save">Save draft</button><button class="button" type="submit" data-save-action="preview">Save & preview</button><button class="button button-primary" type="submit" data-save-action="submit">${requiresReview ? 'Submit for review' : 'Submit to title placements'}</button>${isPublisher() ? '<button class="button button-dark" type="submit" data-save-action="publish">Publish card version</button>' : ''}${item.id && item.status !== 'archived' ? '<button class="button button-danger" type="submit" data-save-action="archive" formnovalidate>Archive</button>' : ''}</div><p class="help">Drafts and previews do not publish a card. Sponsor cards are managed independently of Tribune advertisements and billing.</p></form></section></div>`;
+}
+function syncVarsityYears(form) {
+  const selected = [...new FormData(form).getAll('varsityYears')].map(String).sort();
+  const summary = $('#card-varsity-summary', form); if (summary) summary.textContent = selected.length ? selected.join(', ') : 'Choose varsity years';
+  const grad = Number(formValue(form, 'gradClass'));
+  $$('[data-varsity-year]', form).forEach(label => { label.hidden = Boolean(grad && Number(label.dataset.varsityYear) > grad && !$('input', label).checked); });
+}
+function cardTextValues(form) {
+  return Object.fromEntries(['headline', 'body', 'ctaLabel', 'ctaUrl'].map(name => [name, form.elements.namedItem(name)?.value || '']));
+}
+function syncCardTemplate(form) {
+  const template = formValue(form, 'backTemplate') || 'banner_text';
+  const previous = form.dataset.activeBackTemplate;
+  const drafts = state.cardDrafts.get(form) || {};
+  if (previous && previous !== template) {
+    drafts[previous] = cardTextValues(form);
+    const next = drafts[template] || (template === 'share_promotion' ? sharePromotionDefaults() : { headline: '', body: '', ctaLabel: '', ctaUrl: '' });
+    for (const [name, value] of Object.entries(next)) form.elements.namedItem(name).value = value;
+  }
+  form.dataset.activeBackTemplate = template; state.cardDrafts.set(form, drafts);
+  $$('[data-card-template]', form).forEach(panel => {
+    const visible = panel.dataset.cardTemplate === template; panel.hidden = !visible;
+    $$('input,textarea,select,button', panel).forEach(control => { control.disabled = !visible; });
+  });
+  const message = $('[data-card-message]', form); message.hidden = template === 'full_image';
+  $$('input,textarea', message).forEach(control => { control.disabled = template === 'full_image'; });
+}
+
 function renderBrand() {
   const item = state.newBrand ? {} : sponsor() || {};
   const heading = pageHeading('Sponsor dashboard / Brand profile', state.newBrand ? 'Welcome another hometown partner.' : 'The name behind the support.', 'Keep your brand identity consistent across the placements assigned to you.', isPublisher() ? button('Add a sponsor brand', 'new-brand', '', true) : '');
   if (!item.id && !isPublisher()) return heading + empty('No sponsor brand is assigned.', 'Your publisher can connect your account to the correct business.');
   const logo = safeUrl(item.logoUrl);
-  return heading + `<div class="two-columns"><section class="panel"><div class="brand-preview">${logo ? `<img src="${esc(logo)}" alt="${esc(item.name || 'Sponsor')} logo">` : `<div class="brand-initials" aria-hidden="true">${esc((item.name || 'Y').slice(0, 1).toUpperCase())}</div>`}<div><p class="eyebrow">${item.id ? 'Sponsor profile' : 'New sponsor'}</p><h2 style="margin:0;font:700 23px Georgia,serif">${esc(item.name || 'Your brand')}</h2></div></div><form id="brand-form"><input type="hidden" name="id" value="${esc(item.id || '')}"><p class="form-error" role="alert" hidden></p>${field('brand', 'name', 'Business / sponsor name', item.name, { required: true, max: 160 })}${field('brand', 'websiteUrl', 'Business website', item.websiteUrl, { type: 'url', optional: true, placeholder: 'https://' })}${assetPicker('brand', 'logo', item.logoUrl, { name: 'logoUrl', label: 'Brand logo', help: item.id ? 'Use a clean, easy-to-read logo.' : 'Save the brand first, then upload its logo.' })}<label class="check-line"><input type="checkbox" name="isActive"${item.isActive !== false ? ' checked' : ''}>Brand is active</label><div class="form-actions"><button class="button button-primary" type="submit">${item.id ? 'Save brand profile' : 'Create sponsor brand'}</button></div></form></section><aside class="panel"><div class="panel-heading"><div><p class="eyebrow">One consistent identity</p><h2>Recognizable at every school.</h2><p>Your brand profile is shared across its authorized placements. School assignments and advertisement versions stay separate.</p></div></div><p class="help">Use Ad Studio to change the offer or message. A publisher manages the school placements and account access.</p>${item.id ? `<p class="code-note">Brand ID: ${esc(item.id)}</p>` : ''}</aside></div>`;
+  return heading + `<div class="two-columns"><section class="panel"><div class="brand-preview">${logo ? `<img src="${esc(logo)}" alt="${esc(item.name || 'Sponsor')} logo">` : `<div class="brand-initials" aria-hidden="true">${esc((item.name || 'Y').slice(0, 1).toUpperCase())}</div>`}<div><p class="eyebrow">${item.id ? 'Sponsor profile' : 'New sponsor'}</p><h2 style="margin:0;font:700 23px Georgia,serif">${esc(item.name || 'Your brand')}</h2></div></div><form id="brand-form"><input type="hidden" name="id" value="${esc(item.id || '')}"><p class="form-error" role="alert" hidden></p>${field('brand', 'name', 'Business / sponsor name', item.name, { required: true, max: 160 })}${field('brand', 'websiteUrl', 'Business website', item.websiteUrl, { type: 'url', optional: true, placeholder: 'https://' })}${assetPicker('brand', 'logo', item.logoUrl, { name: 'logoUrl', label: 'Brand logo', help: item.id ? 'Use a clean, easy-to-read logo.' : 'Save the brand first, then upload its logo.' })}<label class="check-line"><input type="checkbox" name="isActive"${item.isActive !== false ? ' checked' : ''}>Brand is active</label><p class="notice">Changes to this brand’s name, logo or active status apply to all of its school placements, including Tribune advertisements and sponsor cards.</p><div class="form-actions"><button class="button button-primary" type="submit">${item.id ? 'Save brand profile' : 'Create sponsor brand'}</button></div></form></section><aside class="panel"><div class="panel-heading"><div><p class="eyebrow">One consistent identity</p><h2>Recognizable at every school.</h2><p>Your brand profile is shared across its authorized placements. School assignments and advertisement versions stay separate.</p></div></div><p class="help">Use Ad Studio to change the offer or message. A publisher manages the school placements and account access.</p>${item.id ? `<p class="code-note">Brand ID: ${esc(item.id)}</p>` : ''}</aside></div>`;
 }
 function renderPublisher() {
   if (!isPublisher()) return empty('Publisher access is required.', 'Your sponsor tools are available from the workspace navigation.');
@@ -250,17 +327,18 @@ function publicationForm() {
   const p = state.data.publication || {};
   return `<div class="two-columns"><section class="panel"><div class="panel-heading"><div><p class="eyebrow">Shared publication identity</p><h2>The Tribune, your way.</h2><p>One masthead serves every school. The school name, date and statistics stay dynamic.</p></div></div><form id="publication-form"><input type="hidden" name="revision" value="${esc(p.revision ?? '')}"><p class="form-error" role="alert" hidden></p>${assetPicker('publication', 'masthead', p.masthead?.imageUrl, { name: 'mastheadUrl', assetField: 'mastheadAssetId', assetId: p.masthead?.assetId, label: 'Tribune masthead graphic', help: 'A 1,440 × 360 px PNG is a good starting point. With no image, the existing text masthead is used.' })}${field('publication', 'mastheadAlt', 'Masthead image description', p.masthead?.alt || 'The YAT-A-BOY Tribune', { max: 240, help: 'The publication name remains available in the plain-text edition.' })}<label class="check-line"><input type="checkbox" name="includesTagline"${p.masthead?.includesTagline ? ' checked' : ''}>The uploaded graphic already includes the tagline.</label><fieldset><legend>Sweepstakes and sending details</legend>${field('publication', 'officialRulesUrl', 'Official sweepstakes rules URL', p.officialRulesUrl, { type: 'url', optional: true, placeholder: 'https://' })}${field('publication', 'sweepstakesReminder', 'Sweepstakes reminder', p.sweepstakesReminder, { textarea: true, rows: 4, max: 1200, optional: true })}${field('publication', 'postalAddress', 'Publisher mailing address', p.postalAddress, { textarea: true, rows: 3, max: 500, optional: true, help: 'Appears in the delivered newsletter footer.' })}</fieldset><div class="form-actions"><button class="button" type="submit" data-save-action="preview">Preview settings</button><button class="button button-primary" type="submit" data-save-action="save">Save publication settings</button></div><p class="help">Saving these settings does not change the newsletter’s delivery approval or schedule.</p></form></section><aside class="panel"><p class="eyebrow">A familiar front page</p><h2 style="font:700 24px Georgia,serif;margin:0 0 15px">The YAT-A-BOY Tribune</h2><p class="help">Keep the name and artwork in the masthead image. Leaving the tagline as live text helps it stay readable on phones.</p><p class="section-note">Dedicated to tell our fans, <strong>WHERE THEY YAT!</strong><br>Through <strong>STORIES & STATS!</strong></p><p class="help">Upload a new image for a new graphic version. Previously saved editions keep their original artwork.</p></aside></div>`;
 }
-function renderPlacements() {
+function renderPlacements(cards = false) {
   if (!isPublisher()) return empty('Publisher access is required.', 'School placements are managed by your publisher.');
-  const item = activePlacement() || {};
+  const item = activePlacement(cards) || {};
+  const prefix = cards ? 'card-placement' : 'placement';
   const brands = [['', 'Choose a sponsor'], ...list('sponsors').map(b => [b.id, b.name])];
   const orders = [['', 'No linked order'], ...list('orders').map(o => [o.id, `${schoolName(o.hsid)} · ${o.sponsorshipType || 'Sponsorship'} · ${o.status}`])];
-  return pageHeading('Publisher’s Desk / Placements', 'Put the right partner in the right edition.', 'School assignments control where sponsor advertisements are eligible to appear.', button('New placement', 'new-placement', '', true)) + `<section class="panel"><div class="panel-heading"><div><h2>${item.id ? 'Edit school placement' : 'Add a school placement'}</h2><p>New placements begin paused. Activate when the sponsor, dates and approval requirements are ready.</p></div></div><form id="placement-form"><input type="hidden" name="id" value="${esc(item.id || '')}"><p class="form-error" role="alert" hidden></p><div class="form-grid">${selectField('placement', 'sponsorId', 'Sponsor brand', item.sponsorId || state.sponsorId, brands, { required: true })}<div class="field">${schoolPicker('placement', 'schoolIds', item.hsid ? [String(item.hsid)] : [], true)}</div>${selectField('placement', 'status', 'Placement status', item.status || 'paused', [['paused', 'Paused'], ['active', 'Active'], ['cancelled', 'Cancelled']])}${field('placement', 'priority', 'Placement priority', item.priority ?? 0, { type: 'number', step: '1', help: 'Used when more than one eligible placement is available.' })}</div><fieldset><legend>Placement dates</legend>${dates('placement', item, { startRequired: true })}</fieldset><div style="margin-top:18px">${selectField('placement', 'sponsorOrderId', 'Linked sponsorship order', item.sponsorOrderId || '', orders)}</div><label class="check-line"><input type="checkbox" name="requiresApproval"${item.requiresApproval !== false ? ' checked' : ''}>Require publisher approval for sponsor advertisement updates.</label><div class="form-actions"><button class="button button-primary" type="submit">Save placement</button></div></form></section><section class="panel"><div class="panel-heading"><div><h2>School assignments</h2><p>Placements for the selected sponsor. Use the sponsor selector or search to open another brand.</p></div></div>${placementTable(list('placements'), true)}</section>`;
+  return pageHeading(`Publisher’s Desk / ${cards ? 'Title card placements' : 'Tribune placements'}`, cards ? 'A title sponsor’s place in the gallery.' : 'Put the right partner in the right edition.', cards ? 'Assign the explicit title sponsorship entitlement that allows a two-sided sponsor card at a school.' : 'School assignments control where sponsor advertisements are eligible to appear.', button(cards ? 'New title-card placement' : 'New placement', cards ? 'new-card-placement' : 'new-placement', '', true)) + `<section class="panel"><div class="panel-heading"><div><h2>${item.id ? 'Edit school placement' : 'Add a school placement'}</h2><p>New placements begin paused. Activate when the sponsor, dates and approval requirements are ready.</p></div></div>${cards ? '<p class="notice">Saving a title-card placement records that this sponsor is entitled to a front-and-back gallery card for the selected school. Confirm the title sponsorship arrangement before activating it. This does not create a Tribune ad placement or a payment.</p>' : ''}<form id="${prefix}-form"><input type="hidden" name="id" value="${esc(item.id || '')}"><p class="form-error" role="alert" hidden></p><div class="form-grid">${selectField(prefix, 'sponsorId', 'Sponsor brand', item.sponsorId || state.sponsorId, brands, { required: true })}<div class="field">${schoolPicker(prefix, 'schoolIds', item.hsid ? [String(item.hsid)] : [], true)}</div>${selectField(prefix, 'status', 'Placement status', item.status || 'paused', [['paused', 'Paused'], ['active', 'Active'], ['cancelled', 'Cancelled']])}${field(prefix, 'priority', 'Placement priority', item.priority ?? 0, { type: 'number', step: '1', help: 'Used when more than one eligible placement is available.' })}</div><fieldset><legend>Placement dates</legend>${dates(prefix, item, { startRequired: true })}</fieldset><div style="margin-top:18px">${selectField(prefix, 'sponsorOrderId', 'Linked sponsorship order', item.sponsorOrderId || '', orders)}</div><label class="check-line"><input type="checkbox" name="requiresApproval"${item.requiresApproval !== false ? ' checked' : ''}>Require publisher approval for sponsor ${cards ? 'card' : 'advertisement'} updates.</label><div class="form-actions"><button class="button button-primary" type="submit">Save ${cards ? 'title-card ' : ''}placement</button></div></form></section><section class="panel"><div class="panel-heading"><div><h2>${cards ? 'Title sponsorship assignments' : 'School assignments'}</h2><p>Placements for the selected sponsor. Use the sponsor selector or search to open another brand.</p></div></div>${placementTable(list(cards ? 'cardPlacements' : 'placements'), true, cards)}</section>`;
 }
 function renderAccess() {
   if (!isPublisher()) return empty('Publisher access is required.', 'Your account’s sponsor access is managed by your publisher.');
   const item = list('memberships').find(m => String(m.id) === state.membershipId) || {};
-  return pageHeading('Publisher’s Desk / Account access', 'The right access for the right account.', 'Connect an existing account to its sponsor brand, or grant publisher access.', button('New access assignment', 'new-membership', '', true)) + `<section class="panel"><div class="panel-heading"><div><h2>${item.id ? 'Update account access' : 'Assign account access'}</h2><p>Use the account’s verified Firebase UID. This form does not send an invitation.</p></div></div><form id="membership-form"><p class="form-error" role="alert" hidden></p><div class="form-grid">${field('membership', 'uid', 'Account UID', item.uid, { required: true, max: 128, help: 'Use the exact account identifier. Email addresses are not account identifiers here.' })}${selectField('membership', 'role', 'Access role', item.role || 'sponsor', [['sponsor', 'Sponsor'], ['publisher', 'Publisher']])}<div class="field" data-membership-sponsor${item.role === 'publisher' ? ' hidden' : ''}>${selectField('membership', 'sponsorId', 'Sponsor brand', item.sponsorId || state.sponsorId, [['', 'Choose a sponsor'], ...list('sponsors').map(s => [s.id, s.name])])}</div></div><label class="check-line"><input type="checkbox" name="isActive"${item.isActive !== false ? ' checked' : ''}>Access is active</label><div class="form-actions"><button class="button button-primary" type="submit">Save account access</button></div><p class="help">Your current account UID: <code>${esc(state.data.user?.uid || '')}</code></p></form></section><section class="panel"><div class="panel-heading"><div><h2>Current account assignments</h2></div></div>${list('memberships').length ? `<div class="data-scroll"><table class="data-table"><thead><tr><th scope="col">Account UID</th><th scope="col">Role / brand</th><th scope="col">Status</th><th scope="col">Manage</th></tr></thead><tbody>${list('memberships').map(m => `<tr><td><code>${esc(m.uid)}</code></td><td>${esc(m.role)}<small>${esc(list('sponsors').find(s => String(s.id) === String(m.sponsorId))?.name || (m.role === 'publisher' ? 'Publication-wide access' : ''))}</small></td><td>${statusBadge(m.isActive ? 'active' : 'paused')}</td><td><button class="button button-small" type="button" data-edit-membership="${esc(m.id)}">Edit</button></td></tr>`).join('')}</tbody></table></div>` : empty('No account assignments returned.', 'Assignments appear here after they are saved.')}</section>`;
+  return pageHeading('Publisher’s Desk / Account access', 'The right access for the right account.', 'Connect an existing account to its sponsor brand, or grant publisher access.', button('New access assignment', 'new-membership', '', true)) + `<section class="panel"><div class="panel-heading"><div><h2>${item.id ? 'Update account access' : 'Assign account access'}</h2><p>Use the account’s verified Firebase UID. This form does not send an invitation.</p></div></div><form id="membership-form"><input type="hidden" name="id" value="${esc(item.id || '')}"><input type="hidden" name="revision" value="${esc(item.revision ?? '')}"><p class="form-error" role="alert" hidden></p><div class="form-grid">${field('membership', 'uid', 'Account UID', item.uid, { required: true, max: 128, help: 'Use the exact account identifier. Email addresses are not account identifiers here.' })}${selectField('membership', 'role', 'Access role', item.role || 'sponsor', [['sponsor', 'Sponsor'], ['publisher', 'Publisher']])}<div class="field" data-membership-sponsor${item.role === 'publisher' ? ' hidden' : ''}>${selectField('membership', 'sponsorId', 'Sponsor brand', item.sponsorId || state.sponsorId, [['', 'Choose a sponsor'], ...list('sponsors').map(s => [s.id, s.name])])}</div></div><label class="check-line"><input type="checkbox" name="isActive"${item.isActive !== false ? ' checked' : ''}>Access is active</label><div class="form-actions"><button class="button button-primary" type="submit">Save account access</button></div><p class="help">Your current account UID: <code>${esc(state.data.user?.uid || '')}</code></p></form></section><section class="panel"><div class="panel-heading"><div><h2>Current account assignments</h2></div></div>${list('memberships').length ? `<div class="data-scroll"><table class="data-table"><thead><tr><th scope="col">Account UID</th><th scope="col">Role / brand</th><th scope="col">Status</th><th scope="col">Manage</th></tr></thead><tbody>${list('memberships').map(m => `<tr><td><code>${esc(m.uid)}</code></td><td>${esc(m.role)}<small>${esc(list('sponsors').find(s => String(s.id) === String(m.sponsorId))?.name || (m.role === 'publisher' ? 'Publication-wide access' : ''))}</small></td><td>${statusBadge(m.isActive ? 'active' : 'paused')}</td><td><button class="button button-small" type="button" data-edit-membership="${esc(m.id)}">Edit</button></td></tr>`).join('')}</tbody></table></div>` : empty('No account assignments returned.', 'Assignments appear here after they are saved.')}</section>`;
 }
 function renderOrders() {
   const billing = safeUrl(state.data.billingUrl);
@@ -300,6 +378,28 @@ function creativePayload(form, action) {
   if (action !== 'archive' && formValue(form, 'audienceMode') === 'selected' && !schoolIds.length) throw new Error('Choose at least one booked school, or select all eligible sponsor placements.');
   return { action, ...idRevision(form), sponsorId: state.sponsorId, headline: formValue(form, 'headline'), body: formValue(form, 'body'), imageUrl: formValue(form, 'imageUrl'), imageAlt: formValue(form, 'imageAlt'), url: formValue(form, 'url'), cta: formValue(form, 'cta'), acknowledgment: formValue(form, 'acknowledgment'), ...timing(form), evergreen: checked(form, 'evergreen'), schoolIds, cadence: formValue(form, 'cadence') || 'both' };
 }
+function cardPayload(form, action) {
+  if (!state.sponsorId) throw new Error('Choose a sponsor brand before saving.');
+  const record = idRevision(form);
+  if (record.id && !Number.isInteger(record.revision)) throw new Error('Refresh the workspace before changing this card. Its current revision is missing.');
+  if (action === 'archive') return { action, ...record, sponsorId: state.sponsorId };
+  const schoolIds = formValue(form, 'audienceMode') === 'selected' ? new FormData(form).getAll('schoolId').map(String) : [];
+  if (formValue(form, 'audienceMode') === 'selected' && !schoolIds.length) throw new Error('Choose at least one entitled school, or select all eligible title-card placements.');
+  const varsityYears = [...new Set(new FormData(form).getAll('varsityYears').map(String))].sort();
+  if (varsityYears.length > 8) throw new Error('Select no more than eight varsity years.');
+  const backTemplate = formValue(form, 'backTemplate') || 'banner_text';
+  const ctaLabel = formValue(form, 'ctaLabel'), ctaUrl = formValue(form, 'ctaUrl');
+  if (backTemplate !== 'share_promotion' && Boolean(ctaLabel) !== Boolean(ctaUrl)) throw new Error('Add both the optional button text and its destination, or leave both empty.');
+  return {
+    action, ...record, sponsorId: state.sponsorId, schoolIds,
+    firstName: formValue(form, 'firstName'), lastName: formValue(form, 'lastName'), currentTeam: formValue(form, 'currentTeam'), organization: formValue(form, 'organization'),
+    level: 'SPONSOR', statusLabel: formValue(form, 'statusLabel'), gradClass: formValue(form, 'gradClass'), varsityYears,
+    frontImageUrl: formValue(form, 'frontImageUrl'), frontImageAlt: formValue(form, 'frontImageAlt'), backTemplate,
+    bannerImageUrl: backTemplate === 'banner_text' ? formValue(form, 'bannerImageUrl') : '', bannerImageAlt: backTemplate === 'banner_text' ? formValue(form, 'bannerImageAlt') : '',
+    fullImageUrl: backTemplate === 'full_image' ? formValue(form, 'fullImageUrl') : '', fullImageAlt: backTemplate === 'full_image' ? formValue(form, 'fullImageAlt') : '',
+    headline: backTemplate === 'full_image' ? '' : formValue(form, 'headline'), body: backTemplate === 'full_image' ? '' : formValue(form, 'body'), ctaLabel, ctaUrl, ...timing(form),
+  };
+}
 function notePayload(form, action) {
   if (action === 'archive') return { action, ...idRevision(form) };
   const schoolIds = formValue(form, 'audienceMode') === 'all' ? [] : selectedSchools(form);
@@ -325,6 +425,18 @@ async function saveCreative(form, requestedAction) {
     openPreview({ creativeId: state.creativeId });
   }
 }
+async function saveCard(form, requestedAction) {
+  const action = requestedAction === 'preview' ? 'save' : requestedAction;
+  const payload = cardPayload(form, action);
+  const result = await post('/cards', payload);
+  state.cardId = String(result.card?.id || result.id || payload.id || '');
+  state.dirty = false; await loadDashboard({ loading: false });
+  notify(action === 'archive' ? 'Card version archived.' : action === 'publish' ? 'Card version marked published. School entitlement, dates and approval determine where it is eligible to appear.' : action === 'submit' ? 'Card version submitted. Its current status is shown in version history.' : 'Sponsor card draft saved.');
+  if (requestedAction === 'preview') {
+    if (!state.cardId) throw new Error('The draft was saved, but its card version ID was not returned. Select it in version history to preview.');
+    openPreview({ cardId: state.cardId });
+  }
+}
 async function saveNote(form, requestedAction) {
   const action = requestedAction === 'preview' ? 'save' : requestedAction;
   const payload = notePayload(form, action);
@@ -343,18 +455,20 @@ async function saveBrand(form) {
   state.sponsorId = String(result.brand?.id || result.id || id || state.sponsorId); state.newBrand = false; state.dirty = false;
   await loadDashboard({ loading: false }); notify(id ? 'Brand profile saved.' : 'Sponsor brand created. You can now upload its logo and assign placements.');
 }
-async function savePlacement(form) {
+async function savePlacement(form, cards = false) {
   const ids = selectedSchools(form);
   if (ids.length !== 1) throw new Error('Choose one school for this placement.');
   const id = formValue(form, 'id');
-  const result = await post('/placements', { ...(id ? { id } : {}), sponsorId: formValue(form, 'sponsorId'), hsid: ids[0], status: formValue(form, 'status'), priority: Number(formValue(form, 'priority') || 0), ...timing(form), requiresApproval: checked(form, 'requiresApproval'), sponsorOrderId: formValue(form, 'sponsorOrderId') || null });
-  state.placementId = String(result.placement?.id || result.id || id || ''); state.dirty = false;
-  await loadDashboard({ loading: false }); notify('School placement saved.');
+  const result = await post(cards ? '/card-placements' : '/placements', { ...(id ? { id } : {}), sponsorId: formValue(form, 'sponsorId'), hsid: ids[0], status: formValue(form, 'status'), priority: Number(formValue(form, 'priority') || 0), ...timing(form), requiresApproval: checked(form, 'requiresApproval'), sponsorOrderId: formValue(form, 'sponsorOrderId') || null });
+  state[cards ? 'cardPlacementId' : 'placementId'] = String(result.cardPlacement?.id || result.placement?.id || result.id || id || ''); state.dirty = false;
+  await loadDashboard({ loading: false }); notify(cards ? 'Title-card placement saved.' : 'School placement saved.');
 }
 async function saveMembership(form) {
   const role = formValue(form, 'role'), sponsorId = formValue(form, 'sponsorId');
   if (role === 'sponsor' && !sponsorId) throw new Error('Choose a sponsor brand for this account.');
-  const result = await post('/memberships', { uid: formValue(form, 'uid'), role, ...(role === 'sponsor' ? { sponsorId } : {}), isActive: checked(form, 'isActive') });
+  const record = idRevision(form);
+  if (record.id && !Number.isInteger(record.revision)) throw new Error('Refresh the workspace before updating this account assignment. Its current revision is missing.');
+  const result = await post('/memberships', { ...record, uid: formValue(form, 'uid'), role, sponsorId: role === 'sponsor' ? sponsorId : null, isActive: checked(form, 'isActive') });
   state.membershipId = String(result.membership?.id || ''); state.dirty = false;
   await loadDashboard({ loading: false }); notify('Account access saved.');
 }
@@ -365,12 +479,13 @@ async function uploadAsset(input) {
   if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) { status.textContent = 'Choose a PNG, JPG or WebP image.'; input.value = ''; return; }
   if (file.size > MAX_UPLOAD_BYTES) { status.textContent = 'Choose an image no larger than 3 MB.'; input.value = ''; return; }
   const brandId = form?.getAttribute('id') === 'brand-form' ? formValue(form, 'id') : state.sponsorId;
-  if (['logo', 'ad'].includes(kind) && !brandId) { status.textContent = 'Save or choose the sponsor brand before uploading its image.'; input.value = ''; return; }
-  input.disabled = true; form.dataset.uploading = 'true'; status.textContent = 'Uploading and checking the image…';
-  const buttons = $$('button[type=submit],button[data-action=remove-asset]', form);
-  const disabledBefore = buttons.map(button => button.disabled); buttons.forEach(button => { button.disabled = true; });
+  if (SPONSOR_ASSET_KINDS.includes(kind) && !brandId) { status.textContent = 'Save or choose the sponsor brand before uploading its image.'; input.value = ''; return; }
+  if (form.dataset.uploading === 'true' || form.dataset.busy === 'true') { status.textContent = 'Wait for the current save or upload to finish.'; input.value = ''; return; }
+  form.dataset.uploading = 'true'; status.textContent = 'Uploading and checking the image…';
+  const controls = $$('input[type=file],input[name=backTemplate],button[type=submit],button[data-action=remove-asset]', form);
+  const disabledBefore = controls.map(control => control.disabled); controls.forEach(control => { control.disabled = true; });
   try {
-    const body = new FormData(); body.set('file', file); body.set('kind', kind); if (['logo', 'ad'].includes(kind)) body.set('sponsorId', brandId);
+    const body = new FormData(); body.set('file', file); body.set('kind', kind); if (SPONSOR_ASSET_KINDS.includes(kind)) body.set('sponsorId', brandId);
     const result = await request('/upload', { method: 'POST', body });
     if (!result.asset?.url || !safeUrl(result.asset.url)) throw new Error('The image was not returned with a usable address.');
     form.elements.namedItem(input.dataset.urlField).value = result.asset.url;
@@ -380,7 +495,7 @@ async function uploadAsset(input) {
     status.textContent = `Image uploaded${result.asset.width && result.asset.height ? ` · ${result.asset.width} × ${result.asset.height} px` : ''}. Save the form to use it.`;
     state.dirty = true;
   } catch (error) { status.textContent = error.message || 'The image could not be uploaded.'; }
-  finally { input.disabled = false; input.value = ''; delete form.dataset.uploading; buttons.forEach((button, index) => { button.disabled = disabledBefore[index]; }); }
+  finally { input.value = ''; delete form.dataset.uploading; controls.forEach((control, index) => { control.disabled = disabledBefore[index]; }); }
 }
 async function searchSchools(input) {
   const picker = input.closest('[data-school-picker]'), query = input.value.trim();
@@ -412,7 +527,8 @@ async function searchSponsors(input) {
 }
 async function chooseSponsor(id) {
   if (!leaveEdits()) { $('#brand-select').value = state.sponsorId; return; }
-  state.sponsorId = String(id); state.creativeId = ''; state.placementId = ''; state.membershipId = ''; state.newBrand = false; state.dirty = false;
+  closePreview();
+  state.sponsorId = String(id); state.creativeId = ''; state.cardId = ''; state.placementId = ''; state.cardPlacementId = ''; state.membershipId = ''; state.newBrand = false; state.dirty = false;
   $('#sponsor-search').value = ''; $('#sponsor-search-results').innerHTML = ''; $('#global-alert').hidden = true;
   await loadDashboard();
 }
@@ -424,54 +540,95 @@ function updateSchoolPicker(picker, ids) {
   $('.school-result-status', picker).textContent = ids.length ? `${ids.length} school${ids.length === 1 ? '' : 's'} selected.` : 'Search at least two characters.';
   if (!picker.closest('#preview-dialog')) state.dirty = true;
 }
-function previewSchoolOptions() {
-  return [...new Map(scopedPlacements().filter(p => p.status !== 'cancelled').map(p => [String(p.hsid), p])).values()];
+function previewSchoolOptions(cards = false) {
+  return [...new Map(scopedPlacements(cards).filter(p => p.status !== 'cancelled').map(p => [String(p.hsid), p])).values()];
+}
+function clearPreviewContent() {
+  state.preview.requestId++; state.preview.html = ''; state.preview.text = ''; state.preview.card = null; state.preview.origin = ''; state.preview.url = ''; state.preview.frameReady = false;
+  clearTimeout(state.preview.timer);
+  const frame = $('#preview-frame'); frame.removeAttribute('src'); frame.srcdoc = ''; frame.setAttribute('sandbox', ''); frame.hidden = true;
+  $('#preview-text').textContent = ''; $('#preview-text').hidden = true;
+}
+function closePreview() {
+  const dialog = $('#preview-dialog'); if (dialog.open) dialog.close();
+  clearPreviewContent(); state.preview.context = {};
 }
 function openPreview(context = {}) {
-  state.preview.requestId++; state.preview.context = context; state.preview.html = ''; state.preview.text = ''; state.preview.format = 'html';
-  const item = context.creativeId ? list('creatives').find(c => String(c.id) === String(context.creativeId)) : context.noteId ? list('notes').find(n => String(n.id) === String(context.noteId)) : null;
-  const options = previewSchoolOptions();
+  clearPreviewContent();
+  const cards = Boolean(context.cardId);
+  state.preview.kind = cards ? 'card' : 'edition'; state.preview.context = context; state.preview.format = 'html';
+  const item = cards ? list('cards').find(c => String(c.id) === String(context.cardId)) : context.creativeId ? list('creatives').find(c => String(c.id) === String(context.creativeId)) : context.noteId ? list('notes').find(n => String(n.id) === String(context.noteId)) : null;
+  const options = previewSchoolOptions(cards);
   const seed = String(item?.schoolIds?.[0] || options[0]?.hsid || state.preview.schoolId || '');
   if (['daily', 'weekly'].includes(item?.cadence)) state.preview.cadence = item.cadence;
-  const allowedSeed = isPublisher() || options.some(o => String(o.hsid) === seed) ? seed : String(options[0]?.hsid || '');
+  const allowedSeed = (!cards && isPublisher()) || options.some(o => String(o.hsid) === seed) ? seed : String(options[0]?.hsid || '');
   state.preview.schoolId = allowedSeed;
-  const schoolControl = isPublisher() ? schoolPicker('preview', 'schoolIds', allowedSeed ? [allowedSeed] : [], true) : `<div class="field"><label for="preview-school">School placement</label><select name="hsid" id="preview-school" required>${options.length ? options.map(p => `<option value="${esc(p.hsid)}"${String(p.hsid) === allowedSeed ? ' selected' : ''}>${esc(p.schoolName || schoolName(p.hsid))}</option>`).join('') : '<option value="">No school placement available</option>'}</select></div>`;
-  $('#preview-controls').innerHTML = `<form id="preview-form" class="preview-form">${schoolControl}<div class="field cadence-field"><label for="preview-cadence">Edition</label><select name="cadence" id="preview-cadence"><option value="weekly"${state.preview.cadence === 'weekly' ? ' selected' : ''}>Weekly</option><option value="daily"${state.preview.cadence === 'daily' ? ' selected' : ''}>Daily</option></select></div><button type="submit" class="button button-primary">Open preview</button><p class="help" style="flex-basis:100%">This preview uses a saved ad or notice version${context.publication ? ' and the publication settings currently in your form' : ''}. Previewing does not send an email.</p></form>`;
-  $('#preview-error').hidden = true; $('#preview-warnings').hidden = true; $('#preview-subject').textContent = '';
-  $('#preview-empty').hidden = false; $('#preview-frame').hidden = true; $('#preview-frame').srcdoc = ''; $('#preview-text').hidden = true;
+  const schoolControl = !cards && isPublisher() ? schoolPicker('preview', 'schoolIds', allowedSeed ? [allowedSeed] : [], true) : `<div class="field"><label for="preview-school">${cards ? 'Title-card placement' : 'School placement'}</label><select name="hsid" id="preview-school" required>${options.length ? options.map(p => `<option value="${esc(p.hsid)}"${String(p.hsid) === allowedSeed ? ' selected' : ''}>${esc(p.schoolName || schoolName(p.hsid))}</option>`).join('') : `<option value="">No ${cards ? 'title-card' : 'school'} placement available</option>`}</select></div>`;
+  $('#preview-controls').innerHTML = `<form id="preview-form" class="preview-form">${schoolControl}${cards ? '' : `<div class="field cadence-field"><label for="preview-cadence">Edition</label><select name="cadence" id="preview-cadence"><option value="weekly"${state.preview.cadence === 'weekly' ? ' selected' : ''}>Weekly</option><option value="daily"${state.preview.cadence === 'daily' ? ' selected' : ''}>Daily</option></select></div>`}<button type="submit" class="button button-primary">Open preview</button><p class="help" style="flex-basis:100%">${cards ? 'This proof shows both sides using the school gallery’s shared card renderer. Previewing does not publish the card.' : `This preview uses a saved ad or notice version${context.publication ? ' and the publication settings currently in your form' : ''}. Previewing does not send an email.`}</p></form>`;
+  $('#preview-title').textContent = cards ? 'Sponsor card preview' : 'Edition preview';
+  $('.preview-heading .eyebrow').textContent = cards ? 'YAT?STATS · Front & back' : 'The YAT-A-BOY Tribune';
+  $('#preview-frame').title = cards ? 'Sponsor card front and back proof' : 'Tribune HTML email preview';
+  $('#preview-dialog').classList.toggle('is-card-preview', cards);
+  $('#preview-error').hidden = true; $('#preview-warnings').hidden = true; $('#preview-warnings').textContent = ''; $('#preview-subject').textContent = '';
+  $('#preview-empty').hidden = false;
+  $('#preview-empty').innerHTML = cards ? '<p>Choose an entitled school, then open the card preview.</p><span>The preview shows a saved version. It does not publish the card.</span>' : '<p>Choose a school and edition, then open the preview.</p><span>Previewing does not send an email.</span>';
   updatePreviewDisplay();
   const dialog = $('#preview-dialog'); if (!dialog.open) dialog.showModal();
   if (allowedSeed) generatePreview($('#preview-form'));
 }
 async function generatePreview(form) {
-  const hsid = isPublisher() ? selectedSchools(form)[0] : formValue(form, 'hsid');
+  const cards = state.preview.kind === 'card';
+  const hsid = !cards && isPublisher() ? selectedSchools(form)[0] : formValue(form, 'hsid');
   const error = $('#preview-error'); error.hidden = true;
-  if (!hsid) { error.hidden = false; error.textContent = 'Choose an eligible school to preview.'; return; }
-  const requestId = ++state.preview.requestId, epoch = state.authEpoch;
+  if (!hsid) { error.hidden = false; error.textContent = cards ? 'Choose an entitled title-card school to preview.' : 'Choose an eligible school to preview.'; return; }
+  clearPreviewContent();
+  const requestId = state.preview.requestId, epoch = state.authEpoch;
+  const context = { ...state.preview.context };
   const submit = $('button[type=submit]', form); submit.disabled = true; submit.textContent = 'Building preview…';
+  $('#preview-empty').hidden = false; $('#preview-empty').innerHTML = '<p>Building your preview…</p><span>Your saved content is unchanged.</span>';
   try {
-    state.preview.schoolId = hsid; state.preview.cadence = formValue(form, 'cadence') || 'weekly';
-    const result = await post('/preview', { hsid, cadence: state.preview.cadence, ...state.preview.context });
+    state.preview.schoolId = hsid; if (!cards) state.preview.cadence = formValue(form, 'cadence') || 'weekly';
+    const result = await post(cards ? '/card-preview' : '/preview', cards ? { cardId: context.cardId, hsid } : { hsid, cadence: state.preview.cadence, ...context });
     if (requestId !== state.preview.requestId || epoch !== state.authEpoch || !$('#preview-dialog').open) return;
-    if (typeof result.html !== 'string' || typeof result.text !== 'string') throw new Error('The preview did not contain both HTML and plain text. Please try again.');
-    state.preview.html = result.html; state.preview.text = result.text;
-    $('#preview-frame').srcdoc = result.html; $('#preview-text').textContent = result.text;
-    $('#preview-subject').textContent = result.subject ? `Subject: ${result.subject}` : '';
     const warnings = Array.isArray(result.warnings) ? result.warnings : [];
     $('#preview-warnings').hidden = !warnings.length;
     $('#preview-warnings').innerHTML = warnings.length ? `<ul>${warnings.map(w => `<li>${esc(w)}</li>`).join('')}</ul>` : '';
-    $('#preview-empty').hidden = true; updatePreviewDisplay();
-  } catch (reason) { if (requestId === state.preview.requestId && epoch === state.authEpoch && $('#preview-dialog').open) { error.hidden = false; error.textContent = reason.message || 'The preview could not be created.'; } }
-  finally { submit.disabled = false; submit.textContent = 'Open preview'; }
+    const frame = $('#preview-frame');
+    if (cards) {
+      let url;
+      try { url = new URL(result.previewUrl); } catch { throw new Error('The shared card renderer address was not returned. Please try again.'); }
+      if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash || url.pathname.replace(/\/$/, '') !== '/embed/sponsor-card/preview') throw new Error('The shared card renderer address could not be verified.');
+      if (!result.card || typeof result.card !== 'object' || result.card.level !== 'SPONSOR' || String(result.card.id) !== String(context.cardId) || String(result.card.sponsorId) !== state.sponsorId) throw new Error('The card preview did not match the selected sponsor and version.');
+      state.preview.card = result.card; state.preview.url = url.href; state.preview.origin = url.origin;
+      frame.removeAttribute('srcdoc'); frame.setAttribute('sandbox', 'allow-scripts allow-same-origin'); frame.src = url.href;
+      $('#preview-subject').textContent = `Saved card version · Revision ${result.card.revision}`;
+      $('#preview-empty').innerHTML = '<p>Opening the shared card renderer…</p><span>Both the front and back will appear below.</span>';
+      state.preview.timer = setTimeout(() => {
+        if (requestId === state.preview.requestId && !state.preview.frameReady && $('#preview-dialog').open) { error.hidden = false; error.textContent = 'The shared card renderer has not responded. Try opening the preview again.'; }
+      }, 20000);
+    } else {
+      if (typeof result.html !== 'string' || typeof result.text !== 'string') throw new Error('The preview did not contain both HTML and plain text. Please try again.');
+      state.preview.html = result.html; state.preview.text = result.text;
+      frame.srcdoc = result.html; $('#preview-text').textContent = result.text;
+      $('#preview-subject').textContent = result.subject ? `Subject: ${result.subject}` : '';
+      $('#preview-empty').hidden = true;
+    }
+    updatePreviewDisplay();
+  } catch (reason) {
+    if (requestId === state.preview.requestId && epoch === state.authEpoch && $('#preview-dialog').open) { error.hidden = false; error.textContent = reason.message || 'The preview could not be created.'; $('#preview-empty').hidden = true; }
+  } finally { submit.disabled = false; submit.textContent = 'Open preview'; }
 }
 function updatePreviewDisplay() {
-  const html = state.preview.format === 'html', ready = Boolean(state.preview.html);
+  const cards = state.preview.kind === 'card';
+  const html = cards || state.preview.format === 'html', ready = cards ? Boolean(state.preview.card && state.preview.url) : Boolean(state.preview.html);
   $$('[data-preview-format]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.previewFormat === state.preview.format)));
   $$('[data-preview-device]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.previewDevice === state.preview.device)));
+  $('#preview-format-controls').hidden = cards;
   $('#preview-frame').hidden = !ready || !html; $('#preview-text').hidden = !ready || html;
   $('#preview-device-controls').hidden = !html;
   $('#preview-stage').classList.toggle('is-mobile', state.preview.device === 'mobile');
 }
+
 function leaveEdits() {
   if ($('#page-content form[data-busy=true],#page-content form[data-uploading=true]')) { notify('Please wait for the current save or upload to finish.'); return false; }
   return !state.dirty || window.confirm('Leave these unsaved edits? Your saved versions will stay available.');
@@ -498,9 +655,11 @@ document.addEventListener('submit', event => {
   if (form.getAttribute('id') === 'sign-in-form') {
     withForm(form, async () => { $('#login-status').textContent = ''; try { await state.authTools.signInWithEmailAndPassword(state.auth, formValue(form, 'email'), form.elements.namedItem('password').value); } catch (error) { throw new Error(loginError(error)); } });
   } else if (form.getAttribute('id') === 'creative-form') withForm(form, () => saveCreative(form, action));
+  else if (form.getAttribute('id') === 'card-form') withForm(form, () => saveCard(form, action));
   else if (form.getAttribute('id') === 'note-form') withForm(form, () => saveNote(form, action));
   else if (form.getAttribute('id') === 'brand-form') withForm(form, () => saveBrand(form));
   else if (form.getAttribute('id') === 'placement-form') withForm(form, () => savePlacement(form));
+  else if (form.getAttribute('id') === 'card-placement-form') withForm(form, () => savePlacement(form, true));
   else if (form.getAttribute('id') === 'membership-form') withForm(form, () => saveMembership(form));
   else if (form.getAttribute('id') === 'publication-form') withForm(form, async () => {
     const payload = publicationPayload(form);
@@ -514,7 +673,7 @@ document.addEventListener('click', event => {
   if (target.dataset.section) { navigate(target.dataset.section); return; }
   if (target.dataset.pickSponsor) { chooseSponsor(target.dataset.pickSponsor); return; }
   if (target.dataset.deskTab) { if (!leaveEdits()) return; state.deskTab = target.dataset.deskTab; renderPage(); return; }
-  for (const [key, stateKey] of [['editCreative', 'creativeId'], ['editNote', 'noteId'], ['editPlacement', 'placementId'], ['editMembership', 'membershipId']]) {
+  for (const [key, stateKey] of [['editCreative', 'creativeId'], ['editCard', 'cardId'], ['editNote', 'noteId'], ['editPlacement', 'placementId'], ['editCardPlacement', 'cardPlacementId'], ['editMembership', 'membershipId']]) {
     if (target.dataset[key]) { if (!leaveEdits()) return; state[stateKey] = target.dataset[key]; renderPage(); return; }
   }
   if (target.dataset.pickSchool) {
@@ -531,7 +690,7 @@ document.addEventListener('click', event => {
   if (target.dataset.previewFormat) { state.preview.format = target.dataset.previewFormat; updatePreviewDisplay(); return; }
   if (target.dataset.previewDevice) { state.preview.device = target.dataset.previewDevice; updatePreviewDisplay(); return; }
   const action = target.dataset.action;
-  if (action === 'close-preview') $('#preview-dialog').close();
+  if (action === 'close-preview') closePreview();
   else if (action === 'copy-account-id') {
     const field = $('#verified-account-id');
     if (field) {
@@ -544,10 +703,17 @@ document.addEventListener('click', event => {
   else if (action === 'preview-edition') openPreview();
   else if (action?.startsWith('go-')) navigate(action.slice(3));
   else if (action === 'new-creative') { if (!leaveEdits()) return; state.creativeId = ''; renderPage(); }
+  else if (action === 'new-card') { if (!leaveEdits()) return; state.cardId = ''; renderPage(); }
   else if (action === 'new-note') { if (!leaveEdits()) return; state.noteId = ''; renderPage(); }
   else if (action === 'new-placement') { if (!leaveEdits()) return; state.placementId = ''; renderPage(); }
+  else if (action === 'new-card-placement') { if (!leaveEdits()) return; state.cardPlacementId = ''; renderPage(); }
   else if (action === 'new-membership') { if (!leaveEdits()) return; state.membershipId = ''; renderPage(); }
   else if (action === 'new-brand') { if (!leaveEdits()) return; state.newBrand = true; renderPage(); }
+  else if (action === 'card-share-defaults') {
+    const form = target.closest('form');
+    for (const [name, value] of Object.entries(sharePromotionDefaults())) form.elements.namedItem(name).value = value;
+    state.dirty = true;
+  }
   else if (action === 'remove-asset') {
     const holder = target.closest('[data-asset-picker]'), input = $('input[type=file]', holder);
     input.form.elements.namedItem(input.dataset.urlField).value = ''; input.form.elements.namedItem(input.dataset.assetField).value = '';
@@ -576,6 +742,10 @@ document.addEventListener('change', event => {
   if (input.name === 'evergreen' && input.form) {
     syncCreativeTiming(input.form);
   }
+  if (input.form?.getAttribute('id') === 'card-form') {
+    if (input.name === 'backTemplate') syncCardTemplate(input.form);
+    if (['gradClass', 'varsityYears'].includes(input.name)) syncVarsityYears(input.form);
+  }
   if (input.closest('#page-content form')) state.dirty = true;
 });
 document.addEventListener('keydown', event => {
@@ -592,7 +762,16 @@ document.addEventListener('keydown', event => {
     if (event.key === 'Escape') { $('.school-search-results', picker).innerHTML = ''; search.focus(); }
   }
 });
-$('#preview-dialog').addEventListener('click', event => { if (event.target === $('#preview-dialog')) $('#preview-dialog').close(); });
+window.addEventListener('message', event => {
+  const frame = $('#preview-frame');
+  if (state.preview.kind !== 'card' || !state.preview.card || !$('#preview-dialog').open || event.source !== frame.contentWindow || event.origin !== state.preview.origin || event.data?.type !== 'yatstats:sponsor-card-preview-ready') return;
+  state.preview.frameReady = true; clearTimeout(state.preview.timer);
+  $('#preview-empty').hidden = true; $('#preview-error').hidden = true;
+  frame.contentWindow.postMessage({ type: 'yatstats:sponsor-card-preview', card: state.preview.card }, state.preview.origin);
+});
+$('#preview-dialog').addEventListener('click', event => { if (event.target === $('#preview-dialog')) closePreview(); });
+$('#preview-dialog').addEventListener('cancel', event => { event.preventDefault(); closePreview(); });
+$('#preview-dialog').addEventListener('close', () => { clearPreviewContent(); state.preview.context = {}; });
 $('#sign-out').addEventListener('click', async () => { if (!leaveEdits()) return; try { await state.authTools.signOut(state.auth); } catch (error) { notify(loginError(error), true); } });
 $('#reset-password').addEventListener('click', async () => {
   const input = $('#login-email'); if (!input.reportValidity()) return;

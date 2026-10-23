@@ -37,6 +37,8 @@ The dashboard is scoped by `sponsorId`. Publisher searches use the bounded `/spo
 
 No client-side role toggle or bootstrap bypass grants publisher access. Signing out clears the previous account’s workspace and preview content. Late responses from a prior account or sponsor selection cannot replace the current workspace.
 
+Editing an account assignment sends its server-issued `id` and `revision`, together with the new UID, role, sponsor and active state. The backend updates that exact assignment and rejects a stale revision. Creating an assignment omits the ID; it does not silently replace an existing grant.
+
 ## Editorial and sponsor behavior
 
 - Sponsors can edit their assigned brand profiles and ad versions. Published ad edits create a replacement version while preserving the earlier published version. School placement and approval requirements are enforced by the backend.
@@ -47,6 +49,28 @@ No client-side role toggle or bootstrap bypass grants publisher access. Signing 
 - The optional masthead uses a shared graphic, with the existing text masthead as the fallback. A 1,440 × 360 px image is a useful starting size. The checkbox records whether the image includes the tagline.
 - **Save & preview** saves an ad or notice draft, then opens HTML and plain-text previews. **Preview settings** previews unsaved publication settings. Preview HTML is displayed in a sandboxed iframe. Any illustrative statistics or other preview limits returned by the backend are shown with the preview.
 - Saving, previewing and publishing portal content do not send a newsletter or change delivery approval or scheduling.
+
+## Title sponsor cards
+
+**Sponsor cards** manages versioned, two-sided gallery cards independently of Tribune advertisements. **Title card placements** is a publisher-only area that records the explicit title sponsorship entitlement for a school. Those assignments have their own dates and approval requirements; they do not create a newsletter placement or a payment.
+
+The front editor preserves first and last name, graduation class, varsity years, status, current team and organization from the contribution form. `level` is readonly `SPONSOR` in the UI, is sent as that literal value, and is enforced by the backend. Sponsor presentation is separate from player records and fantasy statistics.
+
+The three back templates are:
+
+- `banner_text`: an optional sponsor banner followed by one headline/message in the FunZone. Personal card details remain on the front.
+- `share_promotion`: editable prepared text from `dashboard.cardDefaults.sharePromotion`. A blank destination uses the selected school’s community hub. The frontend does not maintain a second copy of the default message.
+- `full_image`: a single uploaded image replaces the banner and message area. Inactive banner/message fields are cleared from the saved content for this template.
+
+Front, banner and full-back artwork use the sponsor-scoped `card_front`, `card_banner` and `card_full` upload kinds. Drafts can be saved while being prepared; the backend enforces publication requirements for images, descriptions, content and entitlements. Published and archived cards create a new version when edited. Existing-card mutations include `id` and `revision`.
+
+### Shared-renderer card proof
+
+`POST /api/partners/card-preview` accepts `{cardId, hsid}` and returns `{card, warnings, previewUrl}`. The corporate frontend does not reproduce the gallery card in HTML. It loads the returned HTTPS `/embed/sponsor-card/preview` page in the preview iframe, where the school gallery’s actual shared components render both faces. Card URLs contain no card data; the frontend keeps the card only in memory.
+
+Only card mode uses `sandbox="allow-scripts allow-same-origin"`. The parent waits for `yatstats:sponsor-card-preview-ready`, checks both `event.source === iframe.contentWindow` and the exact returned URL origin, then posts `{type: 'yatstats:sponsor-card-preview', card}` to that specific origin. The child validates the fields again. The frame is cleared on close, Escape, sign-out and sponsor changes. Newsletter previews continue to use `srcdoc` with the strict empty sandbox.
+
+The preview shows the actual 5:7 front and back side by side when room permits and stacked at narrow widths. It proves the saved version without publishing it. No checkout action is part of this flow.
 
 ## Orders and billing
 
@@ -65,6 +89,8 @@ The initial browser verification covered:
 - Masthead and sponsor logo uploads, blank-logo brand creation, and publication preview without saving settings.
 - A dated, school-specific publisher notice; placement dates converted from local time to UTC; and account membership forms.
 - Read-only orders/billing, bearer tokens on authenticated requests, sandboxed preview HTML, and clearing previous account content at sign-out.
+
+The sponsor-card extension adds targeted checks for the three templates, API-provided prepared copy, scoped artwork uploads, version forks, fixed SPONSOR payloads, title entitlement forms, the iframe window/origin handshake, preview cleanup, restoration of the newsletter’s strict sandbox, and exact membership ID/revision updates. An isolated renderer fixture tests rejected source/origin messages. A separate local integration check forwards an HTTPS test origin to the actual Next development renderer and verifies all three front/back proofs, loaded artwork, the real handshake, newsletter sandbox restoration, and 390 px layout without horizontal overflow or nested frame clipping. Authentication and API writes remain mocked in both checks.
 
 For a publishing-branch check, verify that the current `/partners/` tour still renders, its dashboard link works in both the desktop navigation and mobile menu, and `/partners/dashboard/` loads the sign-in view through the same-origin config endpoint. No repeat of every authenticated flow is needed when only transferring the verified static files.
 
