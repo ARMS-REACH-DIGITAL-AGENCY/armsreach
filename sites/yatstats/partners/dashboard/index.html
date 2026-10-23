@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111713">
+  <meta name="description" content="Manage your YAT?STATS sponsorship, advertisements and Tribune editions.">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Partner Dashboard & Publisher’s Desk | YAT?STATS</title>
+  <link rel="stylesheet" href="portal.css?v=1">
+  <script type="module" src="portal.js?v=1"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to workspace</a>
+  <header class="topbar">
+    <a class="wordmark" href="../" aria-label="YAT?STATS partner tour"><img src="../../img/yatstats-wordmark-white.png" alt="YAT?STATS" width="150"></a>
+    <span class="topbar-rule" aria-hidden="true"></span><span class="topbar-title">Partner Dashboard</span>
+    <div class="topbar-right"><a class="tour-link" href="../">Explore the partnership <span aria-hidden="true">↗</span></a><button id="sign-out" class="button button-quiet" type="button" hidden>Sign out</button></div>
+  </header>
+  <div id="boot" class="boot" role="status" aria-live="polite"><span class="spinner" aria-hidden="true"></span><p>Opening your workspace…</p></div>
+  <main id="main" tabindex="-1">
+    <section id="sign-in-view" class="sign-in-view" hidden>
+      <div class="welcome"><p class="eyebrow">Hometown connections. Lasting impact.</p><h1>Show up for<br> the stories<br> <em>that matter.</em></h1><p>Manage your school sponsorship and the message fans see in <strong>The YAT-A-BOY Tribune.</strong></p><div class="welcome-note"><span aria-hidden="true">✦</span><p>Your account opens the sponsor brands and placements assigned to you. Publishers also have access to edition settings and notices.</p></div></div>
+      <div class="login-card"><p class="eyebrow">Welcome back</p><h2>Sign in to your dashboard</h2><p class="muted">Use your existing YAT?STATS account.</p><form id="sign-in-form"><label for="login-email">Email address</label><input id="login-email" name="email" type="email" autocomplete="username" required inputmode="email"><label for="login-password">Password</label><input id="login-password" name="password" type="password" autocomplete="current-password" required><p id="login-error" class="form-error" role="alert" hidden></p><button class="button button-primary full-width" type="submit">Sign in</button><button id="reset-password" class="text-button" type="button">Forgot your password?</button><p id="login-status" class="help" role="status" aria-live="polite"></p></form><div id="login-unavailable" class="notice" hidden></div><p class="login-help">Need access to a sponsor account? Ask your YAT?STATS publisher to connect your account to the correct brand.</p></div>
+    </section>
+    <div id="workspace" class="workspace" hidden>
+      <aside class="sidebar" aria-label="Workspace navigation"><div class="account-block"><p class="eyebrow">Your workspace</p><p id="account-email" class="account-email"></p><span id="account-role" class="badge"></span></div><div class="brand-switch"><label for="brand-select">Sponsor brand</label><select id="brand-select" aria-label="Choose sponsor brand"></select><div id="sponsor-search-box" hidden><label for="sponsor-search" style="margin-top:12px">Find a sponsor brand</label><input id="sponsor-search" type="search" autocomplete="off" placeholder="Search all brands" aria-controls="sponsor-search-results"><p id="sponsor-search-status" class="school-result-status" role="status" aria-live="polite"></p><ul id="sponsor-search-results" class="school-search-results"></ul></div></div><nav id="workspace-nav"></nav><div class="sidebar-foot"><strong>The YAT-A-BOY Tribune</strong><span>Stories. Stats. Hometown pride.</span></div></aside>
+      <section class="workspace-content" aria-label="Partner workspace"><div id="global-alert" class="global-alert" role="status" aria-live="polite" hidden></div><div id="page-content" aria-busy="false"></div></section>
+    </div>
+  </main>
+  <dialog id="preview-dialog" class="preview-dialog" aria-labelledby="preview-title"><div class="preview-heading"><div><p class="eyebrow">The YAT-A-BOY Tribune</p><h2 id="preview-title">Edition preview</h2></div><button class="icon-button" type="button" data-action="close-preview" aria-label="Close edition preview">×</button></div><div id="preview-controls"></div><p id="preview-error" class="form-error" role="alert" hidden></p><div id="preview-warnings" class="preview-warnings" role="status" hidden></div><div class="preview-tools"><div class="segmented" aria-label="Preview format"><button type="button" data-preview-format="html" aria-pressed="true">HTML</button><button type="button" data-preview-format="text" aria-pressed="false">Plain text</button></div><div class="segmented" id="preview-device-controls" aria-label="Preview screen size"><button type="button" data-preview-device="desktop" aria-pressed="true">Desktop</button><button type="button" data-preview-device="mobile" aria-pressed="false">Mobile</button></div></div><p id="preview-subject" class="preview-subject"></p><div id="preview-stage" class="preview-stage"><div id="preview-empty" class="empty-state"><p>Choose a school and edition, then open the preview.</p><span>Previewing does not send an email.</span></div><iframe id="preview-frame" title="Tribune HTML email preview" sandbox="" referrerpolicy="no-referrer" hidden></iframe><pre id="preview-text" tabindex="0" hidden></pre></div></dialog>
+  <noscript><p class="noscript">JavaScript is needed to sign in and manage your partner workspace. <a href="../">Return to the partner tour.</a></p></noscript>
+</body>
+</html>
