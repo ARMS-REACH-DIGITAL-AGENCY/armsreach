@@ -1,6 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": true,
+  "rewrites": [
+    {
+      "source": "/api/partners/:path*",
+      "destination": "https://mike-crozite-template-git-feat-0bfdb5-arms-reach-digital-agency.vercel.app/api/partners/:path*"
+    }
+  ],
   "redirects": [
     { "source": "/sites/yatstats", "destination": "/", "permanent": true },
     { "source": "/sites/yatstats/", "destination": "/", "permanent": true },
