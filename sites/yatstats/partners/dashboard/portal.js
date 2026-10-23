@@ -773,6 +773,15 @@ $('#preview-dialog').addEventListener('click', event => { if (event.target === $
 $('#preview-dialog').addEventListener('cancel', event => { event.preventDefault(); closePreview(); });
 $('#preview-dialog').addEventListener('close', () => { clearPreviewContent(); state.preview.context = {}; });
 $('#sign-out').addEventListener('click', async () => { if (!leaveEdits()) return; try { await state.authTools.signOut(state.auth); } catch (error) { notify(loginError(error), true); } });
+$('#toggle-password').addEventListener('click', () => {
+  const input = $('#login-password');
+  const button = $('#toggle-password');
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  button.textContent = show ? 'Hide password' : 'Show password';
+  button.setAttribute('aria-pressed', show ? 'true' : 'false');
+  input.focus();
+});
 $('#reset-password').addEventListener('click', async () => {
   const input = $('#login-email'); if (!input.reportValidity()) return;
   const button = $('#reset-password'); button.disabled = true; $('#login-error').hidden = true;
