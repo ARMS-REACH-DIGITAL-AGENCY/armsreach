@@ -13,7 +13,7 @@ const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector
 const esc = (value = '') => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const state = {
   auth: null, authTools: null, firebaseUser: null, data: null, authEpoch: 0, dashboardRequestId: 0,
-  section: 'overview', deskTab: 'notes', sponsorId: '', creativeId: '', cardId: '', noteId: '', placementId: '', cardPlacementId: '', membershipId: '', newBrand: false,
+  section: 'overview', deskTab: 'notes', sponsorId: '', creativeId: '', cardId: '', noteId: '', placementId: '', splashPlacementId: '', cardPlacementId: '', membershipId: '', newBrand: false,
   schools: new Map(), searchTimers: new WeakMap(), searchControllers: new WeakMap(), cardDrafts: new WeakMap(), dirty: false,
   preview: { kind: 'edition', context: {}, format: 'html', device: 'desktop', html: '', text: '', card: null, origin: '', url: '', schoolId: '', cadence: 'weekly', requestId: 0 },
 };
@@ -112,7 +112,7 @@ function rememberSchools() {
   for (const item of [...list('placements'), ...list('cardPlacements')]) if (item.hsid) state.schools.set(String(item.hsid), { hsid: String(item.hsid), name: item.schoolName || `School ${item.hsid}`, location: '' });
 }
 function clearWorkspace() {
-  state.data = null; state.sponsorId = ''; state.creativeId = ''; state.cardId = ''; state.noteId = ''; state.placementId = ''; state.cardPlacementId = ''; state.membershipId = ''; state.newBrand = false;
+  state.data = null; state.sponsorId = ''; state.creativeId = ''; state.cardId = ''; state.noteId = ''; state.placementId = ''; state.splashPlacementId = ''; state.cardPlacementId = ''; state.membershipId = ''; state.newBrand = false;
   state.schools.clear(); closePreview(); state.preview.schoolId = '';
   $('#brand-select').innerHTML = '<option value="">No Partner organization assigned</option>'; $('#brand-select').disabled = true;
   $('#sponsor-search-box').hidden = true; $('#sponsor-search').value = ''; $('#sponsor-search-results').innerHTML = ''; $('#workspace-nav').innerHTML = '';
@@ -201,13 +201,13 @@ function renderWorkspace() {
     ['brand', 'Brand Profile', '◇'],
     ['orders', 'Agreement & Billing', '▧'],
   ];
-  if (isPublisher()) nav.push(['publisher', 'Publication Desk', '✦'], ['placements', 'Digest / Tribune Access', '⊞'], ['cardPlacements', 'Partner Card Access', '⊞'], ['access', 'Account Access', '⌘']);
+  if (isPublisher()) nav.push(['publisher', 'Publication Desk', '✦'], ['splashPlacements', 'Splash Logo Access', '◎'], ['placements', 'Digest / Tribune Access', '⊞'], ['cardPlacements', 'Partner Card Access', '⊞'], ['access', 'Account Access', '⌘']);
   if (!nav.some(([key]) => key === state.section)) state.section = 'overview';
   $('#workspace-nav').innerHTML = nav.map(([key, label, mark]) => `<button class="nav-button" type="button" data-section="${key}"${state.section === key ? ' aria-current="page"' : ''}><span class="nav-mark" aria-hidden="true">${mark}</span>${label}</button>`).join('');
   renderPage();
 }
 function renderPage() {
-  const views = { overview: renderOverview, program: renderProgram, cards: renderCards, ads: renderAds, performance: renderPerformance, arms: renderArms, brand: renderBrand, publisher: renderPublisher, placements: renderPlacements, cardPlacements: () => renderPlacements(true), access: renderAccess, orders: renderOrders };
+  const views = { overview: renderOverview, program: renderProgram, cards: renderCards, ads: renderAds, performance: renderPerformance, arms: renderArms, brand: renderBrand, publisher: renderPublisher, placements: renderPlacements, splashPlacements: renderSplashPlacements, cardPlacements: () => renderPlacements(true), access: renderAccess, orders: renderOrders };
   $('#page-content').innerHTML = (views[state.section] || renderOverview)();
   $('#page-content').setAttribute('aria-busy', 'false');
   const creativeForm = $('#creative-form');
@@ -215,16 +215,17 @@ function renderPage() {
   const cardForm = $('#card-form');
   if (cardForm) { syncCardTemplate(cardForm); syncVarsityYears(cardForm); }
   state.dirty = false;
-  document.title = `${({ overview: 'Partner Program', program: 'Where You Show Up', cards: 'Partner Card', ads: 'Creative Studio', performance: 'Performance', arms: 'Leads & ARMS', brand: 'Brand Profile', publisher: 'Publication Desk', placements: 'Digest / Tribune Access', cardPlacements: 'Partner Card Access', access: 'Account Access', orders: 'Agreement & Billing' })[state.section] || 'Partner Program'} | YAT?STATS`;
+  document.title = `${({ overview: 'Partner Program', program: 'Where You Show Up', cards: 'Partner Card', ads: 'Creative Studio', performance: 'Performance', arms: 'Leads & ARMS', brand: 'Brand Profile', publisher: 'Publication Desk', placements: 'Digest / Tribune Access', splashPlacements: 'Splash Logo Access', cardPlacements: 'Partner Card Access', access: 'Account Access', orders: 'Agreement & Billing' })[state.section] || 'Partner Program'} | YAT?STATS`;
 }
 function scopedPlacements(cards = false) { return list(cards ? 'cardPlacements' : 'placements').filter(p => !state.sponsorId || String(p.sponsorId) === state.sponsorId); }
 function renderOverview() {
   const brand = sponsor();
   const placements = scopedPlacements();
+  const splashPlacements = list('splashPlacements').filter(p => String(p.sponsorId) === state.sponsorId);
   const cardPlacements = scopedPlacements(true);
   const creatives = list('creatives').filter(c => !state.sponsorId || String(c.sponsorId) === state.sponsorId);
   const cards = list('cards').filter(c => !state.sponsorId || String(c.sponsorId) === state.sponsorId);
-  const activePrograms = new Set([...placements, ...cardPlacements].filter(p => p.status === 'active').map(p => String(p.hsid))).size;
+  const activePrograms = new Set([...placements, ...splashPlacements, ...cardPlacements].filter(p => p.status === 'active').map(p => String(p.hsid))).size;
   const liveCreative = creatives.filter(c => c.status === 'published').length + cards.filter(c => c.status === 'published').length;
   const drafts = creatives.filter(c => ['draft','pending'].includes(c.status)).length + cards.filter(c => ['draft','pending'].includes(c.status)).length;
   const title = brand ? `${brand.name} Partner Program` : 'Your YAT?STATS Partner Program';
@@ -233,7 +234,7 @@ function renderOverview() {
     `<div class="stats-grid"><div class="stat-card"><span>Active school programs</span><strong>${activePrograms}</strong><small>Across currently connected Partner placements</small></div><div class="stat-card"><span>Live creative versions</span><strong>${liveCreative}</strong><small>Published Partner cards and Digest / Tribune messages</small></div><div class="stat-card"><span>Drafts & review</span><strong>${drafts}</strong><small>Work you can continue, approve or publish</small></div></div>
     <section class="panel partner-story"><div class="panel-heading"><div><p class="eyebrow">Your Partnership Arrangement</p><h2>More than an ad.</h2><p>YAT?STATS gives a Partner multiple ways to participate in the baseball community without turning the experience into a wall of advertising.</p></div></div>
       <div class="capability-grid">
-        ${capabilityCard('Splash screen', 'Entry-point recognition when a fan arrives at the school experience.', 'connection', 'Portal connection next')}
+        ${capabilityCard('Splash screen', 'Entry-point recognition using the shared Partner logo.', splashPlacements.some(p => p.status === 'active') ? 'active' : 'ready', splashPlacements.some(p => p.status === 'active') ? 'Active school placements' : 'Awaiting school assignment', isPublisher() ? 'go-splashPlacements' : 'go-brand')}
         ${capabilityCard('Active Alumni Partner Card', 'Interactive two-sided card inside the alumni gallery.', cardPlacements.length ? 'active' : 'ready', cardPlacements.length ? `${cardPlacements.length} program assignment${cardPlacements.length===1?'':'s'}` : 'Ready for assignment', 'go-cards')}
         ${capabilityCard('YAT?STATS Daily Digest', 'Compact stat-line email with Partner recognition and trackable calls to action.', placements.length ? 'active' : 'ready', placements.length ? 'Connected through publication access' : 'Ready for assignment', 'go-ads')}
         ${capabilityCard('The YAT-A-BOY Tribune', 'Weekly editorial recap with stories, stats and Partner messaging.', placements.length ? 'active' : 'ready', placements.length ? 'Connected through publication access' : 'Ready for assignment', 'go-ads')}
@@ -252,16 +253,17 @@ function capabilityCard(title, body, mode='connection', status='Connection next'
 }
 function renderProgram() {
   const placements = scopedPlacements();
+  const splash = list('splashPlacements').filter(p => String(p.sponsorId) === state.sponsorId);
   const cards = scopedPlacements(true);
   return pageHeading('Partner Program / Inventory', 'Where your organization can show up.', 'The Partner Program is a collection of native touchpoints, not a single newsletter advertisement.') +
     `<section class="panel"><div class="panel-heading"><div><p class="eyebrow">Connected now</p><h2>Working self-service placements</h2><p>These have real editors and entitlement checks in the current build.</p></div></div><div class="capability-grid">
+      ${capabilityCard('School splash screen','Welcome-screen recognition using the Partner’s shared logo.',splash.some(p => p.status === 'active')?'active':'ready',splash.some(p => p.status === 'active')?`${splash.filter(p => p.status === 'active').length} active school${splash.filter(p => p.status === 'active').length === 1 ? '' : 's'}`:'Awaiting assignment',isPublisher()?'go-splashPlacements':'go-brand')}
       ${capabilityCard('Active Alumni Partner Card','Two-sided interactive card in the alumni gallery.',cards.length?'active':'ready',cards.length?`${cards.length} assigned program${cards.length===1?'':'s'}`:'Awaiting program assignment','go-cards')}
       ${capabilityCard('YAT?STATS Daily Digest','Daily stat-line email placement using the publication creative system.',placements.length?'active':'ready',placements.length?'Publication access connected':'Awaiting program assignment','go-ads')}
       ${capabilityCard('The YAT-A-BOY Tribune','Weekly editorial placement using the same versioned creative system.',placements.length?'active':'ready',placements.length?'Publication access connected':'Awaiting program assignment','go-ads')}
       ${capabilityCard('Brand identity','Shared Partner logo, name and destination across connected placements.',sponsor()?'active':'ready',sponsor()?'Brand profile connected':'Awaiting Partner organization','go-brand')}
     </div></section>
     <section class="panel"><div class="panel-heading"><div><p class="eyebrow">Inventory being connected</p><h2>Built into the Partner Program story</h2><p>These are intentionally shown as not yet connected to self-service so nobody mistakes a mockup for a live entitlement.</p></div></div><div class="capability-grid">
-      ${capabilityCard('School splash screen','Prominent arrival recognition on the school experience.')}
       ${capabilityCard('Community / news placements','Native presence around school and alumni stories.')}
       ${capabilityCard('Player profile placements','Affordable page-level support for individual player traffic.')}
       ${capabilityCard('Tournament recognition','Presence around bracket matchups, school advancement and contest traffic.')}
@@ -370,7 +372,7 @@ function renderBrand() {
   const heading = pageHeading('Partner Program / Brand Profile', state.newBrand ? 'Welcome another hometown partner.' : 'The name behind the support.', 'Keep your brand identity consistent across the placements assigned to you.', isPublisher() ? button('Add a Partner organization', 'new-brand', '', true) : '');
   if (!item.id && !isPublisher()) return heading + empty('No Partner organization is assigned.', 'Your publisher can connect your account to the correct business.');
   const logo = safeUrl(item.logoUrl);
-  return heading + `<div class="two-columns"><section class="panel"><div class="brand-preview">${logo ? `<img src="${esc(logo)}" alt="${esc(item.name || 'Partner')} logo">` : `<div class="brand-initials" aria-hidden="true">${esc((item.name || 'Y').slice(0, 1).toUpperCase())}</div>`}<div><p class="eyebrow">${item.id ? 'Partner profile' : 'New Partner'}</p><h2 style="margin:0;font:700 23px Georgia,serif">${esc(item.name || 'Your brand')}</h2></div></div><form id="brand-form"><input type="hidden" name="id" value="${esc(item.id || '')}"><p class="form-error" role="alert" hidden></p>${field('brand', 'name', 'Business / Partner name', item.name, { required: true, max: 160 })}${field('brand', 'websiteUrl', 'Business website', item.websiteUrl, { type: 'url', optional: true, placeholder: 'https://' })}${assetPicker('brand', 'logo', item.logoUrl, { name: 'logoUrl', label: 'Brand logo', help: item.id ? 'Use a clean, easy-to-read logo.' : 'Save the brand first, then upload its logo.' })}<label class="check-line"><input type="checkbox" name="isActive"${item.isActive !== false ? ' checked' : ''}>Brand is active</label><p class="notice">Changes to this brand’s name, logo or active status apply to all of its school placements, including Tribune advertisements and sponsor cards.</p><div class="form-actions"><button class="button button-primary" type="submit">${item.id ? 'Save brand profile' : 'Create Partner organization'}</button></div></form></section><aside class="panel"><div class="panel-heading"><div><p class="eyebrow">One consistent identity</p><h2>Recognizable at every school.</h2><p>Your brand profile is shared across its authorized placements. School assignments and advertisement versions stay separate.</p></div></div><p class="help">Use Ad Studio to change the offer or message. A publisher manages the school placements and account access.</p>${item.id ? `<p class="code-note">Brand ID: ${esc(item.id)}</p>` : ''}</aside></div>`;
+  return heading + `<div class="two-columns"><section class="panel"><div class="brand-preview">${logo ? `<img src="${esc(logo)}" alt="${esc(item.name || 'Partner')} logo">` : `<div class="brand-initials" aria-hidden="true">${esc((item.name || 'Y').slice(0, 1).toUpperCase())}</div>`}<div><p class="eyebrow">${item.id ? 'Partner profile' : 'New Partner'}</p><h2 style="margin:0;font:700 23px Georgia,serif">${esc(item.name || 'Your brand')}</h2></div></div><form id="brand-form"><input type="hidden" name="id" value="${esc(item.id || '')}"><p class="form-error" role="alert" hidden></p>${field('brand', 'name', 'Business / Partner name', item.name, { required: true, max: 160 })}${field('brand', 'websiteUrl', 'Business website', item.websiteUrl, { type: 'url', optional: true, placeholder: 'https://' })}${assetPicker('brand', 'logo', item.logoUrl, { name: 'logoUrl', label: 'Brand logo', help: item.id ? 'Use a clean, easy-to-read logo.' : 'Save the brand first, then upload its logo.' })}<label class="check-line"><input type="checkbox" name="isActive"${item.isActive !== false ? ' checked' : ''}>Brand is active</label><p class="notice">Changes to this brand’s name, logo or active status apply to every assigned splash screen, Tribune advertisement and sponsor card.</p><div class="form-actions"><button class="button button-primary" type="submit">${item.id ? 'Save brand profile' : 'Create Partner organization'}</button></div></form></section><aside class="panel"><div class="panel-heading"><div><p class="eyebrow">One consistent identity</p><h2>Recognizable at every school.</h2><p>Your brand profile is shared across its authorized placements. School assignments and advertisement versions stay separate.</p></div></div><p class="help">Use Ad Studio to change the offer or message. A publisher manages the school placements and account access.</p>${item.id ? `<p class="code-note">Brand ID: ${esc(item.id)}</p>` : ''}</aside></div>`;
 }
 function renderPublisher() {
   if (!isPublisher()) return empty('Administrator access is required.', 'Your Partner Program tools are available from the workspace navigation.');
@@ -387,6 +389,19 @@ function publicationForm() {
   const p = state.data.publication || {};
   return `<div class="two-columns"><section class="panel"><div class="panel-heading"><div><p class="eyebrow">Shared publication identity</p><h2>The Tribune, your way.</h2><p>One masthead serves every school. The school name, date and statistics stay dynamic.</p></div></div><form id="publication-form"><input type="hidden" name="revision" value="${esc(p.revision ?? '')}"><p class="form-error" role="alert" hidden></p>${assetPicker('publication', 'masthead', p.masthead?.imageUrl, { name: 'mastheadUrl', assetField: 'mastheadAssetId', assetId: p.masthead?.assetId, label: 'Tribune masthead graphic', help: 'A 1,440 × 360 px PNG is a good starting point. With no image, the existing text masthead is used.' })}${field('publication', 'mastheadAlt', 'Masthead image description', p.masthead?.alt || 'The YAT-A-BOY Tribune', { max: 240, help: 'The publication name remains available in the plain-text edition.' })}<label class="check-line"><input type="checkbox" name="includesTagline"${p.masthead?.includesTagline ? ' checked' : ''}>The uploaded graphic already includes the tagline.</label><fieldset><legend>Sweepstakes and sending details</legend>${field('publication', 'officialRulesUrl', 'Official sweepstakes rules URL', p.officialRulesUrl, { type: 'url', optional: true, placeholder: 'https://' })}${field('publication', 'sweepstakesReminder', 'Sweepstakes reminder', p.sweepstakesReminder, { textarea: true, rows: 4, max: 1200, optional: true })}${field('publication', 'postalAddress', 'Publisher mailing address', p.postalAddress, { textarea: true, rows: 3, max: 500, optional: true, help: 'Appears in the delivered newsletter footer.' })}</fieldset><div class="form-actions"><button class="button" type="submit" data-save-action="preview">Preview settings</button><button class="button button-primary" type="submit" data-save-action="save">Save publication settings</button></div><p class="help">Saving these settings does not change the newsletter’s delivery approval or schedule.</p></form></section><aside class="panel"><p class="eyebrow">A familiar front page</p><h2 style="font:700 24px Georgia,serif;margin:0 0 15px">The YAT-A-BOY Tribune</h2><p class="help">Keep the name and artwork in the masthead image. Leaving the tagline as live text helps it stay readable on phones.</p><p class="section-note">Dedicated to tell our fans, <strong>WHERE THEY YAT!</strong><br>Through <strong>STORIES & STATS!</strong></p><p class="help">Upload a new image for a new graphic version. Previously saved editions keep their original artwork.</p></aside></div>`;
 }
+function renderSplashPlacements() {
+  if (!isPublisher()) return empty('Publisher access required.', 'Only an authorized publisher can assign splash sponsors.');
+  const prefix = 'splash-placement';
+  const item = list('splashPlacements').find(p => String(p.id) === state.splashPlacementId) || {};
+  const brands = [['', 'Choose a Partner'], ...list('sponsors').map(b => [b.id, b.name])];
+  const orders = [['', 'No linked order — publisher test placement'], ...list('orders').map(o => [o.id, `${schoolName(o.hsid)} · ${o.sponsorshipType || 'Agreement'} · ${o.status}`])];
+  return pageHeading('Publisher’s Desk / Splash sponsors', 'Put Partner logos on the school welcome screen.',
+    'A Partner’s uploaded Brand Profile logo is reused here. Equal-priority active sponsors rotate between new splash visits.',
+    button('New school splash assignment', 'new-splash-placement', '', true)) +
+    `<section class="panel"><div class="panel-heading"><div><h2>${item.id ? 'Edit splash assignment' : 'Assign a sponsor logo'}</h2><p>Choose an existing Partner and one school. The Partner must have a real uploaded logo and active Brand Profile before activation.</p></div></div><form id="splash-placement-form"><input type="hidden" name="id" value="${esc(item.id || '')}"><p class="form-error" role="alert" hidden></p><div class="form-grid">${selectField(prefix, 'sponsorId', 'Partner organization', item.sponsorId || state.sponsorId, brands, { required: true })}<div class="field">${schoolPicker(prefix, 'schoolIds', item.hsid ? [String(item.hsid)] : [], true)}</div>${selectField(prefix, 'status', 'Splash placement status', item.status || 'paused', [['paused', 'Paused'], ['active', 'Active'], ['cancelled', 'Cancelled']])}${field(prefix, 'priority', 'Sponsor tier priority', item.priority ?? 0, { type: 'number', step: '1', help: 'Brands at the same highest eligible priority rotate equally. Lower tiers only serve when no higher tier is active.' })}</div><fieldset><legend>Placement dates</legend>${dates(prefix, item, { startRequired: true })}</fieldset><div style="margin-top:18px">${selectField(prefix, 'sponsorOrderId', 'Linked sponsorship order', item.sponsorOrderId || '', orders)}</div><p class="notice">Splash placement is independent of Tribune advertisements and gallery Partner Cards. An unlinked assignment can be used for publisher-managed testing. Saving does not create an order or charge a sponsor.</p><div class="form-actions"><button type="submit" class="button button-primary">Save splash placement</button></div></form></section>` +
+    `<section class="panel"><div class="panel-heading"><div><h2>School splash assignments</h2><p>One uploaded brand logo can serve multiple schools; duplicate uploads are unnecessary. New placements begin paused.</p></div></div>${list('splashPlacements').length ? `<div class="data-scroll"><table class="data-table"><thead><tr><th scope="col">School / Partner</th><th scope="col">Status</th><th scope="col">Priority / Dates</th><th scope="col">Preview / Edit</th></tr></thead><tbody>${list('splashPlacements').map(p => `<tr><td><strong>${esc(p.schoolName || schoolName(p.hsid))}</strong><small>${esc(list('sponsors').find(s => String(s.id) === String(p.sponsorId))?.name || 'Partner')}</small></td><td>${statusBadge(p.status)}</td><td><strong>Tier ${esc(p.priority)}</strong><small>${esc(periodLabel(p))}</small></td><td><a class="button button-small" href="https://mike-crozite-template.vercel.app/replay/${encodeURIComponent(String(p.hsid))}" target="_blank" rel="noopener noreferrer">View splash</a> <button class="button button-small" type="button" data-edit-splash-placement="${esc(p.id)}">Edit</button></td></tr>`).join('')}</tbody></table></div>` : empty('No splash logos assigned yet.', 'Choose a Partner and a school above to test its logo.')}</section>`;
+}
+
 function renderPlacements(cards = false) {
   if (!isPublisher()) return empty('Administrator access is required.', 'School placements are managed by your publisher.');
   const item = activePlacement(cards) || {};
@@ -523,6 +538,17 @@ async function savePlacement(form, cards = false) {
   state[cards ? 'cardPlacementId' : 'placementId'] = String(result.cardPlacement?.id || result.placement?.id || result.id || id || ''); state.dirty = false;
   await loadDashboard({ loading: false }); notify(cards ? 'Title-card placement saved.' : 'School placement saved.');
 }
+async function saveSplashPlacement(form) {
+  const ids = selectedSchools(form);
+  if (ids.length !== 1) throw new Error('Choose one school for this splash assignment.');
+  const id = formValue(form, 'id');
+  const result = await post('/splash-placements', { ...(id ? { id } : {}), sponsorId: formValue(form, 'sponsorId'),
+    hsid: ids[0], status: formValue(form, 'status'), priority: Number(formValue(form, 'priority') || 0),
+    ...timing(form), sponsorOrderId: formValue(form, 'sponsorOrderId') || null });
+  state.splashPlacementId = String(result.splashPlacement?.id || id || ''); state.dirty = false;
+  await loadDashboard({ loading: false }); notify('Splash sponsor assignment saved. The uploaded Brand Profile logo will be used for this school.');
+}
+
 async function saveMembership(form) {
   const role = formValue(form, 'role'), sponsorId = formValue(form, 'sponsorId');
   if (role === 'sponsor' && !sponsorId) throw new Error('Choose a Partner brand for this account.');
@@ -719,6 +745,7 @@ document.addEventListener('submit', event => {
   else if (form.getAttribute('id') === 'note-form') withForm(form, () => saveNote(form, action));
   else if (form.getAttribute('id') === 'brand-form') withForm(form, () => saveBrand(form));
   else if (form.getAttribute('id') === 'placement-form') withForm(form, () => savePlacement(form));
+  else if (form.getAttribute('id') === 'splash-placement-form') withForm(form, () => saveSplashPlacement(form));
   else if (form.getAttribute('id') === 'card-placement-form') withForm(form, () => savePlacement(form, true));
   else if (form.getAttribute('id') === 'membership-form') withForm(form, () => saveMembership(form));
   else if (form.getAttribute('id') === 'publication-form') withForm(form, async () => {
@@ -733,7 +760,7 @@ document.addEventListener('click', event => {
   if (target.dataset.section) { navigate(target.dataset.section); return; }
   if (target.dataset.pickSponsor) { chooseSponsor(target.dataset.pickSponsor); return; }
   if (target.dataset.deskTab) { if (!leaveEdits()) return; state.deskTab = target.dataset.deskTab; renderPage(); return; }
-  for (const [key, stateKey] of [['editCreative', 'creativeId'], ['editCard', 'cardId'], ['editNote', 'noteId'], ['editPlacement', 'placementId'], ['editCardPlacement', 'cardPlacementId'], ['editMembership', 'membershipId']]) {
+  for (const [key, stateKey] of [['editCreative', 'creativeId'], ['editCard', 'cardId'], ['editNote', 'noteId'], ['editPlacement', 'placementId'], ['editSplashPlacement', 'splashPlacementId'], ['editCardPlacement', 'cardPlacementId'], ['editMembership', 'membershipId']]) {
     if (target.dataset[key]) { if (!leaveEdits()) return; state[stateKey] = target.dataset[key]; renderPage(); return; }
   }
   if (target.dataset.pickSchool) {
@@ -766,6 +793,7 @@ document.addEventListener('click', event => {
   else if (action === 'new-card') { if (!leaveEdits()) return; state.cardId = ''; renderPage(); }
   else if (action === 'new-note') { if (!leaveEdits()) return; state.noteId = ''; renderPage(); }
   else if (action === 'new-placement') { if (!leaveEdits()) return; state.placementId = ''; renderPage(); }
+  else if (action === 'new-splash-placement') { if (!leaveEdits()) return; state.splashPlacementId = ''; renderPage(); }
   else if (action === 'new-card-placement') { if (!leaveEdits()) return; state.cardPlacementId = ''; renderPage(); }
   else if (action === 'new-membership') { if (!leaveEdits()) return; state.membershipId = ''; renderPage(); }
   else if (action === 'new-brand') { if (!leaveEdits()) return; state.newBrand = true; renderPage(); }

@@ -50,6 +50,18 @@ Editing an account assignment sends its server-issued `id` and `revision`, toget
 - **Save & preview** saves an ad or notice draft, then opens HTML and plain-text previews. **Preview settings** previews unsaved publication settings. Preview HTML is displayed in a sandboxed iframe. Any illustrative statistics or other preview limits returned by the backend are shown with the preview.
 - Saving, previewing and publishing portal content do not send a newsletter or change delivery approval or scheduling.
 
+## Splash logo placements (Publisher’s Desk)
+
+**Splash Logo Access** is a separate publisher-only editor. In **Brand Profile**, a sponsor or authorized publisher first uploads a real PNG/JPEG/WebP logo (up to 3 MB); the backend saves it in cloud object storage and writes its HTTPS URL to the existing `public.sponsor_brands.logo_url`. There is no second upload into a GitHub image folder.
+
+The publisher then chooses the school using search, the existing sponsor brand, status (paused/active/cancelled), start/end dates and priority. The editor uses `POST /api/partners/splash-placements`; the backend writes to the existing `public.school_splash_sponsorships` and records an audit entry. A brand requires a real uploaded logo and active profile before the placement can become active. An optional linked order must be confirmed paid and claimed by the same brand; an unlinked placement is an explicit publisher-managed test or promotion, not a recorded payment.
+
+**Rotation:** each new splash request selects one eligible active sponsor at the school's highest available priority. Distinct brands at the same priority rotate randomly; a sponsor with duplicate campaign rows does not receive additional chances. The eligible pool is cached; the chosen logo is not edge-cached. Paused/expired sponsors and orders no longer in paid status are excluded. A sponsor's existing uploaded logo is reused everywhere it has explicit placement.
+
+The editor includes a **View splash** link using the public replay-by-school-ID route. The manual GitHub folder `public/img/splash-sponsors/<hsid>/` remains a test fallback until an active database assignment exists. Uploaded logos there are indexed at build time and randomly selected on first-visit splashes only; they are not imported by the Publisher’s Desk.
+
+These rights are independent of Tribune advertisements, player/gallery Sponsor Cards, and billing. Publishing a logo placement does not enable sending or invent a paid entitlement. This feature depends on the shared backend's Publisher’s Desk migration, plus `migrations/20261025_tribune_splash_entitlements.sql`, a narrowly scoped grant to the dedicated app role; it must be approved and installed as part of the portal release.
+
 ## Title sponsor cards
 
 **Sponsor cards** manages versioned, two-sided gallery cards independently of Tribune advertisements. **Title card placements** is a publisher-only area that records the explicit title sponsorship entitlement for a school. Those assignments have their own dates and approval requirements; they do not create a newsletter placement or a payment.
