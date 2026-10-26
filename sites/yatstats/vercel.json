@@ -2,9 +2,31 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": true,
   "redirects": [
-    { "source": "/sites/yatstats", "destination": "/", "permanent": true },
-    { "source": "/sites/yatstats/", "destination": "/", "permanent": true },
-    { "source": "/sites/yatstats/:path*/", "destination": "/:path*/", "permanent": true },
-    { "source": "/sites/yatstats/:path*", "destination": "/:path*", "permanent": true }
+    {
+      "source": "/sites/yatstats",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/sites/yatstats/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/sites/yatstats/:path*/",
+      "destination": "/:path*/",
+      "permanent": true
+    },
+    {
+      "source": "/sites/yatstats/:path*",
+      "destination": "/:path*",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/partners/:path*",
+      "destination": "https://mike-crozite-template.vercel.app/api/partners/:path*"
+    }
   ]
 }

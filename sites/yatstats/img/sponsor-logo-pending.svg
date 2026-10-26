@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="240" viewBox="0 0 480 240" role="img" aria-label="Sponsor logo pending">
+  <rect width="480" height="240" rx="12" fill="#f6f2e8"/>
+  <rect x="12" y="12" width="456" height="216" rx="8" fill="none" stroke="#a3a294" stroke-dasharray="7 7"/>
+  <text x="240" y="112" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" fill="#415546">SPONSOR LOGO</text>
+  <text x="240" y="148" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" fill="#6d7066">Upload your artwork to finish setup</text>
+</svg>
