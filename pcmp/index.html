@@ -258,7 +258,7 @@ footer p{margin:0 0 8px;max-width:70em}
 <header class="top">
   <div class="wrap">
     <div class="brand">PCMP <span>| PAYROLL ADVANTAGE</span></div>
-    <a class="btn top-cta" href="#report">Free report &rsaquo;</a>
+    <a class="btn top-cta" href="#report">Free game plan &rsaquo;</a>
   </div>
 </header>
 
@@ -275,8 +275,8 @@ footer p{margin:0 0 8px;max-width:70em}
     <div class="hero-form">
       <div class="form-card optin" id="report">
         <div class="optin-tag">FREE · NO OBLIGATION</div>
-        <p class="q optin-h">Get your free Payroll Scouting Report</p>
-        <p class="optin-sub">Your company's estimated payroll savings and home-team share, prepared for you by a PCMP representative.</p>
+        <p class="q optin-h">Get your free How You Score Game Plan</p>
+        <p class="optin-sub">Your company's estimated payroll savings and home-team share, emailed to you in minutes.</p>
 
         <form id="leadForm" novalidate>
           <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
@@ -287,24 +287,21 @@ footer p{margin:0 0 8px;max-width:70em}
             <label>Email<input name="email" type="email" autocomplete="email" required></label>
           </div>
           <p class="err hidden" id="formErr" role="alert"></p>
-          <button class="btn" type="submit" id="sendBtn">Send my free report &rsaquo;</button>
+          <button class="btn" type="submit" id="sendBtn">Send my free game plan &rsaquo;</button>
           <p class="tiny">By submitting, you agree a PCMP representative may contact you about PCMP by phone, text or email. Message and data rates may apply. Reply STOP to opt out.</p>
         </form>
 
         <div id="quiz" class="hidden">
           <div class="qstep" data-step="employees">
-            <div class="step" id="quizHello">Got it! 3 quick taps so we can run your real numbers</div>
-            <p class="q">How many W-2 employees?</p>
-            <div class="picks" role="group" aria-label="Number of W-2 employees">
-              <button type="button" class="pick" data-name="employees" data-value="5-24">5 – 24</button>
-              <button type="button" class="pick" data-name="employees" data-value="25-99">25 – 99</button>
-              <button type="button" class="pick" data-name="employees" data-value="100-499">100 – 499</button>
-              <button type="button" class="pick" data-name="employees" data-value="500+">500+</button>
-            </div>
+            <div class="step" id="quizHello">Got it! 3 quick questions so we can build your game plan</div>
+            <p class="q">How many W-2 employees do you have?</p>
+            <div class="fields"><label>W-2 employees<input id="empInput" type="number" inputmode="numeric" min="1" max="100000" step="1" placeholder="e.g. 48"></label></div>
+            <p class="err hidden" id="empErr" role="alert">Enter your number of W-2 employees.</p>
+            <button class="btn" type="button" id="empNext">Next &rsaquo;</button>
           </div>
           <div class="qstep hidden" data-step="healthPlan">
             <button type="button" class="back-link" data-back>‹ Back</button>
-            <div class="step">Tap 2 of 3</div>
+            <div class="step">Question 2 of 3</div>
             <p class="q">Do you offer your employees a healthcare plan?</p>
             <div class="picks" role="group" aria-label="Healthcare plan">
               <button type="button" class="pick" data-name="healthPlan" data-value="yes">Yes</button>
@@ -314,7 +311,7 @@ footer p{margin:0 0 8px;max-width:70em}
           </div>
           <div class="qstep hidden" data-step="role">
             <button type="button" class="back-link" data-back>‹ Back</button>
-            <div class="step">Tap 3 of 3</div>
+            <div class="step">Question 3 of 3</div>
             <p class="q">What's your role?</p>
             <div class="picks" role="group" aria-label="Your role">
               <button type="button" class="pick" data-name="role" data-value="owner">Owner</button>
@@ -328,15 +325,15 @@ footer p{margin:0 0 8px;max-width:70em}
             <div class="step">Last one (optional)</div>
             <p class="q">Which high school team would you support?</p>
             <div class="fields"><label>High school team<input name="school" id="schoolInput" autocomplete="off" placeholder="e.g. Hamilton High School, Chandler AZ"></label></div>
-            <button class="btn" type="button" id="finishBtn">Finish my report &rsaquo;</button>
+            <button class="btn" type="button" id="finishBtn">Send my game plan &rsaquo;</button>
             <button type="button" class="back-link" id="skipBtn" style="display:block;margin:12px auto 0">Skip</button>
           </div>
         </div>
 
         <div id="thanks" class="thanks hidden" role="status">
           <div class="step">Safe at home</div>
-          <h3>Your report is on deck.</h3>
-          <p>A PCMP representative will reach out shortly with your numbers.</p>
+          <h3>Your game plan is on its way.</h3>
+          <p>Check your inbox for your How You Score Game Plan. A PCMP representative will follow up to confirm your numbers.</p>
         </div>
       </div>
     </div>
@@ -357,7 +354,7 @@ footer p{margin:0 0 8px;max-width:70em}
       </div>
       <input class="range" id="sbRange" type="range" min="5" max="1000" step="5" value="50" aria-label="Number of W-2 employees">
       <div class="range-lbl"><span>5</span><span>250</span><span>500</span><span>750</span><span>1,000+</span></div>
-      <p class="fine">Estimate uses PCMP's figure of about $600 per participating W-2 employee per year. Your actual number depends on eligibility and participation; your free scouting report gives you the real one.</p>
+      <p class="fine">Estimate uses PCMP's figure of about $600 per participating W-2 employee per year. Your actual number depends on eligibility and participation; your free game plan gives you the real one.</p>
       <a class="btn" href="#hometeam" id="sbCta">Bring my $30,000 home &rsaquo;</a>
     </div>
   </div>
@@ -430,7 +427,7 @@ footer p{margin:0 0 8px;max-width:70em}
       <div class="range-lbl"><span>0%</span><span id="htPct">10% to the team</span><span>50%</span></div>
       <div class="perks"><span>No check to write</span><span>Given in your company's name</span><span>One school or several</span></div>
       <p class="fine">Based on your scoreboard roster above. Giving is optional, and you decide the school and the amount once your real savings are confirmed.</p>
-      <a class="btn" href="#report">Get my free report &rsaquo;</a>
+      <a class="btn" href="#report">Get my free game plan &rsaquo;</a>
     </div>
   </div>
 </section>
@@ -456,7 +453,7 @@ footer p{margin:0 0 8px;max-width:70em}
       <details><summary>Is it compliant?</summary><div class="compliance"><span>IRS § 213(d)</span><span>IRS § 125</span><span>IRS § 105(h)</span><span>SIMRP</span><span>CPA reviewed</span><span>Tax attorney approved</span><span>Audit defensible</span></div><p>It's independently administered and built to withstand scrutiny. Ask your PCMP representative for the written plan documents to review with your own CPA.</p></details>
       <details><summary>What do you need from me to start?</summary><p>A payroll census and employee IDs. There are small business and corporate versions.</p></details>
       <details><summary>How does the team donation work?</summary><p>Once your savings are confirmed, you can choose to put a share toward one or more high school baseball programs, given in your company's name. It's money you didn't know you had, so there's no check to write from your budget. It's always optional, and you pick the school and the amount.</p></details>
-      <details><summary>Who's eligible?</summary><p>Two qualifications: you have W-2 employees and a healthcare plan. Your free scouting report confirms the details.</p></details>
+      <details><summary>Who's eligible?</summary><p>Two qualifications: you have W-2 employees and a healthcare plan. Your free game plan and a PCMP representative confirm the details.</p></details>
     </div>
   </div>
 </section>
@@ -465,9 +462,9 @@ footer p{margin:0 0 8px;max-width:70em}
 <section class="convert" id="qualify">
   <div class="wrap" style="max-width:640px;text-align:center">
     <div class="eyebrow">Step up to the plate</div>
-    <h2>Get your free scouting report.</h2>
-    <p class="sub">Your estimated savings and your home-team share, prepared for you by a PCMP representative. No obligation.</p>
-    <a class="btn" href="#report">Get my free report &rsaquo;</a>
+    <h2>Get your free How You Score Game Plan.</h2>
+    <p class="sub">Your estimated savings and your home-team share, emailed to you in minutes. No obligation.</p>
+    <a class="btn" href="#report">Get my free game plan &rsaquo;</a>
   </div>
 </section>
 
@@ -479,7 +476,7 @@ footer p{margin:0 0 8px;max-width:70em}
 </footer>
 
 <div class="sticky">
-  <a class="btn" href="#report">Get my free report &rsaquo;</a>
+  <a class="btn" href="#report">Get my free game plan &rsaquo;</a>
 </div>
 
 <script>
@@ -530,8 +527,8 @@ footer p{margin:0 0 8px;max-width:70em}
     post({}).then(function(x){
       if(!x.ok){fail(x.j&&x.j.error&&!/^(not-configured|save-failed)$/.test(x.j.error)?x.j.error:callMsg);return;}
       lead.classList.add('hidden');quiz.classList.remove('hidden');
-      document.getElementById('quizHello').textContent='Thanks, '+who.name.split(/\s+/)[0]+'! 3 quick taps so we can run your real numbers';
-    }).catch(function(){fail(callMsg);}).finally(function(){btn.disabled=false;btn.innerHTML='Send my free report &rsaquo;';});
+      document.getElementById('quizHello').textContent='Thanks, '+who.name.split(/\s+/)[0]+'! 3 quick questions so we can build your game plan';
+    }).catch(function(){fail(callMsg);}).finally(function(){btn.disabled=false;btn.innerHTML='Send my free game plan &rsaquo;';});
   });
   var steps=[].slice.call(quiz.querySelectorAll('.qstep')),at=0;
   var go=function(k){steps[at].classList.add('hidden');at=k;steps[at].classList.remove('hidden');};
@@ -539,6 +536,14 @@ footer p{margin:0 0 8px;max-width:70em}
     quiz.querySelectorAll('.pick[data-name="'+b.dataset.name+'"]').forEach(function(x){x.setAttribute('aria-pressed','false');});
     b.setAttribute('aria-pressed','true');answers[b.dataset.name]=b.dataset.value;go(at+1);});});
   quiz.querySelectorAll('[data-back]').forEach(function(b){b.addEventListener('click',function(){go(at-1);});});
+  var emp=document.getElementById('empInput'),empErr=document.getElementById('empErr');
+  var empNext=function(){var n=Math.round(+emp.value);if(!(n>=1&&n<=100000)){empErr.classList.remove('hidden');emp.focus();return;}
+    empErr.classList.add('hidden');answers.employees=String(n);go(at+1);};
+  document.getElementById('empNext').onclick=empNext;
+  emp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();empNext();}});
+  // Hint with the scoreboard roster (a placeholder, never typed-over text).
+  var hint=function(){emp.placeholder='e.g. '+document.getElementById('sbRange').value;};hint();
+  document.getElementById('sbRange').addEventListener('input',hint);
   var finish=function(){answers.school=document.getElementById('schoolInput').value.trim();
     quiz.classList.add('hidden');done.classList.remove('hidden');
     // The lead is already saved; this adds the answers to the same contact.
