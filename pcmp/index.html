@@ -73,6 +73,12 @@ h2{font-size:clamp(34px,5.4vw,58px)}
 .chips{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:26px;font:600 14px/1.2 var(--display);letter-spacing:.08em;text-transform:uppercase;color:#cfc5b0}
 .chips span:before{content:"✓ ";color:var(--yellow)}
 .hero-card{justify-self:center;width:min(360px,100%)}
+.optin{position:relative;margin-top:6px;max-width:560px;color:var(--ink)}
+.optin-tag{display:inline-block;font:700 12px/1 var(--display);letter-spacing:.16em;background:var(--red);color:#fff;padding:6px 9px;border-radius:4px;margin-bottom:10px}
+.optin .optin-h{font-size:clamp(24px,3vw,30px);margin:0 0 6px}
+.optin-sub{margin:0 0 14px;color:#4b4436;font-size:16px;line-height:1.45}
+.fields.two{grid-template-columns:1fr 1fr}
+.optin .step{font-size:12px}
 
 /* ---------- flip card (shared) ---------- */
 .flip{perspective:1400px;cursor:pointer;aspect-ratio:5/7;width:100%;border-radius:14px}
@@ -225,7 +231,7 @@ footer p{margin:0 0 8px;max-width:70em}
 @media (max-width:900px){
   .hero .wrap,.boxscore .grid,.convert .grid{grid-template-columns:1fr}
   .hero{padding-top:36px}
-  .hero-card{width:min(300px,78%);order:-1}
+  .hero-card{width:min(300px,78%)}
   .cards{grid-template-columns:1fr;max-width:380px;margin-inline:auto}
   .innings{grid-template-columns:1fr 1fr}
   .sticky{display:flex}
@@ -238,6 +244,7 @@ footer p{margin:0 0 8px;max-width:70em}
   .split{grid-template-columns:1fr}
   .lineup li{font-size:17px;grid-template-columns:34px 1fr auto;padding:12px 14px}
   .picks{grid-template-columns:1fr 1fr}
+  .fields.two{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -259,9 +266,71 @@ footer p{margin:0 0 8px;max-width:70em}
       <h1 style="margin-top:14px"><span class="kicker">Business owners,</span>Stop leaving <em>runners</em> on base.</h1>
       <div class="underline"></div>
       <p class="lead">Your payroll has runners stranded on base: <strong>about $600 per W-2 employee, every year.</strong> PCMP brings them home. Your employees win, your business wins, and your home team can win too. At zero net cost to you or your team.</p>
-      <div class="cta-row">
-        <a class="btn" href="#qualify">See if you qualify &rsaquo;</a>
-        <a class="btn btn-ghost" href="#scoreboard">Run my numbers</a>
+      <div class="form-card optin" id="report">
+        <div class="optin-tag">FREE · NO OBLIGATION</div>
+        <p class="q optin-h">Get your free Payroll Scouting Report</p>
+        <p class="optin-sub">Your company's estimated payroll savings and home-team share, prepared for you by Michael Clark.</p>
+
+        <form id="leadForm" novalidate>
+          <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+          <div class="fields two">
+            <label>Your name<input name="name" autocomplete="name" required></label>
+            <label>Business name<input name="company" autocomplete="organization" required></label>
+            <label>Mobile phone<input name="phone" type="tel" autocomplete="tel" inputmode="tel" required></label>
+            <label>Email<input name="email" type="email" autocomplete="email" required></label>
+          </div>
+          <p class="err hidden" id="formErr" role="alert"></p>
+          <button class="btn" type="submit" id="sendBtn">Send my free report &rsaquo;</button>
+          <p class="tiny">By submitting, you agree AW Sales may contact you about PCMP by phone, text or email. Message and data rates may apply. Reply STOP to opt out.</p>
+        </form>
+
+        <div id="quiz" class="hidden">
+          <div class="qstep" data-step="employees">
+            <div class="step" id="quizHello">Got it! 3 quick taps so Michael can run your real numbers</div>
+            <p class="q">How many W-2 employees?</p>
+            <div class="picks" role="group" aria-label="Number of W-2 employees">
+              <button type="button" class="pick" data-name="employees" data-value="5-24">5 – 24</button>
+              <button type="button" class="pick" data-name="employees" data-value="25-99">25 – 99</button>
+              <button type="button" class="pick" data-name="employees" data-value="100-499">100 – 499</button>
+              <button type="button" class="pick" data-name="employees" data-value="500+">500+</button>
+            </div>
+          </div>
+          <div class="qstep hidden" data-step="healthPlan">
+            <button type="button" class="back-link" data-back>‹ Back</button>
+            <div class="step">Tap 2 of 3</div>
+            <p class="q">Do you offer your employees a healthcare plan?</p>
+            <div class="picks" role="group" aria-label="Healthcare plan">
+              <button type="button" class="pick" data-name="healthPlan" data-value="yes">Yes</button>
+              <button type="button" class="pick" data-name="healthPlan" data-value="no">No</button>
+              <button type="button" class="pick" data-name="healthPlan" data-value="not-sure" style="grid-column:1/-1">Not sure</button>
+            </div>
+          </div>
+          <div class="qstep hidden" data-step="role">
+            <button type="button" class="back-link" data-back>‹ Back</button>
+            <div class="step">Tap 3 of 3</div>
+            <p class="q">What's your role?</p>
+            <div class="picks" role="group" aria-label="Your role">
+              <button type="button" class="pick" data-name="role" data-value="owner">Owner</button>
+              <button type="button" class="pick" data-name="role" data-value="cfo-finance">CFO / Finance</button>
+              <button type="button" class="pick" data-name="role" data-value="hr-benefits">HR / Benefits</button>
+              <button type="button" class="pick" data-name="role" data-value="other">Other</button>
+            </div>
+          </div>
+          <div class="qstep hidden" data-step="school">
+            <button type="button" class="back-link" data-back>‹ Back</button>
+            <div class="step">Last one (optional)</div>
+            <p class="q">Which high school team would you support?</p>
+            <div class="fields"><label>High school team<input name="school" id="schoolInput" autocomplete="off" placeholder="e.g. Hamilton High School, Chandler AZ"></label></div>
+            <button class="btn" type="button" id="finishBtn">Finish my report &rsaquo;</button>
+            <button type="button" class="back-link" id="skipBtn" style="display:block;margin:12px auto 0">Skip</button>
+          </div>
+        </div>
+
+        <div id="thanks" class="thanks hidden" role="status">
+          <div class="step">Safe at home</div>
+          <h3>Your report is on deck.</h3>
+          <p>Michael Clark will reach out shortly with your numbers. Can't wait? Call or text <a href="tel:+16025106562">(602) 510-6562</a>.</p>
+        </div>
       </div>
       <div class="chips"><span>Pay stays the same</span><span>Benefits stay the same</span><span>No check to write</span></div>
     </div>
@@ -363,7 +432,7 @@ footer p{margin:0 0 8px;max-width:70em}
       <div class="range-lbl"><span>0%</span><span id="htPct">10% to the team</span><span>50%</span></div>
       <div class="perks"><span>No check to write</span><span>Given in your company's name</span><span>One school or several</span></div>
       <p class="fine">Based on your scoreboard roster above. Giving is optional, and you decide the school and the amount once your real savings are confirmed.</p>
-      <a class="btn" href="#qualify">Bring the runs home &rsaquo;</a>
+      <a class="btn" href="#report">Get my free report &rsaquo;</a>
     </div>
   </div>
 </section>
@@ -374,7 +443,7 @@ footer p{margin:0 0 8px;max-width:70em}
     <div class="eyebrow">The Game Plan</div>
     <h2>Four innings. No complicated signs.</h2>
     <div class="innings">
-      <div class="inning"><span class="badge">1ST</span><h3>Quick check</h3><p>Answer two questions below. About 60 seconds.</p></div>
+      <div class="inning"><span class="badge">1ST</span><h3>Free report</h3><p>Request your free Payroll Scouting Report at the top of the page. 30 seconds.</p></div>
       <div class="inning"><span class="badge">2ND</span><h3>Talk to Michael</h3><p>A 20-minute call. No obligation, no disruption to your team.</p></div>
       <div class="inning"><span class="badge">3RD</span><h3>Send your census</h3><p>A payroll census and employee IDs is all it takes to see your real numbers.</p></div>
       <div class="inning"><span class="badge">HOME</span><h3>Score</h3><p>Roll it out. Pay and benefits stay the same, and you choose if a share goes to your home team.</p></div>
@@ -413,8 +482,8 @@ footer p{margin:0 0 8px;max-width:70em}
   <div class="wrap grid">
     <div>
       <div class="eyebrow">Step up to the plate</div>
-      <h2>See if you qualify.</h2>
-      <p class="sub">Two quick questions. Michael will reach out with your numbers and your home-team share, or call him now if you'd rather talk to a real person.</p>
+      <h2>Get your free scouting report.</h2>
+      <p class="sub">Michael will send your numbers and your home-team share, or call him now if you'd rather talk to a real person.</p>
       <div class="coach">
         <div class="mc" aria-hidden="true">MC</div>
         <div><b>Michael Clark</b><span>Principal, AW Sales LLC · Gilbert, AZ</span></div>
@@ -426,66 +495,12 @@ footer p{margin:0 0 8px;max-width:70em}
       </div>
     </div>
 
-    <div class="form-card">
-      <form id="qualForm" novalidate>
-        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
-        <div class="qstep" data-step="employees">
-          <div class="step">Question 1 of 4</div>
-          <p class="q">How many W-2 employees?</p>
-          <div class="picks" role="group" aria-label="Number of W-2 employees">
-            <button type="button" class="pick" data-name="employees" data-value="5-24">5 – 24</button>
-            <button type="button" class="pick" data-name="employees" data-value="25-99">25 – 99</button>
-            <button type="button" class="pick" data-name="employees" data-value="100-499">100 – 499</button>
-            <button type="button" class="pick" data-name="employees" data-value="500+">500+</button>
-          </div>
-          <p class="tiny">No obligation. Takes about 60 seconds.</p>
-        </div>
-
-        <div class="qstep hidden" data-step="healthPlan">
-          <button type="button" class="back-link" data-back>‹ Back</button>
-          <div class="step">Question 2 of 4</div>
-          <p class="q">Do you offer your employees a healthcare plan?</p>
-          <div class="picks" role="group" aria-label="Healthcare plan">
-            <button type="button" class="pick" data-name="healthPlan" data-value="yes">Yes</button>
-            <button type="button" class="pick" data-name="healthPlan" data-value="no">No</button>
-            <button type="button" class="pick" data-name="healthPlan" data-value="not-sure" style="grid-column:1/-1">Not sure</button>
-          </div>
-        </div>
-
-        <div class="qstep hidden" data-step="role">
-          <button type="button" class="back-link" data-back>‹ Back</button>
-          <div class="step">Question 3 of 4</div>
-          <p class="q">What's your role?</p>
-          <div class="picks" role="group" aria-label="Your role">
-            <button type="button" class="pick" data-name="role" data-value="owner">Owner</button>
-            <button type="button" class="pick" data-name="role" data-value="cfo-finance">CFO / Finance</button>
-            <button type="button" class="pick" data-name="role" data-value="hr-benefits">HR / Benefits</button>
-            <button type="button" class="pick" data-name="role" data-value="other">Other</button>
-          </div>
-        </div>
-
-        <div class="qstep hidden" data-step="contact">
-          <button type="button" class="back-link" data-back>‹ Back</button>
-          <div class="step">Question 4 of 4</div>
-          <p class="q">Where should Michael send your numbers?</p>
-          <div class="fields">
-            <label>Your name<input name="name" autocomplete="name" required></label>
-            <label>Business name<input name="company" autocomplete="organization" required></label>
-            <label>Mobile phone<input name="phone" type="tel" autocomplete="tel" inputmode="tel" required></label>
-            <label>Email<input name="email" type="email" autocomplete="email" required></label>
-            <label>High school team you'd support <span style="text-transform:none;letter-spacing:0;font-family:var(--body);font-weight:400;color:var(--muted)">(optional)</span><input name="school" autocomplete="off" placeholder="e.g. Hamilton High School, Chandler AZ"></label>
-          </div>
-          <p class="err hidden" id="formErr" role="alert"></p>
-          <button class="btn" type="submit" id="sendBtn">Send me my numbers &rsaquo;</button>
-          <p class="tiny">By submitting, you agree AW Sales may contact you about PCMP by phone, text or email. Message and data rates may apply. Reply STOP to opt out.</p>
-        </div>
-
-        <div id="thanks" class="thanks hidden" role="status">
-          <div class="step">Safe at home</div>
-          <h3>You're in the lineup.</h3>
-          <p>Michael Clark will reach out shortly. Can't wait? Call <a href="tel:+16025106562">(602) 510-6562</a>.</p>
-        </div>
-      </form>
+    <div class="form-card" style="text-align:center">
+      <div class="optin-tag">FREE · NO OBLIGATION</div>
+      <p class="q">Your free Payroll Scouting Report</p>
+      <p class="optin-sub">Your estimated savings and home-team share, prepared by Michael Clark. Takes 30 seconds to request.</p>
+      <a class="btn" href="#report">Get my free report &rsaquo;</a>
+    </div>
     </div>
   </div>
 </section>
@@ -500,7 +515,7 @@ footer p{margin:0 0 8px;max-width:70em}
 
 <div class="sticky">
   <a class="call" href="tel:+16025106562" aria-label="Call Michael">📞</a>
-  <a class="btn" href="#qualify">See if you qualify &rsaquo;</a>
+  <a class="btn" href="#report">Get my free report &rsaquo;</a>
 </div>
 
 <script>
@@ -532,35 +547,40 @@ footer p{margin:0 0 8px;max-width:70em}
   document.getElementById('prev').onclick=function(){show(i-1);};
   document.getElementById('next').onclick=function(){show(i+1);};
 
-  // Qualify quiz: one tap per question, then contact details. Saved in the
-  // AW Sales sub-account by /api/pcmp-lead with the scoreboard numbers.
-  var form=document.getElementById('qualForm'),answers={};
-  var steps=[].slice.call(form.querySelectorAll('.qstep')),done=document.getElementById('thanks'),err=document.getElementById('formErr');
-  var at=0,go=function(k){steps[at].classList.add('hidden');at=k;steps[at].classList.remove('hidden');
-    var f=steps[at].querySelector('input:not([type=hidden]),.pick');if(f&&window.innerWidth>900)f.focus();};
-  form.querySelectorAll('.pick').forEach(function(b){b.addEventListener('click',function(){
-    form.querySelectorAll('.pick[data-name="'+b.dataset.name+'"]').forEach(function(x){x.setAttribute('aria-pressed','false');});
-    b.setAttribute('aria-pressed','true');answers[b.dataset.name]=b.dataset.value;go(at+1);});});
-  form.querySelectorAll('[data-back]').forEach(function(b){b.addEventListener('click',function(){go(at-1);});});
+  // Contact first (the lead is saved and Michael is texted right away), then
+  // three taps of qualifying answers saved on the same AW Sales contact.
+  var lead=document.getElementById('leadForm'),quiz=document.getElementById('quiz'),done=document.getElementById('thanks'),err=document.getElementById('formErr');
+  var who={},answers={};
+  var post=function(extra){var data={roster:+document.getElementById('sbRange').value,share:+document.getElementById('htRange').value,page:location.href};
+    for(var k in who)data[k]=who[k];for(var j in extra)data[j]=extra[j];
+    return fetch('/api/pcmp-lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+      .then(function(r){return r.json().catch(function(){return {};}).then(function(x){return {ok:r.ok,j:x};});});};
   var fail=function(msg){err.innerHTML=msg;err.classList.remove('hidden');};
-  form.addEventListener('submit',function(e){
+  var callMsg='We couldn\'t send that just now. Please call or text Michael at <a href="tel:+16025106562">(602) 510-6562</a>.';
+  lead.addEventListener('submit',function(e){
     e.preventDefault();err.classList.add('hidden');
-    var bad=[].slice.call(form.querySelectorAll('input[required]')).find(function(x){return !x.value.trim()||(x.type==='email'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x.value))||(x.type==='tel'&&x.value.replace(/\D/g,'').length<10);});
+    var bad=[].slice.call(lead.querySelectorAll('input[required]')).find(function(x){return !x.value.trim()||(x.type==='email'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x.value))||(x.type==='tel'&&x.value.replace(/\D/g,'').length<10);});
     if(bad){bad.focus();bad.style.borderColor='#b3261e';return;}
-    var data={employees:answers.employees,healthPlan:answers.healthPlan,role:answers.role,
-      roster:+document.getElementById('sbRange').value,share:+document.getElementById('htRange').value,page:location.href};
-    ['name','company','phone','email','school','website'].forEach(function(n){data[n]=form.elements[n].value.trim();});
+    ['name','company','phone','email','website'].forEach(function(n){who[n]=lead.elements[n].value.trim();});
     var btn=document.getElementById('sendBtn');btn.disabled=true;btn.textContent='Sending…';
-    fetch('/api/pcmp-lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-      .then(function(r){return r.json().catch(function(){return {};}).then(function(j){return {ok:r.ok,j:j};});})
-      .then(function(x){
-        if(x.ok){steps[at].classList.add('hidden');done.classList.remove('hidden');return;}
-        if(x.j&&x.j.error&&!/^(not-configured|save-failed)$/.test(x.j.error)){fail(x.j.error);}
-        else fail('We couldn\'t send that just now. Please call or text Michael at <a href="tel:+16025106562">(602) 510-6562</a>.');
-      })
-      .catch(function(){fail('We couldn\'t send that just now. Please call or text Michael at <a href="tel:+16025106562">(602) 510-6562</a>.');})
-      .finally(function(){btn.disabled=false;btn.innerHTML='Send me my numbers &rsaquo;';});
+    post({}).then(function(x){
+      if(!x.ok){fail(x.j&&x.j.error&&!/^(not-configured|save-failed)$/.test(x.j.error)?x.j.error:callMsg);return;}
+      lead.classList.add('hidden');quiz.classList.remove('hidden');
+      document.getElementById('quizHello').textContent='Thanks, '+who.name.split(/\s+/)[0]+'! 3 quick taps so Michael can run your real numbers';
+    }).catch(function(){fail(callMsg);}).finally(function(){btn.disabled=false;btn.innerHTML='Send my free report &rsaquo;';});
   });
+  var steps=[].slice.call(quiz.querySelectorAll('.qstep')),at=0;
+  var go=function(k){steps[at].classList.add('hidden');at=k;steps[at].classList.remove('hidden');};
+  quiz.querySelectorAll('.pick').forEach(function(b){b.addEventListener('click',function(){
+    quiz.querySelectorAll('.pick[data-name="'+b.dataset.name+'"]').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');answers[b.dataset.name]=b.dataset.value;go(at+1);});});
+  quiz.querySelectorAll('[data-back]').forEach(function(b){b.addEventListener('click',function(){go(at-1);});});
+  var finish=function(){answers.school=document.getElementById('schoolInput').value.trim();
+    quiz.classList.add('hidden');done.classList.remove('hidden');
+    // The lead is already saved; this adds the answers to the same contact.
+    post(answers).catch(function(){});};
+  document.getElementById('finishBtn').onclick=finish;
+  document.getElementById('skipBtn').onclick=function(){document.getElementById('schoolInput').value='';finish();};
 })();
 </script>
 </body>

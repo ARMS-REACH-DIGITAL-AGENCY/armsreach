@@ -102,9 +102,11 @@ function validate(body) {
   if (!lead.company) return { error: 'Please add your business name.' };
   if (digits(lead.phone).length < 10) return { error: 'Please add a mobile number.' };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email)) return { error: 'Please add a valid email.' };
-  if (!EMPLOYEE_BANDS.includes(lead.employees)) return { error: 'Pick how many W-2 employees you have.' };
-  if (!HEALTH.includes(lead.healthPlan)) return { error: 'Tell us whether you offer a healthcare plan.' };
-  if (!ROLES.includes(lead.role)) return { error: 'Pick your role.' };
+  // Qualifying answers come in a second request (after the contact is
+  // saved); each is optional but must be a known value when present.
+  if (lead.employees && !EMPLOYEE_BANDS.includes(lead.employees)) lead.employees = '';
+  if (lead.healthPlan && !HEALTH.includes(lead.healthPlan)) lead.healthPlan = '';
+  if (lead.role && !ROLES.includes(lead.role)) lead.role = '';
   return { lead };
 }
 
@@ -113,14 +115,14 @@ const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
 function buildContact(lead, ids, locationId) {
   const [firstName, ...rest] = lead.name.split(/\s+/);
   const estimate = lead.roster * 600;
-  const qualified = lead.healthPlan !== 'no';
+  const answered = Boolean(lead.employees || lead.healthPlan || lead.role);
   const values = {
     employees: lead.employees,
     healthPlan: lead.healthPlan,
     role: lead.role,
     roster: lead.roster ? String(lead.roster) : '',
     estimate: lead.roster ? money(estimate) : '',
-    share: `${lead.share}%`,
+    share: answered ? `${lead.share}%` : '',
     school: lead.school,
   };
   const customFields = Object.entries(values)
@@ -129,9 +131,9 @@ function buildContact(lead, ids, locationId) {
   const tags = [
     'pcmp-lead',
     'source-yatstats-founding-partner',
-    `pcmp-employees-${lead.employees.replace('+', 'plus')}`,
-    `pcmp-role-${lead.role}`,
-    qualified ? 'pcmp-qualified' : 'pcmp-needs-review',
+    ...(lead.employees ? [`pcmp-employees-${lead.employees.replace('+', 'plus')}`] : []),
+    ...(lead.role ? [`pcmp-role-${lead.role}`] : []),
+    ...(lead.healthPlan ? [lead.healthPlan === 'no' ? 'pcmp-needs-review' : 'pcmp-qualified'] : []),
     ...(lead.school ? ['pcmp-home-team-interest'] : []),
   ];
   return {
@@ -148,10 +150,10 @@ function buildContact(lead, ids, locationId) {
       customFields,
     },
     note: [
-      'PCMP qualifying answers',
-      `W-2 employees: ${lead.employees}`,
-      `Healthcare plan: ${lead.healthPlan}`,
-      `Role: ${lead.role}`,
+      answered ? 'PCMP qualifying answers' : 'PCMP free Payroll Scouting Report requested',
+      lead.employees ? `W-2 employees: ${lead.employees}` : '',
+      lead.healthPlan ? `Healthcare plan: ${lead.healthPlan}` : '',
+      lead.role ? `Role: ${lead.role}` : '',
       lead.roster ? `Scoreboard roster: ${lead.roster} (estimate ${money(estimate)} / year)` : '',
       `Home team share: ${lead.share}%${lead.roster ? ` (${money((estimate * lead.share) / 100)})` : ''}`,
       lead.school ? `High school team: ${lead.school}` : '',
