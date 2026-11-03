@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Stop Leaving Runners on Base | PCMP · AW Sales</title>
+<title>Stop Leaving Runners on Base | PCMP</title>
 <meta name="description" content="Payroll is the one position nobody coached up. PCMP recovers about $600 per W-2 employee, every year, at zero net cost to you or your team. See if you qualify in 60 seconds.">
 <meta property="og:title" content="Business owners, stop leaving runners on base.">
 <meta property="og:description" content="About $600 per W-2 employee, every year, is stranded in your payroll. See if you qualify.">
@@ -12,15 +12,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Archivo:ital,wght@0,400;0,600;0,800;1,800&display=swap" rel="stylesheet">
 <!--
-  PCMP landing page for AW Sales (HighLevel sub-account DrDp9hSlw7o5O2KANkh2).
-  Lives at armsreachdigital.agency/pcmp. Built to drop into a HighLevel page as
-  one Custom Code element, or to host as a plain page.
-
-  THE FORM: the qualify quiz posts to /api/pcmp-lead (api/pcmp-lead.js),
-  which creates the contact in the AW Sales sub-account with each answer in
-  its own custom field, tags it pcmp-lead and adds a note. If the endpoint
-  can't save, the visitor is asked to call or text Michael instead; a lead
-  is never shown a thank-you that wasn't saved.
+  PCMP landing page (armsreachdigital.agency/pcmp), linked from the YAT?STATS
+  Founding Partner card. No client name, agent name or phone number appears on
+  the page: every lead comes through the form and is tracked in ARMS.
+  The form posts to /api/pcmp-lead (api/pcmp-lead.js), which saves the lead in
+  the HighLevel sub-account (DrDp9hSlw7o5O2KANkh2) with each answer in its own
+  custom field and the pcmp-lead tag. If the save fails the visitor is asked
+  to try again; nobody is shown a thank-you for a lead that wasn't saved.
 -->
 <style>
 :root{
@@ -63,7 +61,7 @@ h2{font-size:clamp(34px,5.4vw,58px)}
              linear-gradient(180deg,#0b0f14 0%,#07090c 70%,#24170e 100%)}
 .hero:after{content:"";position:absolute;inset:auto 0 0 0;height:90px;background:linear-gradient(180deg,transparent,rgba(138,90,53,.35))}
 .hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
-.hero h1{font-size:clamp(46px,7.4vw,92px);line-height:.92}
+.hero h1{font-size:clamp(42px,6vw,78px);line-height:.92}
 .hero h1 .kicker{display:block;font-size:.42em;letter-spacing:.02em;margin-bottom:.25em;font-family:var(--body);font-style:italic;font-weight:800}
 .hero h1 em{font-style:normal;color:var(--yellow)}
 .hero .underline{width:min(420px,80%);height:6px;margin:22px 0 22px;background:var(--yellow);border-radius:6px;transform:skewX(-20deg)}
@@ -72,12 +70,15 @@ h2{font-size:clamp(34px,5.4vw,58px)}
 .cta-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
 .chips{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:26px;font:600 14px/1.2 var(--display);letter-spacing:.08em;text-transform:uppercase;color:#cfc5b0}
 .chips span:before{content:"✓ ";color:var(--yellow)}
-.hero-card{justify-self:center;width:min(360px,100%)}
+.hero-form{min-width:0}
+.hero-form .optin{margin-top:0}
+.top-cta{min-height:40px;padding:0 16px;font-size:14px}
 .optin{position:relative;margin-top:6px;max-width:560px;color:var(--ink)}
 .optin-tag{display:inline-block;font:700 12px/1 var(--display);letter-spacing:.16em;background:var(--red);color:#fff;padding:6px 9px;border-radius:4px;margin-bottom:10px}
 .optin .optin-h{font-size:clamp(24px,3vw,30px);margin:0 0 6px}
 .optin-sub{margin:0 0 14px;color:#4b4436;font-size:16px;line-height:1.45}
-.fields.two{grid-template-columns:1fr 1fr}
+.fields.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.fields input{width:100%;min-width:0}
 .optin .step{font-size:12px}
 
 /* ---------- flip card (shared) ---------- */
@@ -231,7 +232,10 @@ footer p{margin:0 0 8px;max-width:70em}
 @media (max-width:900px){
   .hero .wrap,.boxscore .grid,.convert .grid{grid-template-columns:1fr}
   .hero{padding-top:36px}
-  .hero-card{width:min(300px,78%)}
+  .hero-form{order:0}
+  .hero .chips{display:none}
+  .hero .underline{margin:14px 0}
+  .hero p.lead{margin-bottom:18px}
   .cards{grid-template-columns:1fr;max-width:380px;margin-inline:auto}
   .innings{grid-template-columns:1fr 1fr}
   .sticky{display:flex}
@@ -253,8 +257,8 @@ footer p{margin:0 0 8px;max-width:70em}
 
 <header class="top">
   <div class="wrap">
-    <div class="brand">AW SALES <span>| PCMP</span></div>
-    <a class="top-call" href="tel:+16025106562"><span class="lbl">Talk to Michael</span> <b>(602) 510-6562</b></a>
+    <div class="brand">PCMP <span>| PAYROLL ADVANTAGE</span></div>
+    <a class="btn top-cta" href="#report">Free report &rsaquo;</a>
   </div>
 </header>
 
@@ -266,10 +270,13 @@ footer p{margin:0 0 8px;max-width:70em}
       <h1 style="margin-top:14px"><span class="kicker">Business owners,</span>Stop leaving <em>runners</em> on base.</h1>
       <div class="underline"></div>
       <p class="lead">Your payroll has runners stranded on base: <strong>about $600 per W-2 employee, every year.</strong> PCMP brings them home. Your employees win, your business wins, and your home team can win too. At zero net cost to you or your team.</p>
+      <div class="chips"><span>Pay stays the same</span><span>Benefits stay the same</span><span>No check to write</span></div>
+    </div>
+    <div class="hero-form">
       <div class="form-card optin" id="report">
         <div class="optin-tag">FREE · NO OBLIGATION</div>
         <p class="q optin-h">Get your free Payroll Scouting Report</p>
-        <p class="optin-sub">Your company's estimated payroll savings and home-team share, prepared for you by Michael Clark.</p>
+        <p class="optin-sub">Your company's estimated payroll savings and home-team share, prepared for you by a PCMP representative.</p>
 
         <form id="leadForm" novalidate>
           <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
@@ -281,12 +288,12 @@ footer p{margin:0 0 8px;max-width:70em}
           </div>
           <p class="err hidden" id="formErr" role="alert"></p>
           <button class="btn" type="submit" id="sendBtn">Send my free report &rsaquo;</button>
-          <p class="tiny">By submitting, you agree AW Sales may contact you about PCMP by phone, text or email. Message and data rates may apply. Reply STOP to opt out.</p>
+          <p class="tiny">By submitting, you agree a PCMP representative may contact you about PCMP by phone, text or email. Message and data rates may apply. Reply STOP to opt out.</p>
         </form>
 
         <div id="quiz" class="hidden">
           <div class="qstep" data-step="employees">
-            <div class="step" id="quizHello">Got it! 3 quick taps so Michael can run your real numbers</div>
+            <div class="step" id="quizHello">Got it! 3 quick taps so we can run your real numbers</div>
             <p class="q">How many W-2 employees?</p>
             <div class="picks" role="group" aria-label="Number of W-2 employees">
               <button type="button" class="pick" data-name="employees" data-value="5-24">5 – 24</button>
@@ -329,19 +336,10 @@ footer p{margin:0 0 8px;max-width:70em}
         <div id="thanks" class="thanks hidden" role="status">
           <div class="step">Safe at home</div>
           <h3>Your report is on deck.</h3>
-          <p>Michael Clark will reach out shortly with your numbers. Can't wait? Call or text <a href="tel:+16025106562">(602) 510-6562</a>.</p>
+          <p>A PCMP representative will reach out shortly with your numbers.</p>
         </div>
       </div>
-      <div class="chips"><span>Pay stays the same</span><span>Benefits stay the same</span><span>No check to write</span></div>
     </div>
-    <div class="hero-card">
-      <div class="flip" data-flip tabindex="0" role="button" aria-label="Flip the card to see the payroll impact stats">
-        <div class="flip-inner">
-          <div class="face"><img src="/pcmp/payroll-impact-front.webp" alt="Business owners, stop leaving runners on base. Learn how your employees can score and you win too." width="720" height="1008"></div>
-          <div class="face back"><img src="/pcmp/payroll-impact-back.webp" alt="Payroll impact stats: about $600 per eligible employee per year, from $6,000 for 10 employees to $600,000 for 1,000." width="720" height="1008" loading="lazy"></div>
-        </div>
-      </div>
-      <div class="flip-hint">Tap the card to flip it</div>
     </div>
   </div>
 </section>
@@ -359,7 +357,7 @@ footer p{margin:0 0 8px;max-width:70em}
       </div>
       <input class="range" id="sbRange" type="range" min="5" max="1000" step="5" value="50" aria-label="Number of W-2 employees">
       <div class="range-lbl"><span>5</span><span>250</span><span>500</span><span>750</span><span>1,000+</span></div>
-      <p class="fine">Estimate uses AW Sales' figure of about $600 per participating W-2 employee per year. Your actual number depends on eligibility and participation; your call with Michael gives you the real one.</p>
+      <p class="fine">Estimate uses PCMP's figure of about $600 per participating W-2 employee per year. Your actual number depends on eligibility and participation; your free scouting report gives you the real one.</p>
       <a class="btn" href="#hometeam" id="sbCta">Bring my $30,000 home &rsaquo;</a>
     </div>
   </div>
@@ -437,20 +435,6 @@ footer p{margin:0 0 8px;max-width:70em}
   </div>
 </section>
 
-<!-- =============== OFFER: GAME PLAN =============== -->
-<section class="plan">
-  <div class="wrap">
-    <div class="eyebrow">The Game Plan</div>
-    <h2>Four innings. No complicated signs.</h2>
-    <div class="innings">
-      <div class="inning"><span class="badge">1ST</span><h3>Free report</h3><p>Request your free Payroll Scouting Report at the top of the page. 30 seconds.</p></div>
-      <div class="inning"><span class="badge">2ND</span><h3>Talk to Michael</h3><p>A 20-minute call. No obligation, no disruption to your team.</p></div>
-      <div class="inning"><span class="badge">3RD</span><h3>Send your census</h3><p>A payroll census and employee IDs is all it takes to see your real numbers.</p></div>
-      <div class="inning"><span class="badge">HOME</span><h3>Score</h3><p>Roll it out. Pay and benefits stay the same, and you choose if a share goes to your home team.</p></div>
-    </div>
-    <div class="qual"><b>Only two qualifications:</b><span>W-2 employees</span><span>A healthcare plan</span></div>
-  </div>
-</section>
 
 <!-- =============== BOX SCORE (studiers) =============== -->
 <section class="boxscore">
@@ -461,60 +445,40 @@ footer p{margin:0 0 8px;max-width:70em}
       <p class="sub">For the stat-heads: every number behind PCMP, page by page.</p>
       <div class="slides" id="slides">
         <img id="slideImg" src="https://awsales.co/airo-assets/images/pages/pcmp/slide-0" alt="You have a choice: Option 1, employer FICA, or Option 2, same payroll with a better structure, $600 per W-2 employee.">
-        <div class="nav"><button type="button" id="prev" aria-label="Previous slide">‹</button><span id="slideNo">Page 1 of 12</span><button type="button" id="next" aria-label="Next slide">›</button></div>
+        <div class="nav"><button type="button" id="prev" aria-label="Previous slide">‹</button><span id="slideNo">Page 1 of 11</span><button type="button" id="next" aria-label="Next slide">›</button></div>
       </div>
     </div>
     <div>
       <div class="eyebrow" style="margin-top:6px">Questions from the dugout</div>
       <details open><summary>Does anyone's paycheck go down?</summary><p>No. Employee pay and benefits stay exactly the same. PCMP restructures how payroll is handled, not what your people take home.</p></details>
-      <details><summary>What does it cost my business?</summary><p>AW Sales structures PCMP at zero net cost to the employer and zero net cost to the employee. Michael will walk you through exactly how the numbers work for your company.</p></details>
-      <details><summary>How does it actually work?</summary><p>On each paycheck it runs in four steps: a pre-tax contribution, the tax savings it creates, a SIMRP reimbursement, and the net effect. The paycheck example in the box score shows the before and after, and Michael will walk you through it for your payroll.</p></details>
-      <details><summary>Is it compliant?</summary><div class="compliance"><span>IRS § 213(d)</span><span>IRS § 125</span><span>IRS § 105(h)</span><span>SIMRP</span><span>CPA reviewed</span><span>Tax attorney approved</span><span>Audit defensible</span></div><p>It's independently administered and built to withstand scrutiny. Ask Michael for the written plan documents to review with your own CPA.</p></details>
+      <details><summary>What does it cost my business?</summary><p>PCMP is structured at zero net cost to the employer and zero net cost to the employee. Your PCMP representative will walk you through exactly how the numbers work for your company.</p></details>
+      <details><summary>How does it actually work?</summary><p>On each paycheck it runs in four steps: a pre-tax contribution, the tax savings it creates, a SIMRP reimbursement, and the net effect. The paycheck example in the box score shows the before and after, and your PCMP representative will walk you through it for your payroll.</p></details>
+      <details><summary>Is it compliant?</summary><div class="compliance"><span>IRS § 213(d)</span><span>IRS § 125</span><span>IRS § 105(h)</span><span>SIMRP</span><span>CPA reviewed</span><span>Tax attorney approved</span><span>Audit defensible</span></div><p>It's independently administered and built to withstand scrutiny. Ask your PCMP representative for the written plan documents to review with your own CPA.</p></details>
       <details><summary>What do you need from me to start?</summary><p>A payroll census and employee IDs. There are small business and corporate versions.</p></details>
       <details><summary>How does the team donation work?</summary><p>Once your savings are confirmed, you can choose to put a share toward one or more high school baseball programs, given in your company's name. It's money you didn't know you had, so there's no check to write from your budget. It's always optional, and you pick the school and the amount.</p></details>
-      <details><summary>Who's eligible?</summary><p>Two qualifications: you have W-2 employees and a healthcare plan. Your call with Michael confirms the details.</p></details>
+      <details><summary>Who's eligible?</summary><p>Two qualifications: you have W-2 employees and a healthcare plan. Your free scouting report confirms the details.</p></details>
     </div>
   </div>
 </section>
 
 <!-- =============== CONVERT =============== -->
 <section class="convert" id="qualify">
-  <div class="wrap grid">
-    <div>
-      <div class="eyebrow">Step up to the plate</div>
-      <h2>Get your free scouting report.</h2>
-      <p class="sub">Michael will send your numbers and your home-team share, or call him now if you'd rather talk to a real person.</p>
-      <div class="coach">
-        <div class="mc" aria-hidden="true">MC</div>
-        <div><b>Michael Clark</b><span>Principal, AW Sales LLC · Gilbert, AZ</span></div>
-        <div class="links">
-          <a href="tel:+16025106562">Call (602) 510-6562</a>
-          <a class="alt" href="sms:+16025106562">Text Michael</a>
-          <a class="alt" href="mailto:michael@awsales.co?subject=PCMP%20-%20see%20if%20we%20qualify">Email</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-card" style="text-align:center">
-      <div class="optin-tag">FREE · NO OBLIGATION</div>
-      <p class="q">Your free Payroll Scouting Report</p>
-      <p class="optin-sub">Your estimated savings and home-team share, prepared by Michael Clark. Takes 30 seconds to request.</p>
-      <a class="btn" href="#report">Get my free report &rsaquo;</a>
-    </div>
-    </div>
+  <div class="wrap" style="max-width:640px;text-align:center">
+    <div class="eyebrow">Step up to the plate</div>
+    <h2>Get your free scouting report.</h2>
+    <p class="sub">Your estimated savings and your home-team share, prepared for you by a PCMP representative. No obligation.</p>
+    <a class="btn" href="#report">Get my free report &rsaquo;</a>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <p><b>AW Sales LLC</b> · 835 W Warner Rd, Suite 101-488, Gilbert, AZ 85233 · <a href="tel:+16025106562">(602) 510-6562</a> · <a href="mailto:michael@awsales.co">michael@awsales.co</a></p>
     <p>Savings figures are estimates based on approximately $600 per participating W-2 employee per year. Actual results depend on eligibility, participation and plan design and are not guaranteed. This page is not tax or legal advice; consult your own tax professional.</p>
     <p>Presented on YAT?STATS by ARMS Reach Digital Agency.</p>
   </div>
 </footer>
 
 <div class="sticky">
-  <a class="call" href="tel:+16025106562" aria-label="Call Michael">📞</a>
   <a class="btn" href="#report">Get my free report &rsaquo;</a>
 </div>
 
@@ -539,16 +503,16 @@ footer p{margin:0 0 8px;max-width:70em}
   h.addEventListener('input',updHome);
   r.addEventListener('input',upd);upd();
 
-  // Box score pages (AW Sales' own presentation).
+  // Box score pages (the PCMP presentation; the contact slide is left out).
   var base='https://awsales.co/airo-assets/images/pages/pcmp/';
-  var slides=[['slide-0','You have a choice: employer FICA, or the same payroll with a better structure.'],['slide-sniff','The PCMP program overview.'],['slide-2','How PCMP works: toolkit, rulebook and construction crew.'],['slide-3','The win-win advantages for employers and employees.'],['slide-4','Only two qualifications: W-2 employees and healthcare.'],['slide-5','Fully compliant 213(d) employee benefits.'],['slide-6','RX benefits: smarter prescriptions, healthier people, lower costs.'],['slide-7','How to get started: payroll census, employee IDs, small business and corporate versions.'],['slide-8','Paycheck example: before and after tax savings.'],['slide-9','How the paycheck works: pre-tax contribution, tax savings, SIMRP reimbursement, net effect.'],['slide-11','PCMP process and invoice payment structure in six steps.'],['slide-12','Contact Michael Clark, AW Sales.']];
+  var slides=[['slide-0','You have a choice: employer FICA, or the same payroll with a better structure.'],['slide-sniff','The PCMP program overview.'],['slide-2','How PCMP works: toolkit, rulebook and construction crew.'],['slide-3','The win-win advantages for employers and employees.'],['slide-4','Only two qualifications: W-2 employees and healthcare.'],['slide-5','Fully compliant 213(d) employee benefits.'],['slide-6','RX benefits: smarter prescriptions, healthier people, lower costs.'],['slide-7','How to get started: payroll census, employee IDs, small business and corporate versions.'],['slide-8','Paycheck example: before and after tax savings.'],['slide-9','How the paycheck works: pre-tax contribution, tax savings, SIMRP reimbursement, net effect.'],['slide-11','PCMP process and invoice payment structure in six steps.']];
   var i=0,img=document.getElementById('slideImg'),no=document.getElementById('slideNo');
   var show=function(k){i=(k+slides.length)%slides.length;img.src=base+slides[i][0];img.alt=slides[i][1];no.textContent='Page '+(i+1)+' of '+slides.length;};
   document.getElementById('prev').onclick=function(){show(i-1);};
   document.getElementById('next').onclick=function(){show(i+1);};
 
-  // Contact first (the lead is saved and Michael is texted right away), then
-  // three taps of qualifying answers saved on the same AW Sales contact.
+  // Contact first (the lead is saved and tagged right away), then three taps
+  // of qualifying answers saved on the same contact.
   var lead=document.getElementById('leadForm'),quiz=document.getElementById('quiz'),done=document.getElementById('thanks'),err=document.getElementById('formErr');
   var who={},answers={};
   var post=function(extra){var data={roster:+document.getElementById('sbRange').value,share:+document.getElementById('htRange').value,page:location.href};
@@ -556,7 +520,7 @@ footer p{margin:0 0 8px;max-width:70em}
     return fetch('/api/pcmp-lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
       .then(function(r){return r.json().catch(function(){return {};}).then(function(x){return {ok:r.ok,j:x};});});};
   var fail=function(msg){err.innerHTML=msg;err.classList.remove('hidden');};
-  var callMsg='We couldn\'t send that just now. Please call or text Michael at <a href="tel:+16025106562">(602) 510-6562</a>.';
+  var callMsg='We couldn\'t send that just now. Please check your connection and try again in a moment.';
   lead.addEventListener('submit',function(e){
     e.preventDefault();err.classList.add('hidden');
     var bad=[].slice.call(lead.querySelectorAll('input[required]')).find(function(x){return !x.value.trim()||(x.type==='email'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x.value))||(x.type==='tel'&&x.value.replace(/\D/g,'').length<10);});
@@ -566,7 +530,7 @@ footer p{margin:0 0 8px;max-width:70em}
     post({}).then(function(x){
       if(!x.ok){fail(x.j&&x.j.error&&!/^(not-configured|save-failed)$/.test(x.j.error)?x.j.error:callMsg);return;}
       lead.classList.add('hidden');quiz.classList.remove('hidden');
-      document.getElementById('quizHello').textContent='Thanks, '+who.name.split(/\s+/)[0]+'! 3 quick taps so Michael can run your real numbers';
+      document.getElementById('quizHello').textContent='Thanks, '+who.name.split(/\s+/)[0]+'! 3 quick taps so we can run your real numbers';
     }).catch(function(){fail(callMsg);}).finally(function(){btn.disabled=false;btn.innerHTML='Send my free report &rsaquo;';});
   });
   var steps=[].slice.call(quiz.querySelectorAll('.qstep')),at=0;
