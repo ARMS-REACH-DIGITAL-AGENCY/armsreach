@@ -7,7 +7,7 @@
 <meta name="description" content="Payroll is the one position nobody coached up. PCMP recovers about $600 per W-2 employee, every year, at zero net cost to you or your team. See if you qualify in 60 seconds.">
 <meta property="og:title" content="Business owners, stop leaving runners on base.">
 <meta property="og:description" content="About $600 per W-2 employee, every year, is stranded in your payroll. See if you qualify.">
-<meta property="og:image" content="https://yatstats.com/img/sponsors/payroll-impact-front.webp">
+<meta property="og:image" content="https://www.armsreachdigital.agency/pcmp/payroll-impact-front.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Archivo:ital,wght@0,400;0,600;0,800;1,800&display=swap" rel="stylesheet">
@@ -16,10 +16,11 @@
   Lives at armsreachdigital.agency/pcmp. Built to drop into a HighLevel page as
   one Custom Code element, or to host as a plain page.
 
-  THE FORM: the workflow that texts Michael must be triggered by a HighLevel
-  form. Paste the HighLevel form's embed code inside <div id="hl-form-slot">
-  (search "HL-FORM" below). When a HighLevel form is there, the built-in form
-  hides itself automatically; until then the built-in form runs as a demo.
+  THE FORM: the qualify quiz posts to /api/pcmp-lead (api/pcmp-lead.js),
+  which creates the contact in the AW Sales sub-account with each answer in
+  its own custom field, tags it pcmp-lead and adds a note. If the endpoint
+  can't save, the visitor is asked to call or text Michael instead; a lead
+  is never shown a thank-you that wasn't saved.
 -->
 <style>
 :root{
@@ -201,6 +202,8 @@ details p{margin:0 0 18px;color:#cfc6b3}
 .form-card .tiny{font-size:13px;color:var(--muted);margin:12px 0 0;text-align:center}
 .back-link{background:none;border:0;padding:0;margin:0 0 12px;color:var(--muted);font:600 13px/1 var(--display);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
 .thanks{text-align:center;padding:16px 0}
+.err{margin:14px 0 0;padding:12px 14px;border-radius:10px;background:#fde9e5;border:1px solid #b3261e;color:#7a1712;font-size:15px}
+.err a{font-weight:800}
 .thanks h3{color:var(--navy);font-size:32px;margin:6px 0 10px}
 .hidden{display:none!important}
 .coach{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;margin-top:24px;padding:18px;border-radius:14px;background:#f7ecd3;border:1px dashed #b9ab8c}
@@ -265,8 +268,8 @@ footer p{margin:0 0 8px;max-width:70em}
     <div class="hero-card">
       <div class="flip" data-flip tabindex="0" role="button" aria-label="Flip the card to see the payroll impact stats">
         <div class="flip-inner">
-          <div class="face"><img src="https://yatstats.com/img/sponsors/payroll-impact-front.webp" alt="Business owners, stop leaving runners on base. Learn how your employees can score and you win too." width="720" height="1008"></div>
-          <div class="face back"><img src="https://yatstats.com/img/sponsors/payroll-impact-back.webp" alt="Payroll impact stats: about $600 per eligible employee per year, from $6,000 for 10 employees to $600,000 for 1,000." width="720" height="1008" loading="lazy"></div>
+          <div class="face"><img src="/pcmp/payroll-impact-front.webp" alt="Business owners, stop leaving runners on base. Learn how your employees can score and you win too." width="720" height="1008"></div>
+          <div class="face back"><img src="/pcmp/payroll-impact-back.webp" alt="Payroll impact stats: about $600 per eligible employee per year, from $6,000 for 10 employees to $600,000 for 1,000." width="720" height="1008" loading="lazy"></div>
         </div>
       </div>
       <div class="flip-hint">Tap the card to flip it</div>
@@ -424,27 +427,47 @@ footer p{margin:0 0 8px;max-width:70em}
     </div>
 
     <div class="form-card">
-      <!-- HL-FORM: paste the HighLevel form embed code inside this div. -->
-      <div id="hl-form-slot"></div>
-
       <form id="qualForm" novalidate>
-        <div id="step1">
-          <div class="step">Question 1 of 2</div>
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+        <div class="qstep" data-step="employees">
+          <div class="step">Question 1 of 4</div>
           <p class="q">How many W-2 employees?</p>
           <div class="picks" role="group" aria-label="Number of W-2 employees">
-            <button type="button" class="pick" data-size="5-24">5 – 24</button>
-            <button type="button" class="pick" data-size="25-99">25 – 99</button>
-            <button type="button" class="pick" data-size="100-499">100 – 499</button>
-            <button type="button" class="pick" data-size="500+">500+</button>
+            <button type="button" class="pick" data-name="employees" data-value="5-24">5 – 24</button>
+            <button type="button" class="pick" data-name="employees" data-value="25-99">25 – 99</button>
+            <button type="button" class="pick" data-name="employees" data-value="100-499">100 – 499</button>
+            <button type="button" class="pick" data-name="employees" data-value="500+">500+</button>
           </div>
           <p class="tiny">No obligation. Takes about 60 seconds.</p>
         </div>
 
-        <div id="step2" class="hidden">
-          <button type="button" class="back-link" id="backBtn">‹ Back</button>
-          <div class="step">Question 2 of 2</div>
+        <div class="qstep hidden" data-step="healthPlan">
+          <button type="button" class="back-link" data-back>‹ Back</button>
+          <div class="step">Question 2 of 4</div>
+          <p class="q">Do you offer your employees a healthcare plan?</p>
+          <div class="picks" role="group" aria-label="Healthcare plan">
+            <button type="button" class="pick" data-name="healthPlan" data-value="yes">Yes</button>
+            <button type="button" class="pick" data-name="healthPlan" data-value="no">No</button>
+            <button type="button" class="pick" data-name="healthPlan" data-value="not-sure" style="grid-column:1/-1">Not sure</button>
+          </div>
+        </div>
+
+        <div class="qstep hidden" data-step="role">
+          <button type="button" class="back-link" data-back>‹ Back</button>
+          <div class="step">Question 3 of 4</div>
+          <p class="q">What's your role?</p>
+          <div class="picks" role="group" aria-label="Your role">
+            <button type="button" class="pick" data-name="role" data-value="owner">Owner</button>
+            <button type="button" class="pick" data-name="role" data-value="cfo-finance">CFO / Finance</button>
+            <button type="button" class="pick" data-name="role" data-value="hr-benefits">HR / Benefits</button>
+            <button type="button" class="pick" data-name="role" data-value="other">Other</button>
+          </div>
+        </div>
+
+        <div class="qstep hidden" data-step="contact">
+          <button type="button" class="back-link" data-back>‹ Back</button>
+          <div class="step">Question 4 of 4</div>
           <p class="q">Where should Michael send your numbers?</p>
-          <input type="hidden" name="employees" id="employees">
           <div class="fields">
             <label>Your name<input name="name" autocomplete="name" required></label>
             <label>Business name<input name="company" autocomplete="organization" required></label>
@@ -452,7 +475,8 @@ footer p{margin:0 0 8px;max-width:70em}
             <label>Email<input name="email" type="email" autocomplete="email" required></label>
             <label>High school team you'd support <span style="text-transform:none;letter-spacing:0;font-family:var(--body);font-weight:400;color:var(--muted)">(optional)</span><input name="school" autocomplete="off" placeholder="e.g. Hamilton High School, Chandler AZ"></label>
           </div>
-          <button class="btn" type="submit">Send me my numbers &rsaquo;</button>
+          <p class="err hidden" id="formErr" role="alert"></p>
+          <button class="btn" type="submit" id="sendBtn">Send me my numbers &rsaquo;</button>
           <p class="tiny">By submitting, you agree AW Sales may contact you about PCMP by phone, text or email. Message and data rates may apply. Reply STOP to opt out.</p>
         </div>
 
@@ -508,20 +532,34 @@ footer p{margin:0 0 8px;max-width:70em}
   document.getElementById('prev').onclick=function(){show(i-1);};
   document.getElementById('next').onclick=function(){show(i+1);};
 
-  // Qualify form. A HighLevel form pasted into #hl-form-slot replaces it.
-  var slot=document.getElementById('hl-form-slot'),form=document.getElementById('qualForm');
-  if(slot && slot.children.length){form.classList.add('hidden');return;}
-  var s1=document.getElementById('step1'),s2=document.getElementById('step2'),done=document.getElementById('thanks');
-  document.querySelectorAll('.pick').forEach(function(b){b.addEventListener('click',function(){
-    document.querySelectorAll('.pick').forEach(function(x){x.setAttribute('aria-pressed','false');});
-    b.setAttribute('aria-pressed','true');document.getElementById('employees').value=b.dataset.size;
-    s1.classList.add('hidden');s2.classList.remove('hidden');s2.querySelector('input[name=name]').focus();});});
-  document.getElementById('backBtn').onclick=function(){s2.classList.add('hidden');s1.classList.remove('hidden');};
+  // Qualify quiz: one tap per question, then contact details. Saved in the
+  // AW Sales sub-account by /api/pcmp-lead with the scoreboard numbers.
+  var form=document.getElementById('qualForm'),answers={};
+  var steps=[].slice.call(form.querySelectorAll('.qstep')),done=document.getElementById('thanks'),err=document.getElementById('formErr');
+  var at=0,go=function(k){steps[at].classList.add('hidden');at=k;steps[at].classList.remove('hidden');
+    var f=steps[at].querySelector('input:not([type=hidden]),.pick');if(f&&window.innerWidth>900)f.focus();};
+  form.querySelectorAll('.pick').forEach(function(b){b.addEventListener('click',function(){
+    form.querySelectorAll('.pick[data-name="'+b.dataset.name+'"]').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');answers[b.dataset.name]=b.dataset.value;go(at+1);});});
+  form.querySelectorAll('[data-back]').forEach(function(b){b.addEventListener('click',function(){go(at-1);});});
+  var fail=function(msg){err.innerHTML=msg;err.classList.remove('hidden');};
   form.addEventListener('submit',function(e){
-    e.preventDefault();
-    var bad=[].slice.call(form.querySelectorAll('input[required]')).find(function(x){return !x.value.trim()||(x.type==='email'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x.value));});
+    e.preventDefault();err.classList.add('hidden');
+    var bad=[].slice.call(form.querySelectorAll('input[required]')).find(function(x){return !x.value.trim()||(x.type==='email'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x.value))||(x.type==='tel'&&x.value.replace(/\D/g,'').length<10);});
     if(bad){bad.focus();bad.style.borderColor='#b3261e';return;}
-    s2.classList.add('hidden');done.classList.remove('hidden');
+    var data={employees:answers.employees,healthPlan:answers.healthPlan,role:answers.role,
+      roster:+document.getElementById('sbRange').value,share:+document.getElementById('htRange').value,page:location.href};
+    ['name','company','phone','email','school','website'].forEach(function(n){data[n]=form.elements[n].value.trim();});
+    var btn=document.getElementById('sendBtn');btn.disabled=true;btn.textContent='Sending…';
+    fetch('/api/pcmp-lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+      .then(function(r){return r.json().catch(function(){return {};}).then(function(j){return {ok:r.ok,j:j};});})
+      .then(function(x){
+        if(x.ok){steps[at].classList.add('hidden');done.classList.remove('hidden');return;}
+        if(x.j&&x.j.error&&!/^(not-configured|save-failed)$/.test(x.j.error)){fail(x.j.error);}
+        else fail('We couldn\'t send that just now. Please call or text Michael at <a href="tel:+16025106562">(602) 510-6562</a>.');
+      })
+      .catch(function(){fail('We couldn\'t send that just now. Please call or text Michael at <a href="tel:+16025106562">(602) 510-6562</a>.');})
+      .finally(function(){btn.disabled=false;btn.innerHTML='Send me my numbers &rsaquo;';});
   });
 })();
 </script>
