@@ -26,11 +26,19 @@ const FIELDS = {
   role: 'PCMP Role',
   roster: 'PCMP Scoreboard Roster',
   estimate: 'PCMP Estimated Annual Savings',
+  monthly: 'PCMP Estimated Monthly Savings',
+  perPay: 'PCMP Estimated Savings Per Pay Period',
   share: 'PCMP Home Team Share',
+  teamAmount: 'PCMP Home Team Amount',
+  keeps: 'PCMP Business Keeps',
   school: 'PCMP High School Team',
 };
 
-const EMPLOYEE_BANDS = ['5-24', '25-99', '100-499', '500+'];
+// The How You Score Game Plan math: PCMP's figure of about $600 per
+// participating W-2 employee per year (26 bi-weekly pay periods).
+const PER_EMPLOYEE_YEAR = 600;
+const PAY_PERIODS = 26;
+
 const HEALTH = ['yes', 'no', 'not-sure'];
 const ROLES = ['owner', 'cfo-finance', 'hr-benefits', 'other'];
 
@@ -90,7 +98,7 @@ function validate(body) {
     company: clean(b.company, 160),
     phone: clean(b.phone, 40),
     email: clean(b.email, 200).toLowerCase(),
-    employees: clean(b.employees, 10),
+    employees: Math.max(0, Math.min(100000, Math.round(Number(b.employees) || 0))),
     healthPlan: clean(b.healthPlan, 10),
     role: clean(b.role, 20),
     roster: Math.max(0, Math.min(100000, Number(b.roster) || 0)),
@@ -104,7 +112,6 @@ function validate(body) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email)) return { error: 'Please add a valid email.' };
   // Qualifying answers come in a second request (after the contact is
   // saved); each is optional but must be a known value when present.
-  if (lead.employees && !EMPLOYEE_BANDS.includes(lead.employees)) lead.employees = '';
   if (lead.healthPlan && !HEALTH.includes(lead.healthPlan)) lead.healthPlan = '';
   if (lead.role && !ROLES.includes(lead.role)) lead.role = '';
   return { lead };
@@ -114,27 +121,38 @@ const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
 
 function buildContact(lead, ids, locationId) {
   const [firstName, ...rest] = lead.name.split(/\s+/);
-  const estimate = lead.roster * 600;
   const answered = Boolean(lead.employees || lead.healthPlan || lead.role);
+  // Their own employee count when they gave it, else the scoreboard roster.
+  const count = lead.employees || lead.roster;
+  const estimate = count * PER_EMPLOYEE_YEAR;
+  const team = (estimate * lead.share) / 100;
   const values = {
-    employees: lead.employees,
+    employees: lead.employees ? String(lead.employees) : '',
     healthPlan: lead.healthPlan,
     role: lead.role,
     roster: lead.roster ? String(lead.roster) : '',
-    estimate: lead.roster ? money(estimate) : '',
+    estimate: count ? money(estimate) : '',
+    monthly: count ? money(estimate / 12) : '',
+    perPay: count ? money(estimate / PAY_PERIODS) : '',
     share: answered ? `${lead.share}%` : '',
+    teamAmount: answered && count ? money(team) : '',
+    keeps: answered && count ? money(estimate - team) : '',
     school: lead.school,
   };
+  const band = (n) => (n < 25 ? '1-24' : n < 100 ? '25-99' : n < 500 ? '100-499' : '500plus');
+  // The game plan email goes out once we have their real employee count.
+  const planReady = Boolean(lead.employees);
   const customFields = Object.entries(values)
     .filter(([k, v]) => ids[k] && v !== '')
     .map(([k, v]) => ({ id: ids[k], field_value: v }));
   const tags = [
     'pcmp-lead',
     'source-yatstats-founding-partner',
-    ...(lead.employees ? [`pcmp-employees-${lead.employees.replace('+', 'plus')}`] : []),
+    ...(lead.employees ? [`pcmp-employees-${band(lead.employees)}`] : []),
     ...(lead.role ? [`pcmp-role-${lead.role}`] : []),
     ...(lead.healthPlan ? [lead.healthPlan === 'no' ? 'pcmp-needs-review' : 'pcmp-qualified'] : []),
     ...(lead.school ? ['pcmp-home-team-interest'] : []),
+    ...(planReady ? ['pcmp-game-plan-ready'] : []),
   ];
   return {
     contact: {
@@ -150,12 +168,13 @@ function buildContact(lead, ids, locationId) {
       customFields,
     },
     note: [
-      answered ? 'PCMP qualifying answers' : 'PCMP free Payroll Scouting Report requested',
+      answered ? 'PCMP qualifying answers (How You Score Game Plan sent)' : 'PCMP free How You Score Game Plan requested',
       lead.employees ? `W-2 employees: ${lead.employees}` : '',
       lead.healthPlan ? `Healthcare plan: ${lead.healthPlan}` : '',
       lead.role ? `Role: ${lead.role}` : '',
-      lead.roster ? `Scoreboard roster: ${lead.roster} (estimate ${money(estimate)} / year)` : '',
-      `Home team share: ${lead.share}%${lead.roster ? ` (${money((estimate * lead.share) / 100)})` : ''}`,
+      lead.roster ? `Scoreboard roster: ${lead.roster}` : '',
+      count ? `Estimate: ${money(estimate)} / year, ${money(estimate / 12)} / month, ${money(estimate / PAY_PERIODS)} / pay period` : '',
+      answered ? `Home team share: ${lead.share}% (${money(team)} to the team, ${money(estimate - team)} kept)` : '',
       lead.school ? `High school team: ${lead.school}` : '',
       lead.page ? `Page: ${lead.page}` : '',
     ].filter(Boolean).join('\n'),

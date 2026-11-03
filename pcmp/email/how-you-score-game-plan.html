@@ -1,0 +1,91 @@
+<!--
+  How You Score Game Plan - HighLevel email (AW Sales sub-account).
+  Subject:  {{contact.first_name}}, your How You Score Game Plan is ready
+  Preview:  About {{contact.pcmp_estimated_annual_savings}} a year is stranded on base. Here's how you bring it home.
+
+  Paste into: Marketing > Emails > Templates > New (Code editor), or the
+  workflow's Send Email action (code view).
+  Merge fields: the {{contact.pcmp_...}} keys below are HighLevel's usual keys
+  for the PCMP custom fields the landing page creates. Before saving, open
+  the merge-field picker (Custom Fields) and confirm each key matches.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your How You Score Game Plan</title>
+</head>
+<body style="margin:0;padding:0;background:#efe3c8;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#efe3c8;">
+<tr><td align="center" style="padding:24px 12px;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#fbf3e2;border:4px solid #16243f;border-radius:14px;font-family:Arial,Helvetica,sans-serif;color:#1b1b1b;">
+
+  <!-- Header -->
+  <tr><td style="background:#16243f;border-radius:9px 9px 0 0;padding:22px 26px;">
+    <div style="font:700 12px/1 Arial,sans-serif;letter-spacing:3px;color:#ffd21a;text-transform:uppercase;">PCMP · Payroll Advantage</div>
+    <div style="font:900 30px/1.05 Arial Black,Arial,sans-serif;color:#f4ecdc;text-transform:uppercase;margin-top:10px;">How You Score<br><span style="color:#ffd21a;">Game Plan</span></div>
+    <div style="font:400 14px/1.4 Arial,sans-serif;color:#c9d2e3;margin-top:10px;">Prepared for {{contact.company_name}}</div>
+  </td></tr>
+
+  <!-- Intro -->
+  <tr><td style="padding:24px 26px 6px;">
+    <p style="margin:0 0 12px;font:400 17px/1.55 Arial,sans-serif;">{{contact.first_name}},</p>
+    <p style="margin:0;font:400 17px/1.55 Arial,sans-serif;">Your payroll has runners stranded on base. Here's what your roster of <b>{{contact.pcmp_w2_employees}} W-2 employees</b> could bring home with PCMP, at zero net cost to you or your team.</p>
+  </td></tr>
+
+  <!-- Scoreboard -->
+  <tr><td style="padding:18px 26px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0d2b18;border:6px solid #1b1f22;border-radius:10px;">
+      <tr><td colspan="3" align="center" style="padding:16px 10px 4px;font:700 14px/1 Arial,sans-serif;letter-spacing:4px;color:#f4ecdc;text-transform:uppercase;">The Scoreboard</td></tr>
+      <tr><td colspan="3" align="center" style="padding:10px 10px 2px;font:700 11px/1 Arial,sans-serif;letter-spacing:2px;color:#9fc3a6;text-transform:uppercase;">Runs you could bring home every year</td></tr>
+      <tr><td colspan="3" align="center" style="padding:4px 10px 14px;font:900 46px/1.1 Arial Black,Arial,sans-serif;color:#ffe36b;">{{contact.pcmp_estimated_annual_savings}}</td></tr>
+      <tr>
+        <td align="center" width="33%" style="padding:0 6px 18px;"><div style="font:700 10px/1.2 Arial,sans-serif;letter-spacing:1px;color:#9fc3a6;text-transform:uppercase;">Per month</div><div style="font:900 22px/1.3 Arial Black,Arial,sans-serif;color:#ffd21a;">{{contact.pcmp_estimated_monthly_savings}}</div></td>
+        <td align="center" width="34%" style="padding:0 6px 18px;"><div style="font:700 10px/1.2 Arial,sans-serif;letter-spacing:1px;color:#9fc3a6;text-transform:uppercase;">Per pay period</div><div style="font:900 22px/1.3 Arial Black,Arial,sans-serif;color:#ffd21a;">{{contact.pcmp_estimated_savings_per_pay_period}}</div></td>
+        <td align="center" width="33%" style="padding:0 6px 18px;"><div style="font:700 10px/1.2 Arial,sans-serif;letter-spacing:1px;color:#9fc3a6;text-transform:uppercase;">Per player / yr</div><div style="font:900 22px/1.3 Arial Black,Arial,sans-serif;color:#ffd21a;">$600</div></td>
+      </tr>
+    </table>
+  </td></tr>
+
+  <!-- Home team -->
+  <tr><td style="padding:4px 26px 18px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#2a1a06;border:2px solid #d9a92a;border-radius:10px;">
+      <tr><td style="padding:16px 18px;">
+        <div style="font:700 12px/1 Arial,sans-serif;letter-spacing:2px;color:#ffd98a;text-transform:uppercase;">The Home Team Share · {{contact.pcmp_home_team_share}}</div>
+        <div style="font:400 15px/1.5 Arial,sans-serif;color:#f4ecdc;margin-top:8px;"><b style="color:#ffd21a;">{{contact.pcmp_home_team_amount}}</b> could go to {{contact.pcmp_high_school_team}} in your company's name, and your business still keeps <b style="color:#ffd21a;">{{contact.pcmp_business_keeps}}</b>. No check to write. It's money you didn't know you had. Giving is always optional and your call.</div>
+      </td></tr>
+    </table>
+  </td></tr>
+
+  <!-- Game plan -->
+  <tr><td style="padding:6px 26px 4px;">
+    <div style="font:700 12px/1 Arial,sans-serif;letter-spacing:3px;color:#b3261e;text-transform:uppercase;">Your game plan</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:12px;">
+      <tr><td width="64" valign="top" style="padding:0 0 14px;"><span style="display:inline-block;background:#ffd21a;color:#111;font:700 12px/1 Arial,sans-serif;padding:6px 8px;border-radius:4px;">1ST</span></td>
+          <td style="padding:0 0 14px;font:400 15px/1.5 Arial,sans-serif;"><b>Confirm your numbers.</b> A PCMP representative will reach out to confirm your eligibility and participation.</td></tr>
+      <tr><td width="64" valign="top" style="padding:0 0 14px;"><span style="display:inline-block;background:#ffd21a;color:#111;font:700 12px/1 Arial,sans-serif;padding:6px 8px;border-radius:4px;">2ND</span></td>
+          <td style="padding:0 0 14px;font:400 15px/1.5 Arial,sans-serif;"><b>Send a payroll census.</b> A payroll census and employee IDs is all it takes to see your real numbers.</td></tr>
+      <tr><td width="64" valign="top" style="padding:0 0 14px;"><span style="display:inline-block;background:#ffd21a;color:#111;font:700 12px/1 Arial,sans-serif;padding:6px 8px;border-radius:4px;">3RD</span></td>
+          <td style="padding:0 0 14px;font:400 15px/1.5 Arial,sans-serif;"><b>Review the written plan</b> with your own CPA. It's built on IRS Sections 213(d), 125 and 105(h).</td></tr>
+      <tr><td width="64" valign="top" style="padding:0 0 6px;"><span style="display:inline-block;background:#16243f;color:#ffd21a;font:700 12px/1 Arial,sans-serif;padding:6px 8px;border-radius:4px;">HOME</span></td>
+          <td style="padding:0 0 6px;font:400 15px/1.5 Arial,sans-serif;"><b>Score.</b> Roll it out. Your team's pay and benefits stay exactly the same, and you choose if a share goes to your home team.</td></tr>
+    </table>
+  </td></tr>
+
+  <!-- CTA -->
+  <tr><td align="center" style="padding:18px 26px 26px;">
+    <a href="https://www.armsreachdigital.agency/pcmp#scoreboard" style="display:inline-block;background:#ffd21a;color:#111;text-decoration:none;font:900 italic 17px/1 Arial,sans-serif;text-transform:uppercase;padding:16px 26px;border-radius:4px;">Review my numbers &rsaquo;</a>
+    <div style="font:400 13px/1.5 Arial,sans-serif;color:#5d5648;margin-top:12px;">Reply to this email with any questions.</div>
+  </td></tr>
+
+  <!-- Fine print -->
+  <tr><td style="padding:16px 26px 22px;border-top:1px solid #d8c9a6;font:400 11px/1.5 Arial,sans-serif;color:#7a7060;">
+    These figures are estimates based on approximately $600 per participating W-2 employee per year and are not guaranteed. Actual results depend on eligibility, participation and plan design. This email is not tax or legal advice; consult your own tax professional. You're receiving this because you requested a How You Score Game Plan on YAT?STATS.
+  </td></tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>
