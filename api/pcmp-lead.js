@@ -7,6 +7,7 @@
 //
 // Vercel environment variables (armsreach project):
 //   AW_SALES_HL_TOKEN        AW Sales sub-account Private Integration token
+//                            (AW_SALES_ARMS_TOKEN is accepted too; value starts pit-)
 //                            (scopes: contacts.write, contacts.readonly,
 //                            locations/customFields.write, locations/customFields.readonly)
 //   AW_SALES_LOCATION_ID     optional, defaults to AW Sales' id below
@@ -170,10 +171,10 @@ async function handler(req, res) {
   if (checked.spam) return res.status(200).json({ ok: true });
   if (checked.error) return res.status(400).json({ error: checked.error });
 
-  const token = process.env.AW_SALES_HL_TOKEN;
+  const token = process.env.AW_SALES_HL_TOKEN || process.env.AW_SALES_ARMS_TOKEN;
   const locationId = process.env.AW_SALES_LOCATION_ID || DEFAULT_LOCATION;
   if (!token) {
-    console.error('[pcmp-lead] AW_SALES_HL_TOKEN is not set; lead not saved');
+    console.error('[pcmp-lead] AW_SALES_HL_TOKEN / AW_SALES_ARMS_TOKEN is not set; lead not saved');
     return res.status(503).json({ error: 'not-configured' });
   }
 
