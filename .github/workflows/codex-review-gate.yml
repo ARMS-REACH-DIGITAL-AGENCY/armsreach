@@ -1,0 +1,83 @@
+# This status check must be marked REQUIRED in the main-branch ruleset.
+# Codex posts a machine-readable state inside an issue comment, not as a check run.
+# We validate that the review matches the exact PR head commit and is complete.
+name: Codex Review Gate
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  codex-review-complete:
+    name: Codex review complete
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Wait for a completed Codex review of this commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 60); do
+            # --slurp returns a JSON array of pages, even if there is only one.
+            gh api --paginate --slurp \
+              "repos/${GITHUB_REPOSITORY}/issues/$PR_NUMBER/comments?per_page=100" \
+              > "$RUNNER_TEMP/codex-review-comments.json"
+
+            if python3 - "$RUNNER_TEMP/codex-review-comments.json" "$PR_HEAD_SHA" <<'PY'
+          import json
+          import re
+          import sys
+
+          with open(sys.argv[1], encoding="utf-8") as f:
+              pages = json.load(f)
+          comments = [c for page in pages for c in page]
+          expected_sha = sys.argv[2]
+          review_states = []
+          for comment in comments:
+              if comment.get("user", {}).get("login") != "chatgpt-codex-connector[bot]":
+                  continue
+              match = re.search(r"<!--\s*codex-review-state:v1\s*(\{.*?\})\s*-->", comment.get("body", ""), re.S)
+              if not match:
+                  continue
+              try:
+                  state = json.loads(match.group(1)).get("code_review") or {}
+              except (ValueError, TypeError):
+                  continue
+              if state.get("commit_sha") == expected_sha:
+                  review_states.append((comment.get("updated_at", ""), state))
+          if not review_states:
+              print("Waiting for Codex review of current PR head.")
+              sys.exit(1)
+          state = sorted(review_states, key=lambda item: item[0])[-1][1]
+          if state.get("status") == "completed" and state.get("has_unresolved_findings") is False:
+              print("Codex review completed for current commit: no unresolved findings.")
+              sys.exit(0)
+          if state.get("status") == "completed" and state.get("has_unresolved_findings") is True:
+              print("::error::Codex reported unresolved findings for current commit.")
+              sys.exit(2)
+          print("Waiting for Codex review to complete:", state.get("status"))
+          sys.exit(1)
+          PY
+            then
+              exit 0
+            else
+              status=$?
+              if [ "$status" -eq 2 ]; then
+                exit 1
+              fi
+            fi
+            echo "Codex review not ready (attempt $attempt/60); checking again in 30s."
+            sleep 30
+          done
+          echo "::error::Timed out waiting for Codex review of $PR_HEAD_SHA. Re-run this check after Codex completes."
+          exit 1
