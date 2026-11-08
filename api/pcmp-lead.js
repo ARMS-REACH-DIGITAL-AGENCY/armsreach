@@ -92,7 +92,7 @@ async function fieldIds(token, locationId) {
 
 function validate(body) {
   const b = body && typeof body === 'object' ? body : {};
-  if (clean(b.website)) return { spam: true }; // honeypot
+  if (clean(b.pcmp_spare_field) || clean(b.website)) return { spam: true }; // honeypot, including cached pages
   const lead = {
     name: clean(b.name, 120),
     company: clean(b.company, 160),
@@ -189,7 +189,7 @@ async function handler(req, res) {
   let body = req.body;
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = null; } }
   const checked = validate(body);
-  if (checked.spam) return res.status(200).json({ ok: true });
+  if (checked.spam) return res.status(422).json({ error: 'submission-rejected' });
   if (checked.error) return res.status(400).json({ error: checked.error });
 
   const token = process.env.AW_SALES_HL_TOKEN || process.env.AW_SALES_ARMS_TOKEN;
@@ -206,11 +206,13 @@ async function handler(req, res) {
     const { contact, note } = buildContact(checked.lead, ids, locationId);
     const saved = await hl('/contacts/upsert', token, { method: 'POST', body: JSON.stringify(contact) });
     const contactId = saved?.contact?.id;
-    if (contactId) {
-      await hl(`/contacts/${contactId}/notes`, token, { method: 'POST', body: JSON.stringify({ body: note }) })
-        .catch((e) => console.error('[pcmp-lead] note failed', e.status));
+    if (!contactId || (saved.contact.locationId && saved.contact.locationId !== locationId)) {
+      throw new Error('HighLevel upsert response has no verified contact in the expected sub-account');
     }
-    return res.status(200).json({ ok: true });
+    await hl(`/contacts/${contactId}/notes`, token, { method: 'POST', body: JSON.stringify({ body: note }) })
+      .catch((e) => console.error('[pcmp-lead] note failed', e.status));
+    console.info('[pcmp-lead] contact saved to AW Sales', { locationId, contactId });
+    return res.status(200).json({ ok: true, saved: true });
   } catch (e) {
     console.error('[pcmp-lead] save failed', e.status, JSON.stringify(e.body));
     return res.status(502).json({ error: 'save-failed' });
