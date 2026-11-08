@@ -325,6 +325,7 @@ footer p{margin:0 0 8px;max-width:70em}
             <div class="step">Last one (optional)</div>
             <p class="q">Which high school team would you support?</p>
             <div class="fields"><label>High school team<input name="school" id="schoolInput" autocomplete="off" placeholder="e.g. Hamilton High School, Chandler AZ"></label></div>
+            <p class="err hidden" id="finishErr" role="alert"></p>
             <button class="btn" type="button" id="finishBtn">Send my game plan &rsaquo;</button>
             <button type="button" class="back-link" id="skipBtn" style="display:block;margin:12px auto 0">Skip</button>
           </div>
@@ -525,7 +526,7 @@ footer p{margin:0 0 8px;max-width:70em}
     ['name','company','phone','email','website'].forEach(function(n){who[n]=lead.elements[n].value.trim();});
     var btn=document.getElementById('sendBtn');btn.disabled=true;btn.textContent='Sending…';
     post({}).then(function(x){
-      if(!x.ok){fail(x.j&&x.j.error&&!/^(not-configured|save-failed)$/.test(x.j.error)?x.j.error:callMsg);return;}
+      if(!x.ok||!x.j||x.j.saved!==true){fail(callMsg);return;}
       lead.classList.add('hidden');quiz.classList.remove('hidden');
       document.getElementById('quizHello').textContent='Thanks, '+who.name.split(/\s+/)[0]+'! 3 quick questions so we can build your game plan';
     }).catch(function(){fail(callMsg);}).finally(function(){btn.disabled=false;btn.innerHTML='Send my free game plan &rsaquo;';});
@@ -544,10 +545,28 @@ footer p{margin:0 0 8px;max-width:70em}
   // Hint with the scoreboard roster (a placeholder, never typed-over text).
   var hint=function(){emp.placeholder='e.g. '+document.getElementById('sbRange').value;};hint();
   document.getElementById('sbRange').addEventListener('input',hint);
-  var finish=function(){answers.school=document.getElementById('schoolInput').value.trim();
-    quiz.classList.add('hidden');done.classList.remove('hidden');
-    // The lead is already saved; this adds the answers to the same contact.
-    post(answers).catch(function(){});};
+  // The first submission saves the contact. Do not claim the completed game plan
+  // is on its way until the qualifying answers are also saved successfully.
+  var finishBusy=false;
+  var finish=function(){
+    if(finishBusy)return;
+    answers.school=document.getElementById('schoolInput').value.trim();
+    var finishErr=document.getElementById('finishErr');
+    var button=document.getElementById('finishBtn'),skip=document.getElementById('skipBtn');
+    finishErr.classList.add('hidden');
+    finishBusy=true;button.disabled=true;skip.disabled=true;
+    button.textContent='Saving…';
+    post(answers).then(function(x){
+      if(!x.ok||!x.j||x.j.saved!==true)throw new Error('PCMP answers not confirmed');
+      quiz.classList.add('hidden');done.classList.remove('hidden');
+    }).catch(function(){
+      finishErr.textContent='We could not save your answers. Please try again.';
+      finishErr.classList.remove('hidden');
+    }).finally(function(){
+      finishBusy=false;button.disabled=false;skip.disabled=false;
+      button.innerHTML='Send my game plan &rsaquo;';
+    });
+  };
   document.getElementById('finishBtn').onclick=finish;
   document.getElementById('skipBtn').onclick=function(){document.getElementById('schoolInput').value='';finish();};
 })();
