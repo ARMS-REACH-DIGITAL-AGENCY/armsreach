@@ -103,9 +103,12 @@
     .brand{width:clamp(170px,40vh,340px);padding-top:clamp(56px,12vh,144px)}
     .headline-group{font-size:clamp(20px,4.6vh,40px)}
   }
-  /* Keep the desktop wordmark below the right field light. Transform only the
-     brand block: the hero, baseball photo, and fixed role ticker stay put. */
-  @media (min-width:901px){.brand{transform:none}}
+  /* Keep the complete desktop wordmark visible above the hero photograph.
+     Unlike translateY, a bottom margin reserves space in normal layout, while
+     the stacking order keeps the hero overlay behind both logo lines. */
+  @media (min-width:901px){
+    .brand{position:relative;z-index:3;transform:none;margin-bottom:clamp(12px,2vh,24px)}
+  }
   @media (max-width:760px){
     :root{--yat-message-h:calc(104px / 3);--yat-mascot-w:68px}
     .splash{height:100vh;height:100svh;height:100dvh;min-height:0;padding:0 0 max(4px,env(safe-area-inset-bottom));overflow:hidden}
