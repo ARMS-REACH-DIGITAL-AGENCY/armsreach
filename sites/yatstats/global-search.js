@@ -190,8 +190,8 @@ function favoriteButtonHtml(player, name) {
       data-fav-player-name="${esc(name)}"
       data-fav-school-id="${schoolId}"
       aria-pressed="false"
-      aria-label="Add ${esc(name)} to favorites"
-      title="Favorite ${esc(name)}"
+      aria-label="Open ${esc(name)} profile for favorites"
+      title="Open ${esc(name)} profile to manage favorites"
     >
       <i class="ri-heart-line" aria-hidden="true"></i>
     </button>
