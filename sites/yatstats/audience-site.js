@@ -8,6 +8,15 @@
   const SITE_BASE = (() => {
     try { return new URL('.', document.currentScript.src).pathname; } catch (_) { return '/'; }
   })();
+  // Corporate YAT?STATS-only Global Search. Source microsite stays read-only.
+  const yatSearchStyle = document.createElement('link');
+  yatSearchStyle.rel = 'stylesheet';
+  yatSearchStyle.href = SITE_BASE + 'global-search.css?v=1';
+  document.head.appendChild(yatSearchStyle);
+  const yatSearchScript = document.createElement('script');
+  yatSearchScript.src = SITE_BASE + 'global-search.js?v=1';
+  document.head.appendChild(yatSearchScript);
+
   const PLATFORM = 'https://hamilton.az.yatstats.com';
   const CODY = `${PLATFORM}/5004/player/180827/cody-bellinger`;
   const CARD = `${PLATFORM}/?view=active&player=180827#player-180827`;
@@ -177,7 +186,7 @@
   document.head.appendChild(style);
 
   // One actual navigation/logo/footer template for both tour and legal pages.
-  const sharedHeader = `<header><div class="head"><a class="logo" href="${SITE_BASE}"><img src="${LOGO}" alt="YAT?STATS"></a><button class="menu" id="menu">☰</button><nav class="nav" id="nav"><button class="nav-close" id="navClose" aria-label="Close navigation">×</button>${Object.entries(pages).map(([k,p])=>`<div class="nav-group"><a href="${SITE_BASE}${k}/" class="nav-main ${k===key?'active':''}">${p.nav}</a><a href="${SITE_BASE}${k}/#faq" class="nav-faq">${p.nav} FAQs</a></div>`).join('')}</nav><div class="nav-backdrop" id="navBackdrop"></div></div></header>`;
+  const sharedHeader = `<header><div class="head"><a class="logo" href="${SITE_BASE}"><img src="${LOGO}" alt="YAT?STATS"></a><button class="menu" id="menu">☰</button><nav class="nav" id="nav"><button class="nav-close" id="navClose" aria-label="Close navigation">×</button>${Object.entries(pages).map(([k,p])=>`<div class="nav-group"><a href="${SITE_BASE}${k}/" class="nav-main ${k===key?'active':''}">${p.nav}</a><a href="${SITE_BASE}${k}/#faq" class="nav-faq">${p.nav} FAQs</a></div>`).join('')}</nav><button type="button" class="yat-global-nav-search" data-yat-global-search-open aria-label="Search the YAT?STATS global database" title="Global Search" aria-controls="drawerLeft" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 5 5"></path></svg></button><div class="nav-backdrop" id="navBackdrop"></div></div></header>`;
   const sharedFooter = `<footer class="site-footer" role="contentinfo"><div class="site-footer-inner"><a class="site-footer-brand" href="${SITE_BASE}"><img src="${LOGO}" alt="YAT?STATS home"></a><nav class="site-footer-nav" aria-label="Footer"><a href="${SITE_BASE}fans/">Fans</a><a href="${SITE_BASE}programs/">Programs</a><a href="${SITE_BASE}players/">Players</a><a href="${SITE_BASE}partners/">Partners</a><a href="${SITE_BASE}privacy-policy/">Privacy Policy</a><a href="${SITE_BASE}terms-and-conditions/">Terms &amp; Conditions</a></nav><div class="site-footer-bottom"><span>© 2026 YAT?STATS</span><a href="mailto:info@yatstats.com">info@yatstats.com</a></div></div></footer>`;
   function bindSiteNavigation(){
     const nav=document.getElementById('nav'),menu=document.getElementById('menu'),navClose=document.getElementById('navClose'),navBackdrop=document.getElementById('navBackdrop');
