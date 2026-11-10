@@ -273,3 +273,14 @@ body.yat-global-search-open .nav-backdrop{pointer-events:none;}
 #drawerLeft .yat-search-school-crest-link, #drawerLeft .yat-search-player-headshot-link {flex-shrink:0;}
 #drawerLeft .yat-search-fav-btn{position:relative;}
 @media(max-width:779px){#drawerLeft .yat-search-mode-btn{font-size:clamp(10px,2.7vw,14px)!important;}}
+
+/* The corporate pages do not load Remix Icon. Supply visible heart glyphs
+   locally so the search result favorite control never renders blank. */
+#drawerLeft .yat-search-fav-btn .ri-heart-line::before{
+  content:"♡";display:inline-block;font:400 29px/1 Arial,sans-serif;
+  vertical-align:middle;
+}
+#drawerLeft .yat-search-fav-btn .ri-heart-fill::before{
+  content:"♥";display:inline-block;font:400 25px/1 Arial,sans-serif;
+  vertical-align:middle;
+}
