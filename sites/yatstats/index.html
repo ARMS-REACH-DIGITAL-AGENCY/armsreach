@@ -159,6 +159,19 @@
   .yat-business-disclosure nav{display:flex;flex-wrap:wrap;gap:6px 18px}
   .yat-business-disclosure a{color:#e0c793;text-decoration:underline;text-underline-offset:3px}
   @media(max-width:760px){.yat-business-disclosure{font-size:11px;line-height:1.65}}
+  /* Landing-page Global Search uses the same microsite search renderer in a
+     centered embed; only the container layout belongs to the corporate site. */
+  .yat-landing-global-search{position:relative;z-index:8;width:min(620px,calc(100% - 28px));height:194px;flex:0 0 auto;margin:14px auto 18px;border-radius:14px;overflow:hidden;background:#080808;box-shadow:0 16px 42px rgba(0,0,0,.58)}
+  .yat-landing-global-search.is-expanded{height:clamp(320px,53vh,490px)}
+  .yat-landing-global-search iframe{display:block;width:100%;height:100%;border:0;background:#080808}
+  @media(max-width:760px){
+    /* The fixed-height original mobile splash must be scrollable once search
+       occupies real space; retain the original brand and hero styling. */
+    .splash{height:auto;min-height:100dvh;overflow:visible;padding-bottom:calc(var(--yat-message-h) + var(--yat-dock-h) + 22px)}
+    .intro{height:auto;flex:0 0 auto;justify-content:flex-start}
+    .yat-landing-global-search{width:100%;height:205px;margin:clamp(48px,14vw,65px) auto 15px}
+    .yat-landing-global-search.is-expanded{height:min(500px,57svh);min-height:325px}
+  }
 </style>
 <script defer src="corporate-analytics.js?v=1"></script>
 </head>
@@ -172,6 +185,16 @@
       <p>Stories and Stats!</p>
       <h1 style="margin:0;width:100%"><img src="img/yatstats-logo-stacked.webp" width="900" height="419" alt="YAT?STATS"></h1>
     </header>
+
+    <section class="yat-landing-global-search" id="yatLandingGlobalSearch" aria-label="Search the YAT?STATS database">
+      <iframe
+        id="yatLandingSearchFrame"
+        title="YAT?STATS Global Search — Player Name, High School, Current Team"
+        src="https://hamilton.az.yatstats.com/global-search/embed"
+        loading="eager"
+        referrerpolicy="strict-origin-when-cross-origin"
+      ></iframe>
+    </section>
 
     <section class="hero">
       <div class="hero-photo" aria-hidden="true"></div>
@@ -225,5 +248,17 @@
   </nav>
 </aside>
 
+<script>
+  // Only the official YAT?STATS search frame may expand its results panel.
+  (function(){
+    var panel=document.getElementById('yatLandingGlobalSearch');
+    var frame=document.getElementById('yatLandingSearchFrame');
+    window.addEventListener('message',function(event){
+      if(event.origin!=='https://hamilton.az.yatstats.com'||event.source!==frame.contentWindow)return;
+      if(!event.data||event.data.type!=='yatstats-search-embed-state'||typeof event.data.expanded!=='boolean')return;
+      panel.classList.toggle('is-expanded',event.data.expanded);
+    });
+  })();
+</script>
 </body>
 </html>
