@@ -397,12 +397,18 @@ function init(){
     drawer.setAttribute('aria-hidden','false');
     document.querySelectorAll('[data-yat-global-search-open]').forEach(b=>b.setAttribute('aria-expanded','true'));
     input.focus();input.select();
+    // Closing aborts pending work. Reopen with an existing query must not
+    // remain stuck on the canceled request's loading state.
+    if(input.value.trim())requestSearch(true);
   }
   function closeSearch(){
     document.body.classList.remove('yat-global-search-open');
     drawer.setAttribute('aria-hidden','true');
     document.querySelectorAll('[data-yat-global-search-open]').forEach(b=>b.setAttribute('aria-expanded','false'));
     invalidate();
+    intendedKey=null;
+    phase='idle';
+    setStatus();
     if(restoreFocus?.isConnected)restoreFocus.focus();
   }
   window.YatGlobalSearchOpen=openSearch;
