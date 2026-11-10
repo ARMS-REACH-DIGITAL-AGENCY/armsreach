@@ -1,7 +1,7 @@
 /* Corporate YAT?STATS search drawer only. Visual result rules copied from
    microsite SearchDrawerTabs.tsx (read-only source) plus shell tokens. */
 @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@500;600;700;800&family=Oswald:wght@400;500;600;700;800&display=swap');
-:root {--yat-font-ui:"Archivo",Arial,sans-serif;--yat-font-compact:"Barlow Condensed",Arial,sans-serif;--fg:#f2f2f2;--ink:#e8e8e8;--muted:#c4c4c4;--line:rgba(255,255,255,.08);--card-bg:#171717;--yat-bracket-accent:#ffb21c;}
+#yatCorporateSearch {--yat-font-ui:"Archivo",Arial,sans-serif;--yat-font-compact:"Barlow Condensed",Arial,sans-serif;--fg:#f2f2f2;--ink:#e8e8e8;--muted:#c4c4c4;--line:rgba(255,255,255,.08);--card-bg:#171717;--yat-bracket-accent:#ffb21c;}
 #yatCorporateSearch, #yatCorporateSearch * {box-sizing:border-box;}
 .yat-global-mask {position:fixed;inset:0;z-index:10010;display:block;opacity:0;visibility:hidden;pointer-events:none;border:0;background:rgba(0,0,0,.45);transition:opacity .2s ease,visibility .2s ease;}
 #drawerLeft.yat-global-left-drawer {position:fixed;z-index:10020;top:0;bottom:0;left:0;width:min(86vw,360px);max-width:360px;overflow:hidden;color:var(--ink);background:rgba(6,6,6,.57);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);box-shadow:0 0 24px rgba(0,0,0,.35);border-right:1px solid var(--line);transform:translateX(-102%);visibility:hidden;transition:transform .28s ease,visibility .28s ease;}
