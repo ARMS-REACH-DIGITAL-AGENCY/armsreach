@@ -97,6 +97,12 @@
     .hero-photo::after{background:linear-gradient(rgba(0,0,0,.10),transparent 14%,transparent 58%,#000 78%),linear-gradient(90deg,#000,transparent 14%,transparent 86%,#000),radial-gradient(ellipse at 82% 30%,transparent 40%,rgba(0,0,0,.36) 100%)}
   }
   @media (min-width:901px) and (max-width:1100px) and (max-height:820px){.brand{padding-top:clamp(80px,10.5vh,100px)}}
+  /* Keep the complete desktop wordmark visible above the hero photograph.
+     Unlike translateY, a bottom margin reserves space in normal layout, while
+     the stacking order keeps the hero overlay behind both logo lines. */
+  @media (min-width:901px){
+    .brand{position:relative;z-index:3;transform:none;margin-bottom:clamp(12px,2vh,24px)}
+  }
   @media (max-width:760px){
     :root{--yat-message-h:calc(104px / 3);--yat-mascot-w:68px}
     .splash{height:100vh;height:100svh;height:100dvh;min-height:0;padding:0 0 max(4px,env(safe-area-inset-bottom));overflow:hidden}
