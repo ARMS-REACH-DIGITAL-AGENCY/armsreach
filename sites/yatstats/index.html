@@ -253,8 +253,13 @@
   (function(){
     var panel=document.getElementById('yatLandingGlobalSearch');
     var frame=document.getElementById('yatLandingSearchFrame');
+    // Preview the paired, unmerged microsite route without changing Production.
+    if(location.hostname.endsWith('.vercel.app')){
+      frame.src='https://mike-crozite-template-eppt7oyjl-arms-reach-digital-agency.vercel.app/global-search/embed';
+    }
+    var searchOrigin=new URL(frame.src).origin;
     window.addEventListener('message',function(event){
-      if(event.origin!=='https://hamilton.az.yatstats.com'||event.source!==frame.contentWindow)return;
+      if(event.origin!==searchOrigin||event.source!==frame.contentWindow)return;
       if(!event.data||event.data.type!=='yatstats-search-embed-state'||typeof event.data.expanded!=='boolean')return;
       panel.classList.toggle('is-expanded',event.data.expanded);
     });
